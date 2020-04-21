@@ -1,10 +1,6 @@
 \documentclass[a4paper, 11pt]{article}
 \usepackage{graphicx}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{amsmath}
-\usepackage{listings}
-\usepackage[margin=0.8in]{geometry}
+\usepackage[margin=0.78in]{geometry}
 
 \title { Visual Analytics\\ \bigskip \large Propostal: Mobile applications}
 \date{21 April 2020}
@@ -35,7 +31,18 @@ As we said before the dataset contains 10 000 applications, with 13 features whi
 \item \textbf{Android version}: minimum required version to run the application.
 \end{itemize}
 The database contained one more feature which was deemed not useful for analysis which is \textbf{Current version}. Since every developer uses a different(personal) way to denote the released versions it wouldn't have made much sense in a visualization.
+
 \section{MDS}
+
+In this section, we are going to briefly present which are the main choices and ideas for the analysis part of the project and how we want to handle the high cost of computation for the chosen algorithm.   
+Indeed, the analysis of the data done by PCA or MDS requires computing power and in general is not possible to do it while the user interacts with the application. 
+So in order to make the app usable, we decided to do a preprocessing phase, in which we run the algorithm, and we store the result in the data itself, adding one column for each component. In this way, we run the algorithm only one time and then we load it like a new feature. \\
+
+Another problem that we need to face is which algorithm to use. PCA is often used for these kinds of tasks, but in this case we have more categorical features than continuous values. So we'll probably use MDS because it can be adapted with a lot of kinds of data using a specific distance function. Of course, if we consider only the categorical features than the better choice for a function is the Jaccard distance, but we can do more. Indeed we will try also a different approach with a custom distance function, that considers all the features (both categorical and continuous) merging the Jaccard distance with the euclidian distance and normalizing them, in order to avoid that a type of feature hides the contribution of the other.
+%preprocessing
+%where to put the coordinates, resulting from the preprocessing script
+%mds because there are some categorical feature and also contiguos
+%custom distance function, merge with jaccard, euclidian
 
 \section{Visual Project}
 In the following we will go over each visualization we want to implement through D3.js, an initial mock-up can be seen in the last page of the proposal.
