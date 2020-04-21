@@ -1,23 +1,24 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.3.19)  29 MAR 2020 20:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.4.6)  21 APR 2020 17:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **proposal.tex
 (./proposal.tex
-LaTeX2e <2018-12-01>
+LaTeX2e <2017-04-15>
+Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo
-File: size11.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+File: size11.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 )
-\c@part=\count80
-\c@section=\count81
-\c@subsection=\count82
-\c@subsubsection=\count83
-\c@paragraph=\count84
-\c@subparagraph=\count85
-\c@figure=\count86
-\c@table=\count87
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
@@ -52,28 +53,40 @@ nment
 
 (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count88
+\c@float@type=\count87
 \float@exts=\toks15
-\float@box=\box27
+\float@box=\box26
 \@float@everytoks=\toks16
-\@floatcapt=\box28
+\@floatcapt=\box27
 )
 (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 \@float@every@algorithm=\toks17
-\c@algorithm=\count89
+\c@algorithm=\count88
 )
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+Package: algpseudocode 
 
-! LaTeX Error: File `algpseudocode.sty' not found.
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
 
-Type X to quit or <RETURN> to proceed,
-or enter new name. (Default extension: sty)
-
-Enter file name: 
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2018/12/01 v2.17b AMS math features
-\@mathmargin=\skip43
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count89
+\c@ALG@rem=\count90
+\c@ALG@nested=\count91
+\ALG@tlm=\skip43
+\ALG@thistlm=\skip44
+\c@ALG@Lnr=\count92
+\c@ALG@blocknr=\count93
+\c@ALG@storecount=\count94
+\c@ALG@tmpcounter=\count95
+\ALG@tmplength=\skip45
+)
+Document Style - pseudocode environments for use with the `algorithmicx' style
+) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2017/09/02 v2.17a AMS math features
+\@mathmargin=\skip46
 
 For additional information on amsmath, use the `?' option.
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
@@ -91,30 +104,30 @@ Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count90
-LaTeX Info: Redefining \frac on input line 223.
-\uproot@=\count91
-\leftroot@=\count92
-LaTeX Info: Redefining \overline on input line 385.
-\classnum@=\count93
-\DOTSCASE@=\count94
-LaTeX Info: Redefining \ldots on input line 482.
-LaTeX Info: Redefining \dots on input line 485.
-LaTeX Info: Redefining \cdots on input line 606.
-\Mathstrutbox@=\box29
-\strutbox@=\box30
+\inf@bad=\count96
+LaTeX Info: Redefining \frac on input line 213.
+\uproot@=\count97
+\leftroot@=\count98
+LaTeX Info: Redefining \overline on input line 375.
+\classnum@=\count99
+\DOTSCASE@=\count100
+LaTeX Info: Redefining \ldots on input line 472.
+LaTeX Info: Redefining \dots on input line 475.
+LaTeX Info: Redefining \cdots on input line 596.
+\Mathstrutbox@=\box28
+\strutbox@=\box29
 \big@size=\dimen107
-LaTeX Font Info:    Redeclaring font encoding OML on input line 729.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
-\macc@depth=\count95
-\c@MaxMatrixCols=\count96
+LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
+\macc@depth=\count101
+\c@MaxMatrixCols=\count102
 \dotsspace@=\muskip10
-\c@parentequation=\count97
-\dspbrk@lvl=\count98
+\c@parentequation=\count103
+\dspbrk@lvl=\count104
 \tag@help=\toks19
-\row@=\count99
-\column@=\count100
-\maxfields@=\count101
+\row@=\count105
+\column@=\count106
+\maxfields@=\count107
 \andhelp@=\toks20
 \eqnshift@=\dimen108
 \alignsep@=\dimen109
@@ -123,65 +136,92 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
 \totwidth@=\dimen112
 \lineht@=\dimen113
 \@envbody=\toks21
-\multlinegap=\skip44
-\multlinetaggap=\skip45
+\multlinegap=\skip47
+\multlinetaggap=\skip48
 \mathdisplay@stack=\toks22
-LaTeX Info: Redefining \[ on input line 2844.
-LaTeX Info: Redefining \] on input line 2845.
+LaTeX Info: Redefining \[ on input line 2817.
+LaTeX Info: Redefining \] on input line 2818.
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count102
-\lst@gtempboxa=\box31
+\lst@mode=\count108
+\lst@gtempboxa=\box30
 \lst@token=\toks23
-\lst@length=\count103
+\lst@length=\count109
 \lst@currlwidth=\dimen114
-\lst@column=\count104
-\lst@pos=\count105
+\lst@column=\count110
+\lst@pos=\count111
 \lst@lostspace=\dimen115
 \lst@width=\dimen116
-\lst@newlines=\count106
-\lst@lineno=\count107
+\lst@newlines=\count112
+\lst@lineno=\count113
 \lst@maxwidth=\dimen117
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2019/02/27 1.8b (Carsten Heinz)
-\c@lstnumber=\count108
-\lst@skipnumbers=\count109
-\lst@framebox=\box32
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+\c@lstnumber=\count114
+\lst@skipnumbers=\count115
+\lst@framebox=\box31
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
-File: listings.cfg 2019/02/27 1.8b listings configuration
+File: listings.cfg 2015/06/04 1.6 listings configuration
 ))
-Package: listings 2019/02/27 1.8b (Carsten Heinz)
+Package: listings 2015/06/04 1.6 (Carsten Heinz)
 
-No file proposal.aux.
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2010/09/12 v5.6 Page Geometry
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count116
+\Gm@cntv=\count117
+\c@Gm@tempcnt=\count118
+\Gm@bindingoffset=\dimen118
+\Gm@wd@mp=\dimen119
+\Gm@odd@mp=\dimen120
+\Gm@even@mp=\dimen121
+\Gm@layoutwidth=\dimen122
+\Gm@layoutheight=\dimen123
+\Gm@layouthoffset=\dimen124
+\Gm@layoutvoffset=\dimen125
+\Gm@dimlist=\toks24
+)
+(./proposal.aux)
 \openout1 = `proposal.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count110
-\scratchdimen=\dimen118
-\scratchbox=\box33
-\nofMPsegments=\count111
-\nofMParguments=\count112
-\everyMPshowfont=\toks24
-\MPscratchCnt=\count113
-\MPscratchDim=\dimen119
-\MPnumerator=\count114
-\makeMPintoPDFobject=\count115
-\everyMPtoPDFconversion=\toks25
+\scratchcounter=\count119
+\scratchdimen=\dimen126
+\scratchbox=\box32
+\nofMPsegments=\count120
+\nofMParguments=\count121
+\everyMPshowfont=\toks25
+\MPscratchCnt=\count122
+\MPscratchDim=\dimen127
+\MPnumerator=\count123
+\makeMPintoPDFobject=\count124
+\everyMPtoPDFconversion=\toks26
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
@@ -209,13 +249,14 @@ Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
-))))
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
-Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO
 )
-
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2018/01/21 v0.26 Utility functions of pdfTeX for LuaTeX (HO
 )
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
@@ -233,28 +274,81 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\c@lstlisting=\count116
+\c@lstlisting=\count125
 
-[1
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(57.81621pt, 481.87546pt, 57.81621pt)
+* v-part:(T,H,B)=(57.81621pt, 729.41443pt, 57.81621pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=481.87546pt
+* \textheight=729.41443pt
+* \oddsidemargin=-14.45378pt
+* \evensidemargin=-14.45378pt
+* \topmargin=-51.45378pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=11.0pt
+* \footskip=30.0pt
+* \marginparwidth=50.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}]
-(./proposal.aux) ) 
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--21
+
+ []
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 24.
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 24.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+<mockup.png, id=12, 597.432pt x 827.7324pt>
+File: mockup.png Graphic file (type png)
+<use mockup.png>
+Package pdftex.def Info: mockup.png  used on input line 55.
+(pdftex.def)             Requested size: 481.87546pt x 667.6557pt.
+ [2] [3 <./mockup.png>] (./proposal.aux) ) 
 Here is how much of TeX's memory you used:
- 3518 strings out of 494553
- 48287 string characters out of 6177318
- 111134 words of memory out of 5000000
- 7159 multiletter control sequences out of 15000+600000
- 8561 words of font info for 31 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 41i,6n,32p,275b,217s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on proposal.pdf (1 page, 42302 bytes).
+ 4328 strings out of 492982
+ 60835 string characters out of 6134897
+ 134780 words of memory out of 5000000
+ 7840 multiletter control sequences out of 15000+600000
+ 8819 words of font info for 32 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 41i,6n,32p,333b,219s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.p
+fb>
+Output written on proposal.pdf (3 pages, 1836875 bytes).
 PDF statistics:
- 24 PDF objects out of 1000 (max. 8388607)
- 16 compressed objects within 1 object stream
+ 39 PDF objects out of 1000 (max. 8388607)
+ 26 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
