@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Mobile App Monitor</title>
+
+<head>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+  <div class='header'>
+    <table id="title_table">
+      <tr>
+        
+        <th>
+          <span class="title_container">
+            <p id = "title"><b>Mobile App Monitor Project</b></p> 
+          </span>
+        </th>
+        
+        <th>
+          <span class="type_container">
+            <b>App type:</b>
+            <input type="checkbox" name="paid" value="paid">
+            <p id="paid_text" style="display:inline;">Paid</p>
+            <input type="checkbox" name="free" value="free">
+            <p id="free_text" style="display:inline;">Free</p> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+          </span>
+        </th>
+        
+        <th>
+          <button style="display:inline-block" id='darkmode_button' class='invisible_button'>
+            <img src="./res/darkmode_off.svg" height="29" width="29" id='darkmode_img' />
+          </button>
+          <button style="display:inline-block" id='blind_button' class='invisible_button'>
+            <img src="./res/blind_off.svg" height="33" width="33" id='blind_img' />
+          </button>
+        </th>
+      
+      </tr>
+    </table>
+  </div>
+  <div class='container'>
+    <div class='subcontainer1'>
+      <div class="name_list"></div>
+      <div class="parallel_plot"></div>
+      <div class="box_area">
+
+        <div class="box1">
+          <div class="boxplot1"></div>
+          <hr>
+        </div>
+
+        <div class="box2">
+          <div class="boxplot2"></div>
+          <hr>
+        </div>
+
+        <div class="box3">
+          <div class="boxplot3"></div>
+        </div>
+
+      </div>
+    </div>
+    
+    <div class='subcontainer2'>
+      <div class="scatterplot"></div>
+      <div class="barchart"></div>
+      <div class="histo_content"></div>
+      <div class="histo_version"></div>
+    </div>
+  </div>
+
+  <script src="./js/general.js"></script>
+</body>

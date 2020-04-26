@@ -1,0 +1,155 @@
+.header {
+  border-bottom: 1px solid#e7e7e7;
+  background-color:#f3f3f3;
+  margin-bottom: 5px;
+}
+
+.subcontainer1 {
+  width: 100%;
+  height: 50%
+}
+
+.subcontainer2 {
+  float: left;
+  width: 100%;
+  height: 43%
+}
+
+#title {
+  font-family: 'Roboto Slab';
+  margin-left: 10px;
+  display: inline;
+  font-size: 18px;
+}
+
+button.invisible_button {
+  outline: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  margin-right: 20px;
+}
+
+#title_table {
+  padding-top: 0.5%;
+  width:100%;
+}
+.title_container {
+  width: 450px;
+}
+
+th {
+  font-weight: normal;
+}
+.container {
+  width: 100%;
+  height: 93%;
+}
+.name_list{ 
+  margin-left: 10px;
+  float: left;
+  margin-bottom: 10px;
+  width: 31%;
+  height: 100%;
+  border: 2px solid gray;
+}
+  
+.parallel_plot { 
+  float: left;
+  margin-left: 10px;
+  width: 55%;
+  height: 100%;
+  border: 2px solid gray;
+}
+
+.box_area {
+  margin-left: 10px;
+  float: left;
+  width: 10%;
+  height: 100%;
+  border: 2px solid gray;
+  align-content: center;
+}
+
+.box1 {
+  width: 100%;
+  height: 33%;
+}
+
+.box2 {
+  width: 100%;
+  height: 30%;
+}
+
+.box3 {
+  width: 100%;
+  height: 33%;
+}
+
+.scatterplot {
+  margin-left: 10px;
+  float: left;
+  width: 24%;
+  height: 100%;
+  border: 2px solid gray;
+}
+
+.barchart {
+  margin-left: 10px;
+  float: left;
+  width: 24%;
+  height: 100%;
+  border: 2px solid gray;
+}
+
+.histo_content {
+  margin-left: 10px;
+  float: left;
+  width: 24%;
+  height: 100%;
+  border: 2px solid gray;
+}
+
+.histo_version {
+  margin-left: 10px;
+  float: left;
+  width: 24%;
+  height: 100%;
+  border: 2px solid gray;
+}
+
+
+html, body {
+  margin: 0;
+  height: 100%;
+  width: 100;
+}
+
+.boxplot1 {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 2%;
+  margin-left: 6%;
+}
+
+.boxplot2 {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 2%;
+  margin-top: 6%;
+  margin-left: 6%;
+}
+
+.boxplot3 {
+  width: 100%;
+  height: 100%;
+  margin-top: 6%;
+  margin-left: 6%;
+}
+
+hr {
+  border: 1px solid #989898;
+  margin-right: 5px;
+  margin-left: 5px;
+  opacity: 0.7;
+}
