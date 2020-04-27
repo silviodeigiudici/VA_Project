@@ -1,20 +1,22 @@
-DataUpdater = function () {
-    this.eventsHandler = new EventTarget();
-    this.data = [];
-}
+class DataUpdater {
 
-DataUpdater.prototype.loadData = function () {
-    
-    referenceDataUpdater = this; //used in csv function
+    constructor() {
+        this.eventsHandler = new EventTarget();
+        this.data = [];
+    }
 
-    d3.csv("./data/data.csv", function (loadedData) {
-        referenceDataUpdater.data = loadedData;
-        referenceDataUpdater.eventsHandler.dispatchEvent( new Event('dataReady') );
-    });
-}
+    loadData() {
+        var referenceDataUpdater = this; //used in csv function
 
-DataUpdater.prototype.addListener = function (nameEvent, handler) {
-    this.eventsHandler.addEventListener(nameEvent, handler);
+        d3.csv("./data/data.csv", function (loadedData) {
+            referenceDataUpdater.data = loadedData;
+            referenceDataUpdater.eventsHandler.dispatchEvent( new Event('dataReady') );
+        });
+    }
+
+    addListener(nameEvent, handler) {
+        this.eventsHandler.addEventListener(nameEvent, handler);
+    }
 }
 
 var dataUpdater = new DataUpdater();
