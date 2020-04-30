@@ -18,10 +18,12 @@ var svg = d3.select(".scatterplot")
 
 var lenght_x = 350;
 var x = d3.scaleLinear()
+    .domain([0, 4])
     .range([0, lenght_x]);
 
 var lenght_y = 340;
 var y = d3.scaleLinear()
+    .domain([0, 4])
     .range([lenght_y, 0]);
 
 var xAxis = d3.axisBottom(x);
@@ -47,16 +49,20 @@ dataUpdater.addListener('dataReady', function(e) {
     //get data
     
     //prepare visualization
-      
-    x.domain(d3.extent(dataUpdater.data, function(d) { return d.par1 + width_translate; })).nice();
-    y.domain(d3.extent(dataUpdater.data, function(d) { return d.par2 + height_translate; })).nice();
     
+    //if you use the following lines, don't use domain in the scaleLiner before
+    //maybe d3.extent is used to find the range in the data? finding the min and max?
+    //x.domain(d3.extent(dataUpdater.data, function(d) { return d.par1 + width_translate; })).nice();
+    //y.domain(d3.extent(dataUpdater.data, function(d) { return d.par2 + height_translate; })).nice();
+    
+    //points need to be translated with respect svg as the axes did
+    //x(number) covert a coordinate in the range in a web page distance
     var myCircle = svg.selectAll("circle")
         .data(dataUpdater.data)
         .enter()
         .append("circle")
-        .attr("cx", function (d) { return x(d.par1 + 5) + width_translate; })
-        .attr("cy", function (d) { return y(d.par2 + 5) + height_translate; })
+        .attr("cx", function (d) { return x(Number(d.par1)) + width_translate; })
+        .attr("cy", function (d) { return y(Number(d.par2)) + height_translate; })
         .attr("r", 3)
         .style("fill", '#2b77df')
         .style("opacity", 0.5);
