@@ -1,5 +1,5 @@
-file_name = "./googleplaystore.csv"
-file_name_2 = "./googleplaystore2.csv"
+file_name = "../googleplaystore.csv"
+file_name_2 = "../../visualization/data/data.csv"
 
 f = open( file_name, "r")
 fout = open(file_name_2, "w")
@@ -23,9 +23,21 @@ file_content = f.read()
 
 rows = file_content.strip().split("\n")
 
+'''
 for line in rows:
     pos_occurrence = find_th_occurrence(line, ";", 1)
     if pos_occurrence != -1:
         line = line[:pos_occurrence] + "-" + line[pos_occurrence + 1:]
     fout.write(line + "\n")
+'''
 
+
+#fast script to select a part of the dataset
+num_lines = 100
+rows = rows[:num_lines]
+
+for line in rows:
+    fout.write(line + "\n")
+
+fout.close()
+f.close()

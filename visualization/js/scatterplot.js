@@ -45,11 +45,6 @@ svg.append("g")
 
 
 dataUpdater.addListener('dataReady', function(e) {
-    console.log(dataUpdater.data);
-    //get data
-    
-    //prepare visualization
-    
     //if you use the following lines, don't use domain in the scaleLiner before
     //maybe d3.extent is used to find the range in the data? finding the min and max?
     //x.domain(d3.extent(dataUpdater.data, function(d) { return d.par1 + width_translate; })).nice();
@@ -61,8 +56,8 @@ dataUpdater.addListener('dataReady', function(e) {
         .data(dataUpdater.data)
         .enter()
         .append("circle")
-        .attr("cx", function (d) { return x(Number(d.par1)) + width_translate; })
-        .attr("cy", function (d) { return y(Number(d.par2)) + height_translate; })
+        .attr("cx", function (d) { return x(parseFloat(d.Rating)) + width_translate; })
+        .attr("cy", function (d) { return y(parseFloat(d.Rating)) + height_translate; })
         .attr("r", 3)
         .style("fill", '#2b77df')
         .style("opacity", 0.5);
