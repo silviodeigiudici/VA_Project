@@ -18,12 +18,12 @@ var svg = d3.select(".scatterplot")
 
 var lenght_x = 350;
 var x = d3.scaleLinear()
-    .domain([0, 4])
+    .domain([-5, 5])
     .range([0, lenght_x]);
 
 var lenght_y = 340;
 var y = d3.scaleLinear()
-    .domain([0, 4])
+    .domain([-5, 5])
     .range([lenght_y, 0]);
 
 var xAxis = d3.axisBottom(x);
@@ -56,8 +56,8 @@ dataUpdater.addListener('dataReady', function(e) {
         .data(dataUpdater.data)
         .enter()
         .append("circle")
-        .attr("cx", function (d) { return x(parseFloat(d.Rating)) + width_translate; })
-        .attr("cy", function (d) { return y(parseFloat(d.Rating)) + height_translate; })
+        .attr("cx", function (d) { return x(parseFloat(d.comp0)) + width_translate; })
+        .attr("cy", function (d) { return y(parseFloat(d.comp1)) + height_translate; })
         .attr("r", 3)
         .style("fill", '#2b77df')
         .style("opacity", 0.5);

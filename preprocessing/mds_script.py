@@ -6,14 +6,17 @@ import scipy.spatial.distance as scispa
 from sklearn.impute import SimpleImputer
 from sklearn import preprocessing
 
+#path_to_data = '../dataset/googleplaystore.csv'
+path_to_data = '../visualization/data/data.csv'
+
 data = pd.io.parsers.read_csv(  #pandas handles in a better way
-     'googleplaystore.csv', 
+     path_to_data, 
      header="infer",         #the first row contains the city names
      usecols=[1,2,3,5,6,8]
     )
 
-iterations = 150
-num_rows = 2000
+iterations = 10
+num_rows = 100
 data_numpy = data.values[:num_rows]
 
 #list_values_to_check = ["Free", "Paid"]
@@ -90,7 +93,11 @@ plt.show()
 
 path = "./images_run/" + str(iterations) + "_" + str(num_rows) + "_" + str(index_field) + ".png"
 
-plt.savefig(path)
+#plt.savefig(path)
 
 print(stress)
+
+
+import add_mds_coords
+add_mds_coords.add_coords(pos, path_to_data)
 
