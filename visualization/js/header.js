@@ -18,11 +18,17 @@ class Header {
     }
 
     checkPaidFilter(row){
-        return this.checkBoxPaid.checked;
+        if( !this.checkBoxPaid.checked && row.Type === "Paid" )
+            return false;
+        else
+            return true;
     }
 
     checkFreeFilter(row){
-        return this.checkBoxFree.checked;
+        if( !this.checkBoxFree.checked && row.Type === "Free" )
+            return false;
+        else
+            return true;
     }
 
     activateHeader(referenceHeader){
