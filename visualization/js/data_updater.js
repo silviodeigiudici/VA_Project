@@ -23,7 +23,16 @@ class DataUpdater {
 
     updateData() {
         //for all originalData rows  
-        console.log("Update Data");
+        //console.log("Update Data");
+        this.data = [];
+
+        var referenceDataUpdater = this;
+        this.originalData.forEach( function(row, index) {
+            if( referenceDataUpdater.header.checkPaidFilter(row) && referenceDataUpdater.header.checkFreeFilter(row) )
+                referenceDataUpdater.data.push( row );
+        });
+        //console.log(this.data);
+        this.eventsHandler.dispatchEvent( new Event('updateVisualization') );
     }
 }
 

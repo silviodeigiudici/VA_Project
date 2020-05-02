@@ -47,6 +47,10 @@ class Scatterplot {
             referenceScatterplot.startVisualization(referenceScatterplot, width_translate, height_translate);
         });
 
+        this.dataUpdater.addListener('updateVisualization', function(e) {
+            referenceScatterplot.updateVisualization(referenceScatterplot, width_translate, height_translate);
+        });
+
     }
 
     startVisualization(referenceScatterplot, width_translate, height_translate){
@@ -58,6 +62,25 @@ class Scatterplot {
         //points need to be translated with respect svg as the axes did
         //x(number) covert a coordinate in the range in a web page distance
         var myCircle = referenceScatterplot.svg.selectAll("circle")
+            .data(referenceScatterplot.dataUpdater.data)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
+            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; })
+            .attr("r", 3)
+            .style("fill", '#2b77df')
+            .style("opacity", 0.5);
+
+    }
+
+    updateVisualization(referenceScatterplot, width_translate, height_translate) {
+        
+        console.log("Start update scatterplot");
+        referenceScatterplot.svg.selectAll("circle")
+            .data([])
+            .exit().remove();
+
+        referenceScatterplot.svg.selectAll("circle")
             .data(referenceScatterplot.dataUpdater.data)
             .enter()
             .append("circle")
