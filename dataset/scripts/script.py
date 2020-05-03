@@ -1,5 +1,5 @@
 file_name = "../googleplaystore.csv"
-file_name_2 = "../../visualization/data/data.csv"
+file_name_2 = "../smaller_googleplaystore.csv"
 
 f = open( file_name, "r")
 fout = open(file_name_2, "w")

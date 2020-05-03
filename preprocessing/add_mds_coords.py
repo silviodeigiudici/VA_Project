@@ -1,4 +1,4 @@
-dest_path = '../visualization/data/data.csv'
+dest_path = '../visualization/data/data_mds.csv'
 
 #coords is a numpy array/matrix
 def add_coords(coords, src_path):
