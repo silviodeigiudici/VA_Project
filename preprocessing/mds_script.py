@@ -6,7 +6,8 @@ import scipy.spatial.distance as scispa
 from sklearn.impute import SimpleImputer
 from sklearn import preprocessing
 
-path_to_data = '../dataset/googleplaystore.csv'
+#path_to_data = '../dataset/googleplaystore.csv'
+path_to_data = '../filtering/data_filtered.csv'
 #path_to_data = '../visualization/data/data.csv'
 
 data = pd.io.parsers.read_csv(  #pandas handles in a better way
