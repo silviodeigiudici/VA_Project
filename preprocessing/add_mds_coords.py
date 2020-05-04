@@ -1,4 +1,5 @@
-dest_path = '../visualization/data/data_mds.csv'
+#dest_path = '../visualization/data/data_mds.csv'
+dest_path = '../filtering/to_filter.csv'
 
 #coords is a numpy array/matrix
 def add_coords(coords, src_path):
@@ -12,7 +13,7 @@ def add_coords(coords, src_path):
     
     dest_file.write(rows[0] + ",comp0,comp1\n")
 
-    num_lines = len(rows)
+    num_lines = len(rows) - 1
     #num_lines = len(coords)
     for i in range(1, num_lines):
         new_row = rows[i] + "," + str(coords[i - 1, 0]) + "," + str(coords[i - 1, 1])
