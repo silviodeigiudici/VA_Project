@@ -7,7 +7,7 @@ from sklearn.impute import SimpleImputer
 from sklearn import preprocessing
 
 #path_to_data = '../dataset/googleplaystore.csv'
-path_to_data = '../filtering/data_filtered.csv'
+path_to_data = '../dataset/filtering/data_filtered.csv'
 #path_to_data = '../visualization/data/data.csv'
 
 data = pd.io.parsers.read_csv(  #pandas handles in a better way
@@ -16,9 +16,10 @@ data = pd.io.parsers.read_csv(  #pandas handles in a better way
      usecols=[1,2,3,5,6,8]
     )
 
-iterations = 10
+iterations = 1
 num_rows = 100
-data_numpy = data.values[:num_rows]
+#data_numpy = data.values[:num_rows]
+data_numpy = data.values[:]
 
 #list_values_to_check = ["Free", "Paid"]
 list_values_to_check = ["10,000+", "100,000+", "1,000,000+", "10,000,000+"]
@@ -26,7 +27,8 @@ list_values_to_check = ["10,000+", "100,000+", "1,000,000+", "10,000,000+"]
 
 #index_field = 2
 index_field = 3
-array_to_check = data.values[:num_rows,index_field]
+#array_to_check = data.values[:num_rows,index_field]
+array_to_check = data.values[:,index_field]
 
 booleans_list = []
 for value in list_values_to_check:
@@ -40,9 +42,9 @@ for value in list_values_to_check:
 data_numpy_euclidian = data_numpy[:,[1,2]]
 data_numpy_jaccard = data_numpy[:,[0,3,4,5]]
 
-imp_mean = SimpleImputer(missing_values=np.nan, strategy='mean')
-imp_mean.fit(data_numpy_euclidian)
-data_numpy_euclidian = imp_mean.transform(data_numpy_euclidian)
+#imp_mean = SimpleImputer(missing_values=np.nan, strategy='mean')
+#imp_mean.fit(data_numpy_euclidian)
+#data_numpy_euclidian = imp_mean.transform(data_numpy_euclidian)
 
 
 data_numpy_euclidian = preprocessing.StandardScaler().fit_transform(data_numpy_euclidian)

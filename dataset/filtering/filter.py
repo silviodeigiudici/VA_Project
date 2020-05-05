@@ -45,8 +45,8 @@ print("Filtering features")
 for row in data_numpy:
     row[4] = handle_size( row[4] )
     row[5] = handle_installs( row[5] )
-    row[6] = handle_price( row[6] )
-    row[9] = handle_version( row[9] )
+    row[7] = handle_price( row[7] )
+    row[10] = handle_version( row[10] )
 
 print("Filling missing values")
 dataframe = pd.DataFrame(data_numpy)

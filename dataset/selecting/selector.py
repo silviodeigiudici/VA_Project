@@ -9,7 +9,7 @@ dest_data = './data_selected.csv'
 data = pd.io.parsers.read_csv(  #pandas handles in a better way
      src_data, 
      header="infer",         #the first row contains the city names
-     usecols=[0,1,2,3,4,5,7,8,10,12],
+     usecols=[0,1,2,3,4,5,6,7,8,10,12],
      keep_default_na=False
     )
 
@@ -21,7 +21,7 @@ print("Selecting Paid and few Free")
 booleans_list_paid = []
 booleans_list_free = []
 for row in data_numpy:
-    new_bool = row[6] != "0"
+    new_bool = row[6] == "Paid"
     booleans_list_paid.append(new_bool)
     booleans_list_free.append(not new_bool)
 
