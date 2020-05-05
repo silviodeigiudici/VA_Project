@@ -21,7 +21,7 @@ print("Selecting Paid and few Free")
 booleans_list_paid = []
 booleans_list_free = []
 for row in data_numpy:
-    new_bool = row[6] == 0
+    new_bool = row[6] != "0"
     booleans_list_paid.append(new_bool)
     booleans_list_free.append(not new_bool)
 
