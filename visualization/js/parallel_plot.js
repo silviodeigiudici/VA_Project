@@ -29,7 +29,7 @@ class ParallelPlot {
         var i;
         console.log(dataUpdater.data[0])
         var y = {}
-        //var c = {}
+        var c = {}
         c["Category"] =  d3.map(data, function(d){return(d.Category)}).keys().sort()
         c["ContentRating"] =  d3.map(data, function(d){return(d.ContentRating)}).keys().sort()
 
