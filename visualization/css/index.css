@@ -48,8 +48,7 @@ th {
 .name_list{
   margin-left: 10px;
   float: left;
-  margin-bottom: 10px;
-  width: 31%;
+  width: 11%;
   height: 100%;
   border: 2px solid gray;
 }
@@ -89,7 +88,8 @@ th {
 .scatterplot {
   margin-left: 10px;
   float: left;
-  width: 24%;
+  margin-bottom: 10px;
+  width: 31%;
   height: 100%;
   border: 2px solid gray;
 }
@@ -97,7 +97,7 @@ th {
 .barchart {
   margin-left: 10px;
   float: left;
-  width: 24%;
+  width: 28%;
   height: 100%;
   border: 2px solid gray;
 }
@@ -105,7 +105,7 @@ th {
 .histo_content {
   margin-left: 10px;
   float: left;
-  width: 24%;
+  width: 28%;
   height: 100%;
   border: 2px solid gray;
 }
@@ -113,7 +113,7 @@ th {
 .histo_version {
   margin-left: 10px;
   float: left;
-  width: 24%;
+  width: 28%;
   height: 100%;
   border: 2px solid gray;
 }
