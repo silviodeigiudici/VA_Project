@@ -13,34 +13,56 @@ path_to_data = '../dataset/filtering/data_filtered.csv'
 data = pd.io.parsers.read_csv(  #pandas handles in a better way
      path_to_data, 
      header="infer",         #the first row contains the city names
-     usecols=[1,2,3,5,6,8]
+     #usecols=[1,2,3,5,6,8]
+     usecols=[1,2,3,4,5,6,7,8,10]
     )
 
-iterations = 1
-num_rows = 100
+iterations = 50
+num_rows = 1000
 #data_numpy = data.values[:num_rows]
 data_numpy = data.values[:]
 
 #list_values_to_check = ["Free", "Paid"]
-list_values_to_check = ["10,000+", "100,000+", "1,000,000+", "10,000,000+"]
-#list_values_to_check = ["Everyone", "Teen", "Everyone 10+", "Mature 17+", "Adults only 18+"]
+#list_values_to_check = [10000, 100000, 1000000, 10000000]
+list_values_to_check = ["Everyone", "Teen", "Everyone 10+", "Mature 17+", "Adults only 18+"]
+#list_values_to_check = ["4.0","4.1","Varies with device","4.4","2.3"]
+#list_values_to_check = ["GAME","FAMILY","MEDICAL","TOOLS","COMMUNICATION"]
 
-#index_field = 2
-index_field = 3
+#colors = ['black', 'red', 'blue', 'green', 'yellow']
+
+#index_field = 0
+#index_field = 8
+index_field = 7
+#index_field = 4
+#index_field = 5
+
+
+list_values_to_check = [3.5,4,4.2,4.4,4.6,4.8]
+index_field = 1
+
 #array_to_check = data.values[:num_rows,index_field]
 array_to_check = data.values[:,index_field]
 
+
+booleans_list = []
+for i in range(1,len(list_values_to_check)):
+    new_booleans = (array_to_check > list_values_to_check[i-1]) & (array_to_check <= list_values_to_check[i])
+    booleans_list.append(new_booleans)
+
+'''
 booleans_list = []
 for value in list_values_to_check:
     new_booleans = array_to_check == value
     booleans_list.append(new_booleans)
-
+'''
 
 #TO ELIMINATE:
 #data_numpy = data.values[:num_rows,[0, 1, 3]] #extract specific columns
 
-data_numpy_euclidian = data_numpy[:,[1,2]]
-data_numpy_jaccard = data_numpy[:,[0,3,4,5]]
+#data_numpy_euclidian = data_numpy[:,[2]]
+data_numpy_euclidian = data_numpy[:,[1,2,3,6]]
+data_numpy_jaccard = data_numpy[:,[0,4,5,7,8]]
+#data_numpy_jaccard = data_numpy[:,[7]]
 
 #imp_mean = SimpleImputer(missing_values=np.nan, strategy='mean')
 #imp_mean.fit(data_numpy_euclidian)
