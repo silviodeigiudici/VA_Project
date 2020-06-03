@@ -17,7 +17,7 @@ header_new = data.columns
 data_numpy = data.values
 
 dictionary = {}
-index_feature_analying = 8
+index_feature_analying = 5
 
 '''
 #used in reviews
