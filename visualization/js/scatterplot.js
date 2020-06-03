@@ -62,18 +62,6 @@ class Scatterplot {
         //points need to be translated with respect svg as the axes did
         //x(number) covert a coordinate in the range in a web page distance
 
-        /*
-        var myCircle = referenceScatterplot.svg.selectAll("circle")
-            .data(referenceScatterplot.dataUpdater.data)
-            .enter()
-            .append("circle")
-            .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
-            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; })
-            .attr("r", 3)
-            .style("fill", '#2b77df')
-            .style("opacity", 0.5);
-*/      
-
         referenceScatterplot.svg.selectAll("circle")
             .data(referenceScatterplot.dataUpdater.data)
             .enter()
@@ -83,40 +71,12 @@ class Scatterplot {
             .attr("r", 3)
             .style("fill", '#2b77df')
             .style("opacity", 0.5);
-;
-/*
-        circle.attr("class","update");
 
-        circle.enter()
-            .append("circle");
-
-        circle.attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
-            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; })
-            .attr("r", 3)
-            .style("fill", '#2b77df')
-            .style("opacity", 0.5);
-*/
     }
 
     updateVisualization(referenceScatterplot, width_translate, height_translate) {
         
         console.log("Start update scatterplot");
-      /* 
-        referenceScatterplot.svg.selectAll("circle")
-            .data([])
-            .exit().remove();
-
-        referenceScatterplot.svg.selectAll("circle")
-            .data(referenceScatterplot.dataUpdater.data)
-            .enter()
-            .append("circle")
-            .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
-            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; })
-            .attr("r", 3)
-            .style("fill", '#2b77df')
-            .style("opacity", 0.5);
-       */ 
-
 
         var circle = referenceScatterplot.svg.selectAll("circle").data(referenceScatterplot.dataUpdater.data);
 
@@ -130,92 +90,6 @@ class Scatterplot {
             .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
             .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; })
 
-/*
-        var circle = referenceScatterplot.svg.selectAll("circle").data(referenceScatterplot.dataUpdater.data);
-
-        circle.enter()
-            .append("circle")
-            .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
-            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; })
-            .attr("r", 3)
-            .style("fill", '#2b77df')
-            .style("opacity", 0.5) //.transition().duration(750);
-
-        circle.exit().remove();
-*/
-        //circle.attr("class","update");
-        /*
-        circle.enter()
-            .append("circle");
-
-        circle.attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
-            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; })
-            .attr("r", 3)
-            .style("fill", '#2b77df')
-            .style("opacity", 0.5);
-
-        circle.exit()
-            .attr("class", "exit")
-            .transition(750)
-            .ease("linear")
-            .attr("cy", 0)
-            .style("opacity", 0.2)
-            .remove();
-*/
-
-/*
-//Attach the data to the graph
-        var circle = svg.selectAll("circle").data(data);
-
-        // Update existing element
-        circle.attr("class", "update");
-
-        // Add new element
-        circle.enter()
-            .append("circle")
-            .attr("class", "enter")
-            .attr("stroke-width", 0)
-            .attr("stroke", "black")
-                .transition()
-                .duration(750)
-                .attr("y", 0)
-                .style("fill-opacity", 1);
-
-        // Apply attribute to new and updated element
-        circle.attr("cx", function(d,i) {return x(d.h);})
-            .attr("cy", function(d,i) {return y(d.v);})
-            .attr("r", function(d,i) {return r(Math.sqrt(d.v));})
-            .style("fill", function(d,i) {return color(d.v);})
-            .style("opacity", function(d,i) {return o(d.v);})
-            .on("click", function(d,i){window.open(d.name,'_blank');})
-            .on("mouseover", function(d,i){d3.select(this).style("fill", "red").attr("stroke-width", 1);})
-            .on("mouseout", function(d,i){d3.select(this).style("fill", function(d,i) {return color(d.v);}).attr("stroke-width", 0);})
-            .append("title")
-            .text(function(d) { return d.v+' '+ d.t+' (adjusted) - '+ d.d })
-                .transition()
-                .duration(750)
-                .attr("y", 0)
-                .style("fill-opacity", 1);
-
-        // Remove old elements
-        circle.exit()
-            .attr("class", "exit")
-            .transition(750)
-            .ease("linear")
-            .attr("cy", 0)
-            .style("opacity", 0.2)
-            .remove();
-
-        // Update the Axis
-        var xAxis = d3.svg.axis().scale(x).orient("bottom");
-        var yAxis = d3.svg.axis().scale(y).orient("left");
-
-        svg.selectAll("g .y.axis")
-            .call(yAxis)
-
-        svg.selectAll("g .x.axis")
-            .call(xAxis);
-*/
     }
 
 }
