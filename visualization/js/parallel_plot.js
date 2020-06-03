@@ -27,7 +27,6 @@ class ParallelPlot {
         var dimensions = Object.keys(dataUpdater.data[0]).filter(function(d) { return d != "Current Version" && d !="Genres" && d !="Current Ver" && d != "comp0" && d!= "comp1" && d!="App" && d!="Type" && d!="LastUpdated"});
         var data = dataUpdater.data
         var i;
-        console.log(dataUpdater.data[0])
         var y = {}
         var c = {}
         c["Category"] =  d3.map(data, function(d){return(d.Category)}).keys().sort()
