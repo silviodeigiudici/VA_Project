@@ -2,8 +2,8 @@ class BoxPlot1 {
     constructor(dataUpdater) {
         this.dataUpdater = dataUpdater;
 
-        var margin = { top: 15, right: 50, bottom: 20, left: 50 }
-        var height = 90;
+        var margin = { top: 20, right: 50, bottom: 20, left: 90 }
+        var height = 110;
         var width = 30;
         this.height = height;
         this.width = width;

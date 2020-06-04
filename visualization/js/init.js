@@ -6,6 +6,7 @@ var header = new Header(dataUpdater);
 var parallelPlot = new ParallelPlot(dataUpdater);
 var boxPlot = new BoxPlot1(dataUpdater);
 var histo_content = new HistoContent(dataUpdater);
+var histo_category = new HistoCategory(dataUpdater);
 
 dataUpdater.header = header;
 

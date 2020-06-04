@@ -2,9 +2,9 @@ class ParallelPlot {
     constructor(dataUpdater) {
         this.dataUpdater = dataUpdater;
 
-        var margin = { top: 20, right: 5, bottom: 5, left: 30 }
-        var height = 300;
-        var width = 800;
+        var margin = { top: 25, right: 5, bottom: 5, left: 20 }
+        var height = 400;
+        var width = 1100;
         this.height = height;
         this.width = width;
         this.svg = d3.select(".parallel_plot")

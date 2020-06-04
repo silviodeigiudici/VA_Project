@@ -3,8 +3,8 @@ class HistoContent {
         this.dataUpdater = dataUpdater;
 
         var margin = { top: 50, right: 5, bottom: 10, left: 50 }
-        var height = 100;
-        var width = 200;
+        var height = 300  ;
+        var width = 450;
         this.height = height;
         this.width = width;
         this.svg = d3.select(".histo_content")
@@ -43,55 +43,69 @@ class HistoContent {
             occurances[current] = occurances[current] + 1
           }
         }
-      var max = 0
-      for (i in occurances){
-        dat[i] = []
-        dat.push(occurances[i])
-        if (occurances[i] > max){
-          max = occurances[i]
+        var max = 0
+        var count = 0
+        for (i in occurances){
+          count = count +1
+          dat[i] = []
+          dat.push(occurances[i])
+          if (occurances[i] > max){
+            max = occurances[i]
+          }
         }
-      }
 
-      var dataObj = []
-      for (let i = 0; i < 5; i++) {
-      dataObj[i] = {
-        cat: categories[i],
-        frequencies: occurances[categories[i]]
+        var dataObj = []
+        for (let i = 0; i < count; i++) {
+        dataObj[i] = {
+          cat: categories[i],
+          frequencies: occurances[categories[i]]
+          }
         }
-      }
 
-      var x = d3.scaleBand()
-                .range([0, referenceHistogram.width])
-                .padding(0.1);
-      var y = d3.scaleLinear()
-                .range([referenceHistogram.height, 0]);
-
-
-      // get the data
-      // format the data
-        // Scale the range of the data in the domains
-      x.domain(dataObj.map(function(d) { return d.cat; }));
-      y.domain([0, d3.max(dataObj, function(d) { return d.frequencies; })]);
+        var x = d3.scaleBand()
+                  .range([0, referenceHistogram.width])
+                  .padding(0.1);
+        var y = d3.scaleLinear()
+                  .range([referenceHistogram.height, 0]);
 
 
-      // append the rectangles for the bar chart
-      referenceHistogram.svg.selectAll(".bar")
-        .data(dataObj)
-        .enter().append("rect")
-          .attr("class", "bar")
+        // get the data
+        // format the data
+          // Scale the range of the data in the domains
+        x.domain(dataObj.map(function(d) { return d.cat; }));
+        y.domain([0, d3.max(dataObj, function(d) { return d.frequencies; })]);
+
+
+        // append the rectangles for the bar chart
+        referenceHistogram.svg.selectAll(".bar")
+          .data(dataObj)
+          .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) { return x(d.cat); })
+            .attr("width", x.bandwidth())
+            .attr("y", function(d) { return y(d.frequencies); })
+            .attr("height", function(d) { return referenceHistogram.height - y(d.frequencies); })
+            .attr("fill", "#69b3a2");
+
+
+        /* #Label over bars, need fixing
+        referenceHistogram.svg.selectAll(".bar")
+        .append("text")
+          .style("text-anchor", "middle")
+          .attr("y", function(d) { return y(d.frequencies)+500; })
           .attr("x", function(d) { return x(d.cat); })
-          .attr("width", x.bandwidth())
-          .attr("y", function(d) { return y(d.frequencies); })
-          .attr("height", function(d) { return referenceHistogram.height - y(d.frequencies); });
+          .text(function(d) { return d.frequencies; })
+          .style("fill", "black")
+  */
+        // add the x Axis
+        referenceHistogram.svg.append("g")
+            .attr("transform", "translate(0," + referenceHistogram.height + ")")
+            .call(d3.axisBottom(x));
 
-      // add the x Axis
-      referenceHistogram.svg.append("g")
-          .attr("transform", "translate(0," + referenceHistogram.height + ")")
-          .call(d3.axisBottom(x));
+        // add the y Axis
+        referenceHistogram.svg.append("g")
+            .call(d3.axisLeft(y));
 
-      // add the y Axis
-      referenceHistogram.svg.append("g")
-          .call(d3.axisLeft(y));
 
     }
 
