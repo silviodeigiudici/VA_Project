@@ -89,7 +89,6 @@ function makeBoxPlot(referenceBoxPlot,svg,data_sorted){
     var interQuantileRange = q3 - q1
     var min = data_sorted[0]
     var max = data_sorted[data_sorted.length-1]
-    console.log(min, max)
     // Show the Y scale
     var y = d3.scaleLinear()
       .domain([min,max])
