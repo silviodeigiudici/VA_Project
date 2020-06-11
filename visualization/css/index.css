@@ -51,6 +51,7 @@ th {
   width: 11%;
   height: 100%;
   border: 2px solid gray;
+  overflow-y: scroll;
 }
 
 .parallel_plot {
