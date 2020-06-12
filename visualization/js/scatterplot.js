@@ -44,7 +44,7 @@ class Scatterplot {
 
         var referenceScatterplot = this;
         this.dataUpdater.addListener('dataReady', function(e) {
-            referenceScatterplot.startVisualization(referenceScatterplot, width_translate, height_translate);
+            referenceScatterplot.updateVisualization(referenceScatterplot, width_translate, height_translate);
         });
 
         this.dataUpdater.addListener('updateVisualization', function(e) {
@@ -76,7 +76,8 @@ class Scatterplot {
 
     updateVisualization(referenceScatterplot, width_translate, height_translate) {
         
-        console.log("Start update scatterplot");
+        //console.log("Start update scatterplot");
+        
 
         var circle = referenceScatterplot.svg.selectAll("circle").data(referenceScatterplot.dataUpdater.data);
 

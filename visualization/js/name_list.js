@@ -18,7 +18,7 @@ class NameList{
 
         var referenceNamelist = this;
         this.dataUpdater.addListener('dataReady', function(e) {
-            referenceNamelist.startVisualization(referenceNamelist);
+            referenceNamelist.updateVisualization(referenceNamelist);
         });
 
         this.dataUpdater.addListener('updateVisualization', function(e) {
@@ -42,7 +42,7 @@ class NameList{
             .attr("cx", function(d) {return -40;})
             .attr("cy", function(d,i) {return distance_between_row*i - 5;}) 
             .attr("r", 5)
-            .style("fill", "none")
+            .style("fill", "white")
             .style("stroke", "black")
             .style("stroke-width", "3") 
             .style("opacity", 0.5);
@@ -57,9 +57,13 @@ class NameList{
             //.attr("font-weight", "bold")
             .text(function(d,i) {return d.App;});
 
-  }
+        referenceNamelist.svg.selectAll("circle").on("click", referenceNamelist.activateButtoms); 
+        referenceNamelist.svg.selectAll("circle").on("click", function () { referenceNamelist.activateButtoms(referenceNamelist, this) }); //'this' is the buttom! not the NameList! Because this is a function called when there is the event click for the buttom
+    
+    }
 
-    updateVisualization(referenceNamelist, width_translate, height_translate) {
+
+    updateVisualization(referenceNamelist) {
         
         var rows = referenceNamelist.svg.selectAll("g")
             .data(referenceNamelist.dataUpdater.data);
@@ -69,6 +73,7 @@ class NameList{
         var distance_between_row = 15;
 
         rows.select("circle")
+            .style("fill", "white") //otherwise the color remains black if it was clicked
             .attr("cy", function(d,i) {return distance_between_row*i - 5;});
 
         rows.select("text")
@@ -82,7 +87,7 @@ class NameList{
             .attr("cy", function(d,i) {return distance_between_row*i - 5;})
             .attr("cx", function(d) {return -40;})
             .attr("r", 5)
-            .style("fill", "none")
+            .style("fill", "white")
             .style("stroke", "black")
             .style("stroke-width", "3") 
             .style("opacity", 0.5);
@@ -93,7 +98,22 @@ class NameList{
             .attr("font-size","12px")
             .attr("x",function(d) {return -20;});
 
+        referenceNamelist.svg.selectAll("circle").on("click", function () { referenceNamelist.activateButtoms(referenceNamelist, this) }); //'this' is the buttom! not the NameList! Because this is a function called when there is the event click for the buttom
+       
+    
     }
+
+    activateButtoms(referenceNamelist, buttomReference){
+        
+        var buttom = d3.select(buttomReference);         
+
+        if ( buttom.style("fill") == "white" )
+            buttom.style("fill","black");
+        else
+            buttom.style("fill","white");
+    
+    }
+
 
 }
 
