@@ -88,7 +88,7 @@ class Scatterplot {
             .style("opacity", 0.5) //.transition().duration(750);
             .merge(circle)
             .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
-            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; })
+            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; });
 
     }
 
