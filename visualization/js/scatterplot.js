@@ -53,32 +53,8 @@ class Scatterplot {
 
     }
 
-    startVisualization(referenceScatterplot, width_translate, height_translate){
-        //if you use the following lines, don't use domain in the scaleLiner before
-        //maybe d3.extent is used to find the range in the data? finding the min and max?
-        //x.domain(d3.extent(dataUpdater.data, function(d) { return d.par1 + width_translate; })).nice();
-        //y.domain(d3.extent(dataUpdater.data, function(d) { return d.par2 + height_translate; })).nice();
-        
-        //points need to be translated with respect svg as the axes did
-        //x(number) covert a coordinate in the range in a web page distance
-
-        referenceScatterplot.svg.selectAll("circle")
-            .data(referenceScatterplot.dataUpdater.data)
-            .enter()
-            .append("circle")
-            .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
-            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; })
-            .attr("r", 3)
-            .style("fill", '#2b77df')
-            .style("opacity", 0.5);
-
-    }
-
     updateVisualization(referenceScatterplot, width_translate, height_translate) {
         
-        //console.log("Start update scatterplot");
-        
-
         var circle = referenceScatterplot.svg.selectAll("circle").data(referenceScatterplot.dataUpdater.data);
 
         circle.exit().remove();

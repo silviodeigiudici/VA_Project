@@ -22,23 +22,15 @@ class DataUpdater {
     }
 
     updateData() {
-        //for all originalData rows  
-        //console.log("Update Data");
         this.data = [];
 
         var referenceDataUpdater = this;
+        
         this.originalData.forEach( function(row, index) {
-            /*
-            console.log(row.App);
-            console.log(row.Type);
-            console.log(referenceDataUpdater.header.checkPaidFilter(row));
-            console.log(referenceDataUpdater.header.checkFreeFilter(row));
-            */
             if( referenceDataUpdater.header.checkPaidFilter(row) && referenceDataUpdater.header.checkFreeFilter(row) )
                 referenceDataUpdater.data.push( row );
         });
-        //console.log(this.data);
-        //console.log(this.data);
+        
         this.eventsHandler.dispatchEvent( new Event('updateVisualization') );
     }
 }

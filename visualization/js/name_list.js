@@ -27,41 +27,6 @@ class NameList{
 
     }
 
-    startVisualization(referenceNamelist){
-        
-
-        var rows = referenceNamelist.svg.selectAll("circle")
-            .data(referenceNamelist.dataUpdater.data)
-            .enter()
-            .append("g")
-            .attr("transform", "translate(50,20)");
-
-        var distance_between_row = 15;
-
-        rows.append("circle")
-            .attr("cx", function(d) {return -40;})
-            .attr("cy", function(d,i) {return distance_between_row*i - 5;}) 
-            .attr("r", 5)
-            .style("fill", "white")
-            .style("stroke", "black")
-            .style("stroke-width", "3") 
-            .style("opacity", 0.5);
-
-        rows.append("text")
-            //.attr("font", "italic 3px serif") //fill: red;
-            //.attr("width","500")
-            //.attr("height","40")
-            .attr("font-size","12px")
-            .attr("x",function(d) {return -20;})
-            .attr("y", function(d,i) {return distance_between_row*i;}) 
-            //.attr("font-weight", "bold")
-            .text(function(d,i) {return d.App;});
-
-        referenceNamelist.svg.selectAll("circle").on("click", referenceNamelist.activateButtoms); 
-        referenceNamelist.svg.selectAll("circle").on("click", function () { referenceNamelist.activateButtoms(referenceNamelist, this) }); //'this' is the buttom! not the NameList! Because this is a function called when there is the event click for the buttom
-    
-    }
-
 
     updateVisualization(referenceNamelist) {
         
