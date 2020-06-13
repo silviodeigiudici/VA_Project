@@ -21,8 +21,12 @@ class NameList{
             referenceNamelist.updateVisualization(referenceNamelist);
         });
 
-        this.dataUpdater.addListener('updateVisualization', function(e) {
+        this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
             referenceNamelist.updateVisualization(referenceNamelist);
+        });
+
+        this.dataUpdater.addListener('selectUpdateVisualization', function(e) {
+            referenceNamelist.changeButtom(referenceNamelist, e);
         });
 
     }
@@ -31,7 +35,7 @@ class NameList{
     updateVisualization(referenceNamelist) {
         
         var rows = referenceNamelist.svg.selectAll("g")
-            .data(referenceNamelist.dataUpdater.data);
+            .data(referenceNamelist.dataUpdater.brushedData);
         
         rows.exit().remove();
 
@@ -49,7 +53,7 @@ class NameList{
             .attr("transform", "translate(50,20)");
 
         g_entries.append("circle")
-            .attr("id", function(d,i) {return "p" + i.toString();} )
+            .attr("id", function(d,i) {return "b" + i.toString();} )
             .attr("cy", function(d,i) {return distance_between_row*i - 5;})
             .attr("cx", function(d) {return -40;})
             .attr("r", 5)
@@ -64,22 +68,34 @@ class NameList{
             .attr("font-size","12px")
             .attr("x",function(d) {return -20;});
 
-        referenceNamelist.svg.selectAll("circle").on("click", function () { referenceNamelist.activateButtoms(referenceNamelist, this) }); //'this' is the buttom! not the NameList! Because this is a function called when there is the event click for the buttom
+        referenceNamelist.svg.selectAll("circle").on("click", function () { referenceNamelist.activateButtom(referenceNamelist, this) }); //'this' is the buttom! not the NameList! Because this is a function called when there is the event click for the buttom
        
     
     }
 
-    activateButtoms(referenceNamelist, buttomReference){
+    changeButtom(referenceNamelist, eventInfo){
+        
+        var index = eventInfo.detail;
+
+        var buttom = d3.select("#b" + index.toString());
+
+        var highlightValue = referenceNamelist.dataUpdater.brushedData[index].highlight;
+
+        if(highlightValue === "1" || highlightValue === "3")
+            buttom.style("fill", "black");
+        else
+            buttom.style("fill", "white");
+
+    }
+
+    activateButtom(referenceNamelist, buttomReference){
         
         var buttom = d3.select(buttomReference);         
         
-        if ( buttom.style("fill") === "white" )
-            buttom.style("fill","black");
-        else
-            buttom.style("fill","white");
-        
         var stringId = buttom.attr("id");
-        referenceNamelist.dataUpdater.highlightData(stringId.slice(1, stringId.length));
+        var valueString = stringId.slice(1, stringId.length);
+        referenceNamelist.dataUpdater.selectUpdateData(parseInt(valueString));
+
     }
 
 

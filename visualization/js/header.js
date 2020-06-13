@@ -35,12 +35,12 @@ class Header {
 
         referenceHeader.checkBoxPaid.addEventListener('change', function() {
             //referenceHeader.checkBoxPaid.checked = !referenceHeader.checkBoxPaid.checked; //filter
-            referenceHeader.dataUpdater.updateData();
+            referenceHeader.dataUpdater.typeUpdateData();
         });
         
         referenceHeader.checkBoxFree.addEventListener('change', function() {
             //referenceHeader.checkBoxFree.checked = !referenceHeader.checkBoxFree.checked; //filter
-            referenceHeader.dataUpdater.updateData();
+            referenceHeader.dataUpdater.typeUpdateData();
         });
 
     }
