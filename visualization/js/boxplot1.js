@@ -7,6 +7,7 @@ class BoxPlot1 {
         var width = 30;
         this.height = height;
         this.width = width;
+        this.margin = margin;
         this.svg = d3.select(".boxplot1")
           .append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -48,7 +49,7 @@ class BoxPlot1 {
         }
         data_to_sort.pop() //One NaN is sneaking in somehow in the last loop..
         var data_sorted = data_to_sort.sort(d3.ascending)
-        makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg,data_sorted)
+        makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg,data_sorted,"Avg Rating")
 
         //Reviews boxplot
         data_to_sort = []
@@ -60,7 +61,7 @@ class BoxPlot1 {
         data_to_sort.pop() //One NaN is sneaking in somehow in the last loop..
         data_sorted = data_to_sort.sort(d3.ascending)
         //console.log(data_sorted)
-        makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg1,data_sorted)
+        makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg1,data_sorted, "#Reviews")
 
         //Size boxplot
         data_to_sort = []
@@ -72,7 +73,7 @@ class BoxPlot1 {
         data_to_sort.pop() //One NaN is sneaking in somehow in the last loop..
         data_sorted = data_to_sort.sort(d3.ascending)
         //console.log(data_sorted)
-        makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg2,data_sorted)
+        makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg2,data_sorted,"Size")
       }
     updateVisualization() {
 
@@ -80,7 +81,7 @@ class BoxPlot1 {
 
 
 }
-function makeBoxPlot(referenceBoxPlot,svg,data_sorted){
+function makeBoxPlot(referenceBoxPlot,svg,data_sorted,axName){
 
     // Compute summary statistics used for the box:
     var q1 = d3.quantile(data_sorted, .25)
@@ -93,8 +94,16 @@ function makeBoxPlot(referenceBoxPlot,svg,data_sorted){
     var y = d3.scaleLinear()
       .domain([min,max])
       .range([referenceBoxPlot.height, 0]);
-    svg.call(d3.axisLeft(y))
+    svg.append("g")
+      .call(d3.axisLeft(y));
 
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - referenceBoxPlot.margin.left )
+        .attr("x",0 - referenceBoxPlot.height / 2)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text(axName);
 
     // a few features for the box
     var center = 40

@@ -2,11 +2,12 @@ class HistoContent {
     constructor(dataUpdater) {
         this.dataUpdater = dataUpdater;
 
-        var margin = { top: 50, right: 5, bottom: 10, left: 50 }
+        var margin = { top: 50, right: 5, bottom: 10, left: 60 }
         var height = 300  ;
-        var width = 450;
+        var width = 420;
         this.height = height;
         this.width = width;
+        this.margin = margin;
         this.svg = d3.select(".histo_content")
           .append("svg")
             .attr("width", '100%')
@@ -101,11 +102,23 @@ class HistoContent {
         referenceHistogram.svg.append("g")
             .attr("transform", "translate(0," + referenceHistogram.height + ")")
             .call(d3.axisBottom(x));
+        referenceHistogram.svg.append("text")
+            .attr("transform",
+                  "translate(" + ((referenceHistogram.width)/2) + " ,0" +
+                                 (referenceHistogram.height + 35) + ")")
+            .style("text-anchor", "middle")
+            .text("Content Rating");
 
         // add the y Axis
         referenceHistogram.svg.append("g")
             .call(d3.axisLeft(y));
-
+        referenceHistogram.svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - referenceHistogram.margin.left)
+            .attr("x",0 - (referenceHistogram.height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Apps");
 
     }
 

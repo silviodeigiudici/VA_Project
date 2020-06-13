@@ -2,11 +2,12 @@ class HistoCategory {
     constructor(dataUpdater) {
         this.dataUpdater = dataUpdater;
 
-        var margin = { top: 50, right: 5, bottom: 10, left: 140 }
+        var margin = { top: 50, right: 5, bottom: 10, left: 160 }
         var height = 350  ;
         var width = 330;
         this.height = height;
         this.width = width;
+        this.margin = margin;
         this.svg = d3.select(".barchart")
           .append("svg")
             .attr("width", '100%')
@@ -90,10 +91,24 @@ class HistoCategory {
       referenceHistogramCat.svg.append("g")
           .call(d3.axisTop(x));
 
+      //label x Axis
+      referenceHistogramCat.svg.append("text")
+          .attr("transform",
+                "translate(" + ((referenceHistogramCat.width)/2) + " ," + "-" + referenceHistogramCat.margin.top/2 + ")")
+          .style("text-anchor", "middle")
+          .text("Apps");
+
       // draw the y Axis
       referenceHistogramCat.svg.append("g")
           .call(d3.axisLeft(y));
-
+      //label y Axis
+      referenceHistogramCat.svg.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0 - referenceHistogramCat.margin.left)
+          .attr("x",0 - (referenceHistogramCat.height / 2))
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text("Category");
 
 }
 

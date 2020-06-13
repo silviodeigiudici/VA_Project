@@ -2,11 +2,12 @@ class HistoVersion {
     constructor(dataUpdater) {
         this.dataUpdater = dataUpdater;
 
-        var margin = { top: 50, right: 5, bottom: 10, left: 50 }
+        var margin = { top: 50, right: 5, bottom: 10, left: 60 }
         var height = 300  ;
-        var width = 450;
+        var width = 420;
         this.height = height;
         this.width = width;
+        this.margin = margin;
         this.svg = d3.select(".histo_version")
           .append("svg")
             .attr("width", '100%')
@@ -137,10 +138,23 @@ class HistoVersion {
     referenceHistogramVer.svg.append("g")
         .attr("transform", "translate(0," + referenceHistogramVer.height + ")")
         .call(d3.axisBottom(x));
-
+    referenceHistogramVer.svg.append("text")
+        .attr("transform",
+              "translate(" + ((referenceHistogramVer.width)/2) + " ," +
+                             (referenceHistogramVer.height + 35) + ")")
+        .style("text-anchor", "middle")
+        .text("Android Version");
     // add the y Axis
     referenceHistogramVer.svg.append("g")
         .call(d3.axisLeft(y));
+
+    referenceHistogramVer.svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - referenceHistogramVer.margin.left)
+        .attr("x",0 - (referenceHistogramVer.height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Apps");
 
     //Append a legend and populate it
     var legend = referenceHistogramVer.svg.append("g")
