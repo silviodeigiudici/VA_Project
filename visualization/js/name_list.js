@@ -11,7 +11,7 @@ class NameList{
             .attr("overflow","scroll")
             //.attr("display","block")
             .attr("width","200%")
-            .attr("height", "23000%") //(5421 / 23)*100
+            //.attr("height", "23000%") //(5421 / 23)*100
             //.attr("viewBox", "0,0,500,1000")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -25,79 +25,85 @@ class NameList{
             referenceNamelist.updateVisualization(referenceNamelist);
         });
 
-        this.dataUpdater.addListener('selectUpdateVisualization', function(e) {
-            referenceNamelist.changeButtom(referenceNamelist, e);
-        });
-
     }
 
 
     updateVisualization(referenceNamelist) {
         
+        //Preparing the data
+        var dict = {};
+
+        referenceNamelist.dataUpdater.brushedData.forEach( function(row, index) {
+            
+            if (dict[row.Installs] != undefined )
+                dict[row.Installs].push(row.App);
+            else
+                dict[row.Installs] = [row.App];
+
+        });
+        
+        var moreDownloaded = [];
+        var num = 20;
+        var keys = Object.keys(dict).sort( function(a,b) { return parseInt(b, 10) - parseInt(a,10) } );
+        var numInstallsCat = keys.length;
+
+        var actualList = undefined;
+        var i = 0;
+        var j = 0;
+        var k = 0;
+
+        while ( i < num && j < numInstallsCat){
+
+            actualList = dict[keys[j]];
+            
+            if (k < actualList.length && !moreDownloaded.includes(actualList[k])){
+                moreDownloaded.push(actualList[k]);
+                k++;
+                i++;
+            }
+            else if(k < actualList.length && moreDownloaded.includes(actualList[k]))
+                k++;
+            else{
+                k=0;
+                j++;
+            }
+
+        }
+        
+        //##########################################
+        //Draw the app names
         var rows = referenceNamelist.svg.selectAll("g")
-            .data(referenceNamelist.dataUpdater.brushedData);
+            .data(moreDownloaded);
         
         rows.exit().remove();
 
         var distance_between_row = 15;
 
-        rows.select("circle")
-            .style("fill", "white") //otherwise the color remains black if it was clicked
-            .attr("cy", function(d,i) {return distance_between_row*i - 5;});
-
-        rows.select("text")
-            .attr("y", function(d,i) {return distance_between_row*i;}) 
-            .text(function(d,i) {return d.App;});
-        
         var g_entries = rows.enter().append("g")
             .attr("transform", "translate(50,20)");
 
         g_entries.append("circle")
-            .attr("id", function(d,i) {return "b" + i.toString();} )
-            .attr("cy", function(d,i) {return distance_between_row*i - 5;})
             .attr("cx", function(d) {return -40;})
             .attr("r", 5)
-            .style("fill", "white")
-            .style("stroke", "black")
-            .style("stroke-width", "3") 
+            //.style("stroke", "black")
+            .style("fill", "black") 
+            //.style("stroke-width", "3") 
             .style("opacity", 0.5);
 
         g_entries.append("text")
-            .attr("y", function(d,i) {return distance_between_row*i;}) 
-            .text(function(d,i) {return d.App;})
             .attr("font-size","12px")
-            .attr("x",function(d) {return -20;});
+            .attr("x",function(d) {return -30;});
 
-        referenceNamelist.svg.selectAll("circle").on("click", function () { referenceNamelist.activateButtom(referenceNamelist, this) }); //'this' is the buttom! not the NameList! Because this is a function called when there is the event click for the buttom
-       
-    
-    }
+        var all_g = g_entries.merge(rows);
 
-    changeButtom(referenceNamelist, eventInfo){
-        
-        var index = eventInfo.detail;
+        all_g.select("circle")
+            .attr("cy", function(d,i) {return distance_between_row*i - 5;});
 
-        var buttom = d3.select("#b" + index.toString());
-
-        var highlightValue = referenceNamelist.dataUpdater.brushedData[index].highlight;
-
-        if(highlightValue === "1" || highlightValue === "3")
-            buttom.style("fill", "black");
-        else
-            buttom.style("fill", "white");
+        all_g.select("text")
+            .attr("y", function(d,i) {return distance_between_row*i;}) 
+            .text(function(d,i) {return d;});
 
     }
-
-    activateButtom(referenceNamelist, buttomReference){
-        
-        var buttom = d3.select(buttomReference);         
-        
-        var stringId = buttom.attr("id");
-        var valueString = stringId.slice(1, stringId.length);
-        referenceNamelist.dataUpdater.selectUpdateData(parseInt(valueString));
-
-    }
-
 
 }
 

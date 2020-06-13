@@ -64,21 +64,5 @@ class DataUpdater {
         this.eventsHandler.dispatchEvent( new Event("brushScatterUpdateVisualization") );
     }
 
-    selectUpdateData(index) {
-        
-        var highlightValue = this.brushedData[index].highlight;
-
-        if(highlightValue === "1")
-            this.data[index].highlight = "0";
-        else if(highlightValue === "3")
-            this.data[index].highlight = "2";
-        else if(highlightValue === "0")
-            this.data[index].highlight = "1";
-        else if(highlightValue === "2")
-            this.data[index].highlight = "3";
-
-        this.eventsHandler.dispatchEvent( new CustomEvent('selectUpdateVisualization', {detail: index} ) );
-        
-    }
 }
 
