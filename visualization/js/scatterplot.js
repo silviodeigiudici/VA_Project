@@ -51,6 +51,10 @@ class Scatterplot {
             referenceScatterplot.updateVisualization(referenceScatterplot, width_translate, height_translate);
         });
 
+        this.dataUpdater.addListener('highlightValue', function(e) {
+            referenceScatterplot.highlightData(referenceScatterplot, e);
+        });
+
     }
 
     updateVisualization(referenceScatterplot, width_translate, height_translate) {
@@ -60,12 +64,24 @@ class Scatterplot {
         circle.exit().remove();
 
         circle.enter().append("circle")
+            .attr("id", function(d, i) {return "c" + i.toString();} )
             .attr("r", 3)
-            .style("fill", '#2b77df')
             .style("opacity", 0.5) //.transition().duration(750);
             .merge(circle)
+            .style("fill", '#2b77df')
             .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
             .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; });
+
+    }
+
+    highlightData(referenceScatterplot, eventInfo){
+        
+        var point = d3.select("#c" + eventInfo.detail);
+        
+        if( point.style("fill") === "rgb(43, 119, 223)" )
+            point.style("fill", "red");
+        else
+            point.style("fill", "#2b77df");
 
     }
 

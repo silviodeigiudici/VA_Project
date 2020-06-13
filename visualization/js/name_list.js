@@ -49,6 +49,7 @@ class NameList{
             .attr("transform", "translate(50,20)");
 
         g_entries.append("circle")
+            .attr("id", function(d,i) {return "p" + i.toString();} )
             .attr("cy", function(d,i) {return distance_between_row*i - 5;})
             .attr("cx", function(d) {return -40;})
             .attr("r", 5)
@@ -71,12 +72,14 @@ class NameList{
     activateButtoms(referenceNamelist, buttomReference){
         
         var buttom = d3.select(buttomReference);         
-
-        if ( buttom.style("fill") == "white" )
+        
+        if ( buttom.style("fill") === "white" )
             buttom.style("fill","black");
         else
             buttom.style("fill","white");
-    
+        
+        var stringId = buttom.attr("id");
+        referenceNamelist.dataUpdater.highlightData(stringId.slice(1, stringId.length));
     }
 
 

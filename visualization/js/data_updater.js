@@ -33,5 +33,11 @@ class DataUpdater {
         
         this.eventsHandler.dispatchEvent( new Event('updateVisualization') );
     }
+
+    highlightData(index) {
+
+        this.eventsHandler.dispatchEvent( new CustomEvent('highlightValue', {detail: index} ) );
+        
+    }
 }
 
