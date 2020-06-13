@@ -47,11 +47,11 @@ class Scatterplot {
             referenceScatterplot.updateVisualization(referenceScatterplot, width_translate, height_translate);
         });
 
-        this.dataUpdater.addListener('updateVisualization', function(e) {
+        this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
             referenceScatterplot.updateVisualization(referenceScatterplot, width_translate, height_translate);
         });
 
-        this.dataUpdater.addListener('highlightValue', function(e) {
+        this.dataUpdater.addListener('selectUpdateVisualization', function(e) {
             referenceScatterplot.highlightData(referenceScatterplot, e);
         });
 
@@ -59,7 +59,7 @@ class Scatterplot {
 
     updateVisualization(referenceScatterplot, width_translate, height_translate) {
         
-        var circle = referenceScatterplot.svg.selectAll("circle").data(referenceScatterplot.dataUpdater.data);
+        var circle = referenceScatterplot.svg.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData);
 
         circle.exit().remove();
 
@@ -68,7 +68,8 @@ class Scatterplot {
             .attr("r", 3)
             .style("opacity", 0.5) //.transition().duration(750);
             .merge(circle)
-            .style("fill", '#2b77df')
+            //.style("fill", '#2b77df')
+            .style("fill", function(d, i) {return (d.highlight === "0") ? "#2b77df" : "red";} )
             .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
             .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; });
 
@@ -76,12 +77,21 @@ class Scatterplot {
 
     highlightData(referenceScatterplot, eventInfo){
         
-        var point = d3.select("#c" + eventInfo.detail);
-        
-        if( point.style("fill") === "rgb(43, 119, 223)" )
+        var index = eventInfo.detail;
+
+        var point = d3.select("#c" + index.toString());
+
+        var highlightValue = referenceScatterplot.dataUpdater.brushedData[index].highlight;
+
+        if(highlightValue === "1" || highlightValue === "3")
             point.style("fill", "red");
         else
             point.style("fill", "#2b77df");
+
+        //if( point.style("fill") === "rgb(43, 119, 223)" )
+        //    point.style("fill", "red");
+        //else
+        //    point.style("fill", "#2b77df");
 
     }
 
