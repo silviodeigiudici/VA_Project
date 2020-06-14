@@ -6,6 +6,7 @@ class DataUpdater {
         this.data = [];
         this.originalData = [];
         this.header = undefined;
+        this.scatterplot = undefined;
     }
 
     loadData() {
@@ -59,10 +60,16 @@ class DataUpdater {
 
     }
 
-    brushScatterUpdateData() {
+    checkScatterplotFilter(row, eventInfo){
+
+        return this.scatterplot.checkScatterplotFilter(row, eventInfo);
+
+    }
+
+    brushScatterUpdateData(brushData) {
         
-        console.log("new brush event");
-        this.eventsHandler.dispatchEvent( new Event("brushScatterUpdateVisualization") );
+        this.eventsHandler.dispatchEvent( new CustomEvent("brushScatterUpdateVisualization", {detail: brushData} ) );
+
     }
 
 }

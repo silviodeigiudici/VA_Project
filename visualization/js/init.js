@@ -11,5 +11,6 @@ var histo_version = new HistoVersion(dataUpdater);
 var name_list = new NameList(dataUpdater);
 
 dataUpdater.header = header;
+dataUpdater.scatterplot = scatterplot;
 
 dataUpdater.loadData();

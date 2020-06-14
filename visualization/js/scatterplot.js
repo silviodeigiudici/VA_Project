@@ -1,7 +1,6 @@
 class Scatterplot {
     constructor(dataUpdater) {
         this.dataUpdater = dataUpdater; 
-        
 
         var margin_scatter = { top: -3, right: 5, bottom: 5, left: 5 }
         //var height = 400;
@@ -31,26 +30,31 @@ class Scatterplot {
         var yAxis = d3.axisLeft(this.y);
 
         //translation of the axes with respect the svg
-        var width_translate = 30;
-        var height_translate = 10;
+        //var width_translate = 30;
+        this.width_translate = 30;
+        //var height_translate = 10;
+        this.height_translate = 10;
 
         this.svg.append("g")
-            .attr("transform", "translate(" + width_translate + "," + (height_translate + lenght_y) + ")")
+            .attr("transform", "translate(" + this.width_translate + "," + (this.height_translate + lenght_y) + ")")
             .call(xAxis);
 
         this.svg.append("g")
-            .attr("transform", "translate(" + width_translate + "," + height_translate + ")")
+            .attr("transform", "translate(" + this.width_translate + "," + this.height_translate + ")")
             .call(yAxis);
 
         var referenceScatterplot = this;
         this.dataUpdater.addListener('dataReady', function(e) {
-            referenceScatterplot.startVisualization(referenceScatterplot, width_translate, height_translate);
+            referenceScatterplot.startVisualization(referenceScatterplot);
         });
 
         this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
-            referenceScatterplot.updateVisualization(referenceScatterplot, width_translate, height_translate);
+            referenceScatterplot.updateVisualization(referenceScatterplot);
         });
 
+        this.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
+            referenceScatterplot.highlightBrushedPoints(referenceScatterplot, e);
+        });
 
     }
 
@@ -67,33 +71,59 @@ class Scatterplot {
             .merge(circle)
             .style("fill", '#2b77df')
             //.style("fill", function(d, i) {return (d.highlight === "0") ? "#2b77df" : "red";} )
-            .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
-            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; });
+            .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + referenceScatterplot.width_translate; })
+            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + referenceScatterplot.height_translate; });
     }
 
-    activateBrushing(referenceScatterplot){
+    checkScatterplotFilter(row, eventInfo) {
+        
+        var brushData = eventInfo.detail;
+        var x0 = brushData[0][0],
+            x1 = brushData[1][0],
+            y0 = brushData[0][1],
+            y1 = brushData[1][1];
 
-        referenceScatterplot.dataUpdater.brushScatterUpdateData();
+        var cx = this.x(parseFloat(row.comp0)) + this.width_translate;
+        var cy = this.y(parseFloat(row.comp1)) + this.height_translate;
+        
+        return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
 
     }
 
-    startVisualization(referenceScatterplot, width_translate, height_translate) {
+    highlightBrushedPoints(referenceScatterplot, eventInfo){
+        
+        referenceScatterplot.svg.selectAll("circle").style("fill", function(d) {
+            if(referenceScatterplot.dataUpdater.checkScatterplotFilter(d, eventInfo) )
+                return "red";
+            else
+                return "#2b77df";
+        }); 
 
-        referenceScatterplot.buildVisualization(referenceScatterplot, width_translate, height_translate);
+    }
+
+    activateBrushing(referenceScatterplot, brushData){
+        
+        referenceScatterplot.dataUpdater.brushScatterUpdateData(brushData);
+
+    }
+
+    startVisualization(referenceScatterplot) {
+
+        referenceScatterplot.buildVisualization(referenceScatterplot);
         
         var rect = d3.select(".scatterplot").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
         
         referenceScatterplot.svg.call( d3.brush()  
-                                        .extent( [ [0,0], [rect.width,rect.height] ] ) 
-                                        .on("end", function(e) { //you can write .on("start brush end", ..-) to get a notification of the event when you start brushing, when you continue to brush, and when you stop the brush (even if you simple translate the brush rectangular)
-                                            referenceScatterplot.activateBrushing(referenceScatterplot);
-                                        }) 
-                                     );
+            .extent( [ [0,0], [rect.width,rect.height] ] ) 
+            .on("start brush", function(e) { //you can write .on("start brush end", ..-) to get a notification of the event when you start brushing, when you continue to brush, and when you stop the brush (even if you simple translate the brush rectangular)
+                referenceScatterplot.activateBrushing(referenceScatterplot, d3.event.selection);
+            }) 
+        );
     }
 
-    updateVisualization(referenceScatterplot, width_translate, height_translate) {
+    updateVisualization(referenceScatterplot) {
         
-        referenceScatterplot.buildVisualization(referenceScatterplot, width_translate, height_translate);
+        referenceScatterplot.buildVisualization(referenceScatterplot);
 
     }
 
