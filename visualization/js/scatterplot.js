@@ -2,6 +2,8 @@ class Scatterplot {
     constructor(dataUpdater) {
         this.dataUpdater = dataUpdater; 
 
+        this.brush = undefined;
+
         var margin_scatter = { top: -3, right: 5, bottom: 5, left: 5 }
         //var height = 400;
         //var width = 400;
@@ -11,6 +13,8 @@ class Scatterplot {
             .attr("width", '98%')
             .attr("height", '98%')
             .attr("transform", "translate(" + margin_scatter.left + "," + margin_scatter.top + ")");
+
+        this.globalG = this.svg.append("g");
             /*
             .attr("width", width)
             .attr("height", height);
@@ -60,7 +64,7 @@ class Scatterplot {
 
     buildVisualization(referenceScatterplot, width_translate, height_translate){
 
-        var circle = referenceScatterplot.svg.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData);
+        var circle = referenceScatterplot.globalG.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData);
 
         circle.exit().remove();
 
@@ -78,6 +82,9 @@ class Scatterplot {
     checkScatterplotFilter(row, eventInfo) {
         
         var brushData = eventInfo.detail;
+        
+        if(brushData === null) return false;
+
         var x0 = brushData[0][0],
             x1 = brushData[1][0],
             y0 = brushData[0][1],
@@ -92,16 +99,13 @@ class Scatterplot {
 
     highlightBrushedPoints(referenceScatterplot, eventInfo){
         
-        referenceScatterplot.svg.selectAll("circle").style("fill", function(d) {
-            if(referenceScatterplot.dataUpdater.checkScatterplotFilter(d, eventInfo) )
-                return "red";
-            else
-                return "#2b77df";
+        referenceScatterplot.globalG.selectAll("circle").classed("selected", function(d) {
+            return referenceScatterplot.dataUpdater.checkScatterplotFilter(d, eventInfo);
         }); 
 
     }
 
-    activateBrushing(referenceScatterplot, brushData){
+    triggerBrushing(referenceScatterplot, brushData){
         
         referenceScatterplot.dataUpdater.brushScatterUpdateData(brushData);
 
@@ -113,15 +117,19 @@ class Scatterplot {
         
         var rect = d3.select(".scatterplot").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
         
-        referenceScatterplot.svg.call( d3.brush()  
+        referenceScatterplot.brush = d3.brush()  
             .extent( [ [0,0], [rect.width,rect.height] ] ) 
             .on("start brush", function(e) { //you can write .on("start brush end", ..-) to get a notification of the event when you start brushing, when you continue to brush, and when you stop the brush (even if you simple translate the brush rectangular)
-                referenceScatterplot.activateBrushing(referenceScatterplot, d3.event.selection);
-            }) 
-        );
+                referenceScatterplot.triggerBrushing(referenceScatterplot, d3.event.selection);
+            });
+
+        referenceScatterplot.svg.call(referenceScatterplot.brush); //note: call to svg, not the globalG
+
     }
 
     updateVisualization(referenceScatterplot) {
+        
+        referenceScatterplot.svg.call(referenceScatterplot.brush.move, null)
         
         referenceScatterplot.buildVisualization(referenceScatterplot);
 

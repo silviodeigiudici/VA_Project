@@ -95,6 +95,12 @@ th {
   border: 2px solid gray;
 }
 
+.selected {
+  opacity: 1 !important;
+  stroke: black;
+  stroke-width: 1px;
+}
+
 .barchart {
   margin-left: 10px;
   float: left;
