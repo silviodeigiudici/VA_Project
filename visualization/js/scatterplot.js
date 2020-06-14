@@ -44,7 +44,7 @@ class Scatterplot {
 
         var referenceScatterplot = this;
         this.dataUpdater.addListener('dataReady', function(e) {
-            referenceScatterplot.updateVisualization(referenceScatterplot, width_translate, height_translate);
+            referenceScatterplot.startVisualization(referenceScatterplot, width_translate, height_translate);
         });
 
         this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
@@ -54,8 +54,8 @@ class Scatterplot {
 
     }
 
-    updateVisualization(referenceScatterplot, width_translate, height_translate) {
-        
+    buildVisualization(referenceScatterplot, width_translate, height_translate){
+
         var circle = referenceScatterplot.svg.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData);
 
         circle.exit().remove();
@@ -69,6 +69,31 @@ class Scatterplot {
             //.style("fill", function(d, i) {return (d.highlight === "0") ? "#2b77df" : "red";} )
             .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + width_translate; })
             .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + height_translate; });
+    }
+
+    activateBrushing(referenceScatterplot){
+
+        referenceScatterplot.dataUpdater.brushScatterUpdateData();
+
+    }
+
+    startVisualization(referenceScatterplot, width_translate, height_translate) {
+
+        referenceScatterplot.buildVisualization(referenceScatterplot, width_translate, height_translate);
+        
+        var rect = d3.select(".scatterplot").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
+        
+        referenceScatterplot.svg.call( d3.brush()  
+                                        .extent( [ [0,0], [rect.width,rect.height] ] ) 
+                                        .on("end", function(e) { //you can write .on("start brush end", ..-) to get a notification of the event when you start brushing, when you continue to brush, and when you stop the brush (even if you simple translate the brush rectangular)
+                                            referenceScatterplot.activateBrushing(referenceScatterplot);
+                                        }) 
+                                     );
+    }
+
+    updateVisualization(referenceScatterplot, width_translate, height_translate) {
+        
+        referenceScatterplot.buildVisualization(referenceScatterplot, width_translate, height_translate);
 
     }
 

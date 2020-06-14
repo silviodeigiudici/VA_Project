@@ -60,7 +60,8 @@ class DataUpdater {
     }
 
     brushScatterUpdateData() {
-
+        
+        console.log("new brush event");
         this.eventsHandler.dispatchEvent( new Event("brushScatterUpdateVisualization") );
     }
 
