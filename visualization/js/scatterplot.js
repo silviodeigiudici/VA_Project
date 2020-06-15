@@ -52,14 +52,6 @@ class Scatterplot {
             referenceScatterplot.startVisualization(referenceScatterplot);
         });
 
-        this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
-            referenceScatterplot.updateVisualization(referenceScatterplot);
-        });
-
-        this.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
-            referenceScatterplot.highlightBrushedPoints(referenceScatterplot, e);
-        });
-
     }
 
     buildVisualization(referenceScatterplot, width_translate, height_translate){
@@ -111,10 +103,19 @@ class Scatterplot {
 
     }
 
+    updateVisualization(referenceScatterplot) {
+        
+        referenceScatterplot.svg.call(referenceScatterplot.brush.move, null)
+        
+        referenceScatterplot.buildVisualization(referenceScatterplot);
+
+    }
+
     startVisualization(referenceScatterplot) {
 
         referenceScatterplot.buildVisualization(referenceScatterplot);
         
+        //after building the visualization, let's enable the interactions registering to the events
         var rect = d3.select(".scatterplot").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
         
         referenceScatterplot.brush = d3.brush()  
@@ -125,16 +126,16 @@ class Scatterplot {
 
         referenceScatterplot.svg.call(referenceScatterplot.brush); //note: call to svg, not the globalG
 
+        //same for these events, once visualization is completed, let's enable them
+        referenceScatterplot.dataUpdater.addListener('typeUpdateVisualization', function(e) {
+            referenceScatterplot.updateVisualization(referenceScatterplot);
+        });
+
+        referenceScatterplot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
+            referenceScatterplot.highlightBrushedPoints(referenceScatterplot, e);
+        });
+
     }
-
-    updateVisualization(referenceScatterplot) {
-        
-        referenceScatterplot.svg.call(referenceScatterplot.brush.move, null)
-        
-        referenceScatterplot.buildVisualization(referenceScatterplot);
-
-    }
-
 
 }
 

@@ -18,17 +18,13 @@ class NameList{
 
         var referenceNamelist = this;
         this.dataUpdater.addListener('dataReady', function(e) {
-            referenceNamelist.updateVisualization(referenceNamelist);
-        });
-
-        this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
-            referenceNamelist.updateVisualization(referenceNamelist);
+            referenceNamelist.startVisualization(referenceNamelist);
         });
 
     }
 
 
-    updateVisualization(referenceNamelist) {
+    buildVisualization(referenceNamelist) {
         
         //Preparing the data
         var dict = {};
@@ -102,6 +98,22 @@ class NameList{
         all_g.select("text")
             .attr("y", function(d,i) {return distance_between_row*i;}) 
             .text(function(d,i) {return d;});
+
+    }
+
+    updateVisualization(referenceNamelist){
+
+        referenceNamelist.buildVisualization(referenceNamelist);
+
+    }
+
+    startVisualization(referenceNamelist){
+
+        referenceNamelist.buildVisualization(referenceNamelist);
+        
+        this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
+            referenceNamelist.updateVisualization(referenceNamelist);
+        });
 
     }
 
