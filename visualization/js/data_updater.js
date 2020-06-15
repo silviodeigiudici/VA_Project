@@ -29,9 +29,9 @@ class DataUpdater {
         this.data = [];
 
         var referenceDataUpdater = this;
-        
+
         this.originalData.forEach( function(row, index) {
-            
+
             row.highlight = "0" //reset all the highlight value
 
             if( referenceDataUpdater.header.checkPaidFilter(row) && referenceDataUpdater.header.checkFreeFilter(row) )
@@ -40,7 +40,7 @@ class DataUpdater {
         });
 
         this.brushedData = this.data;
-        
+
         this.eventsHandler.dispatchEvent( new Event('typeUpdateVisualization') );
     }
 
@@ -49,10 +49,10 @@ class DataUpdater {
         this.brushedData = [];
 
         var referenceDataUpdater = this;
-        
+
         this.data.forEach( function(row, index) {
-            
-            if( referenceDataUpdater.parallelPlot.checkParallelFilter(row, brushData) )
+
+            if( referenceDataUpdater.parallelPlot.checkParallelFilter(row) )
                 referenceDataUpdater.brushedData.push( row );
 
         });
@@ -68,11 +68,11 @@ class DataUpdater {
     }
 
     brushScatterUpdateData(brushData) {
-        
+
         this.eventsHandler.dispatchEvent( new CustomEvent("brushScatterUpdateVisualization", {detail: brushData} ) );
 
     }
-    
+
     darkmodeUpdateColor(){
 
         this.eventsHandler.dispatchEvent( new Event('darkmodeUpdateColor') );
@@ -86,4 +86,3 @@ class DataUpdater {
 
     }
 }
-

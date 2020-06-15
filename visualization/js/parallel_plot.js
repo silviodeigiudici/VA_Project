@@ -2,7 +2,10 @@ class ParallelPlot {
     constructor(dataUpdater, colorUpdater) {
         this.dataUpdater = dataUpdater;
         this.colorUpdater = colorUpdater;
-
+        this.x = {};
+        this.y = {};
+        this.c = {};
+        this.dimensions = {}
         var margin = { top: 25, right: 5, bottom: 5, left: 20 }
         var height = 400;
         var width = 1100;
@@ -16,27 +19,30 @@ class ParallelPlot {
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
 
-
         var referenceParallelPlot = this;
         this.dataUpdater.addListener('dataReady', function(e) {
-            referenceParallelPlot.startVisualization(referenceParallelPlot);
+            referenceParallelPlot.startVisualization(referenceParallelPlot,dataUpdater.data);
         });
     }
 
-    startVisualization(referenceParallelPlot) {
-        //to see the data(you can delete this line, it's only an example):
-        var dimensions = Object.keys(dataUpdater.data[0]).filter(function(d) { return d != "Current Version" && d != "highlight" && d !="Genres" && d !="Current Ver" && d != "comp0" && d!= "comp1" && d!="App" && d!="Type" && d!="LastUpdated"});
-        var data = dataUpdater.data
+    startVisualization(referenceParallelPlot, currentData) {
+        //the commented line breaks when the user deselects paid and free :(
+        //var dimensions = Object.keys(currentData[0]).filter(function(d) { return d != "Current Version" && d != "highlight" && d !="Genres" && d !="Current Ver" && d != "comp0" && d!= "comp1" && d!="App" && d!="Type" && d!="LastUpdated"});
+        var dimensions = [ "Category", "Rating", "Reviews", "Size", "Installs", "Price", "ContentRating", "AndroidVer" ]
+        referenceParallelPlot.dimensions = dimensions
+        var data = currentData
         var i;
         var y = {}
-        var dragging = {}
         var c = {}
+
+        var filters = {}
         c["Category"] =  d3.map(data, function(d){return(d.Category)}).keys().sort()
         c["ContentRating"] =  d3.map(data, function(d){return(d.ContentRating)}).keys().sort()
 
         //This is used to split between categorical and numerical values since this version of d3js uses respectively scalePOint and scaleLinear
         //and we use the previously created domain lists to have their names on the axis.
         for (i in dimensions) {
+          filters[dimensions[i]] = []
           name = dimensions[i]
           if (name == "Category" || name == "ContentRating"){// || name == "LastUpdated"){
             y[name] = d3.scalePoint()
@@ -55,7 +61,20 @@ class ParallelPlot {
           .range([0, referenceParallelPlot.width])
           .padding(1)
           .domain(dimensions);
+        referenceParallelPlot.y = y;
+        referenceParallelPlot.x = x;
+        referenceParallelPlot.c = c;
+        referenceParallelPlot.filters = filters;
+        referenceParallelPlot.buildVisualization(referenceParallelPlot,data);
+  }
 
+      buildVisualization(referenceParallelPlot,data){
+        var y = referenceParallelPlot.y
+        var x = referenceParallelPlot.x
+        var c = referenceParallelPlot.c
+        var dimensions = referenceParallelPlot.dimensions
+        var dragging = {}
+        var filters = referenceParallelPlot.filters
         // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
         function path(d) {
             return d3.line()(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
@@ -113,7 +132,6 @@ class ParallelPlot {
                     .duration(0)
                     .attr("visibility", null);
               }));
-
 
         // Add an axis and title.
         var g = referenceParallelPlot.svg.selectAll(".dimension");
@@ -211,19 +229,30 @@ class ParallelPlot {
 
         function brush_end(){
             if (!d3.event.sourceEvent) return; // Only transition after input.
-            if (!d3.event.selection) return; // Ignore empty selections.
-
+            if (!d3.event.selection){
+            //Reset selection!
+              for(var i=0;i<dimensions.length;++i){
+                  if(d3.event.target==y[dimensions[i]].brush) {
+                    filters[dimensions[i]] = []
+                  }
+              }
+              //console.log(filters)
+              return; // Ignore empty selections.
+        }
 
             for(var i=0;i<dimensions.length;++i){
                 if(d3.event.target==y[dimensions[i]].brush) {
+                    console.log(dimensions[i])
                     extents[i]=d3.event.selection.map(y[dimensions[i]].invert,y[dimensions[i]]);
                     extents[i][0] = Math.round( extents[i][0] * 10 ) / 10;
                     extents[i][1] = Math.round( extents[i][1] * 10 ) / 10;
-
+                    var ax = dimensions[i];
+                    var limitRange = [extents[i][1],extents[i][0]]
                     d3.select(this).transition().call(d3.event.target.move, extents[i].map(y[dimensions[i]]));
                 }
             }
-
+        filters[ax] = limitRange
+        console.log(filters)
         }
 
         //   brush for ordinal cases
@@ -252,6 +281,7 @@ class ParallelPlot {
                     return extents[i][1] <= d[p] && d[p] <= extents[i][0];
                   }) ? null : "none";
             });
+
         }
 
 
@@ -259,8 +289,16 @@ class ParallelPlot {
         function brush_end_ordinal(){
           if (!d3.event.sourceEvent) return; // Only transition after input.
 
-          if (!d3.event.selection) return; // Ignore empty selections.
-
+          if (!d3.event.selection) {
+            //Reset selection!
+            for(var i=0;i<dimensions.length;++i){
+              if(d3.event.target==y[dimensions[i]].brush) {
+                filters[dimensions[i]] = []
+              }
+            }
+            console.log(filters)
+            return; // Ignore empty selections.
+          }
           for(var i=0;i<dimensions.length;++i){
                 if(d3.event.target==y[dimensions[i]].brush) {
                   var  yScale = y[dimensions[i]];
@@ -269,13 +307,26 @@ class ParallelPlot {
                                   return (s[0] <= yScale(d)) && (yScale(d) <= s[1])
                                   });
                   var temp = selected.sort();
-                  //console.log(temp)
+                  var ax = dimensions[i];
                   extents[i] = [temp[temp.length-1], temp[0]];
                 }
             }
+            foreground.style("display", function(d) {
+                return dimensions.every(function(p, i) {
+                    if(extents[i][0]==0 && extents[i][0]==0) {
+                        return true;
+                    }
+                    return extents[i][1] <= d[p] && d[p] <= extents[i][0];
+                  }) ? null : "none";
+            });
+          //temp contains all selected elements
+          //Now filters contains all elements to remove
+          filters[ax] = temp
+          //console.log(filters)
+          //triggerBrushing(referenceParallelPlot,brushData)
         }
 
-        
+
         //###########################################################
         //EVENTS HANDLING, MUST BE AT THE END OF STARTVISUALIZATION
         //###########################################################
@@ -299,7 +350,22 @@ class ParallelPlot {
 
         //here you need to update the visualization taking the new data from:
         //referenceParallelPlot.dataUpdater.data
+        var margin = { top: 25, right: 5, bottom: 5, left: 20 }
+        var height = 400;
+        var width = 1100;
+        this.height = height;
+        this.width = width;
+        d3.select(".parallel_plot").select("svg").remove();
+        referenceParallelPlot.svg = d3.select(".parallel_plot")
+          .append("svg")
+            .attr("width", '100%')
+            .attr("height", '100%')
+          .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+        referenceParallelPlot = this;
 
+        referenceParallelPlot.buildVisualization(referenceParallelPlot,referenceParallelPlot.dataUpdater.data)
         console.log("type update in the parallel");
     }
 
@@ -310,8 +376,8 @@ class ParallelPlot {
         //where d is a row in the data and eventInfo are the data of the event that you have already.
         //Basically it returns true if the row (sample, d or whatever) needs to be highlighed (because it is in the brush area of the scatter), false if not
         //for an example see the highlighBrushedPoints in the scatterplot, where I use the class selected
-        //to change the style of the point in the brush area 
-        
+        //to change the style of the point in the brush area
+
         console.log("brush scatter in the parallel");
 
     }
@@ -327,28 +393,41 @@ class ParallelPlot {
     }
 
     triggerBrushing(referenceParallelPlot, brushData){
-        
+
         //this function need to be called by the brush event handler, in order to filter the database for the
         //other visualizations
         //Important: you also need to pass the data of the brush (brushData) that you need to use for selecting the rows of the dataset as range of values, categories (for this you may think to use dictionaries for efficiency) ecc
-        
+
         //then you should see brushedData in the function below (checkParallelFilter)
 
         console.log("triggering update by parallel");
-        //console.log(brushData);
-        
+        console.log(brushData);
+
+
         referenceParallelPlot.dataUpdater.brushParallelUpdateData(brushData); //don't delete this
-    
+
     }
-
-    checkParallelFilter(row, brushData){
-
+    checkParallelFilter(row){
+        //console.log("checking")
+        for(var i = 0;i < dimensions.length;++i){
+          if(dimensions[i] == "Category" || dimensions[i] == "ContentRating"){
+            if(!filters[dimensions[i]].includes(row[dimensions[i]])){
+              //console.log("Not passed because of",dimensions[i],filters[dimensions[i]],row[dimensions[i]])
+              return false
+            }
+          }
+          else{
+            if(row[dimensions[i]] < filters[dimensions[i]][0] || row[dimensions[i]] > filters[dimensions[i]][1]){
+              //console.log("Not passed because of",dimensions[i],filters[dimensions[i]],row[dimensions[i]])
+              return false
+            }
+          }
+        }
+        //console.log("passed")
+        return true
         //this function will be called from the dataUpdater in the brushParallelUpdateData, where it will update the data readed from all the visualizations
         //you need to check the row and return true if the row is in the range of the brushes that you user select, false otherwise
         //this function has the same goal of the checkScatterplotFilterin the scatterplot
-        
-        return true; //delete this line after you implement the function
 
     }
-
 }
