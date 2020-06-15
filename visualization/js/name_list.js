@@ -1,6 +1,7 @@
 class NameList{
-    constructor(dataUpdater) {
+    constructor(dataUpdater, colorUpdater) {
         this.dataUpdater = dataUpdater; 
+        this.colorUpdater = colorUpdater;
         
         var margin = { top: 0, right: 0, bottom: 0, left: 0 }
         

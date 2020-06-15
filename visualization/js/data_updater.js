@@ -71,6 +71,18 @@ class DataUpdater {
         this.eventsHandler.dispatchEvent( new CustomEvent("brushScatterUpdateVisualization", {detail: brushData} ) );
 
     }
+    
+    darkmodeUpdateColor(){
 
+        this.eventsHandler.dispatchEvent( new Event('darkmodeUpdateColor') );
+
+    }
+
+    blindmodeUpdateColor(){
+
+
+        this.eventsHandler.dispatchEvent( new Event('blindmodeUpdateColor') );
+
+    }
 }
 

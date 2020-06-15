@@ -1,6 +1,7 @@
 class HistoContent {
-    constructor(dataUpdater) {
+    constructor(dataUpdater, colorUpdater) {
         this.dataUpdater = dataUpdater;
+        this.colorUpdater = colorUpdater;
 
         var margin = { top: 50, right: 5, bottom: 10, left: 60 }
         var height = 300  ;

@@ -1,6 +1,7 @@
 class Scatterplot {
-    constructor(dataUpdater) {
+    constructor(dataUpdater, colorUpdater) {
         this.dataUpdater = dataUpdater; 
+        this.colorUpdater = colorUpdater;
 
         this.brush = undefined;
 
@@ -61,11 +62,11 @@ class Scatterplot {
         circle.exit().remove();
 
         circle.enter().append("circle")
-            .attr("id", function(d, i) {return "c" + i.toString();} )
+            .attr("id", function(d, i) { return "c" + i.toString();} )
             .attr("r", 3)
             .style("opacity", 0.5) //.transition().duration(750);
             .merge(circle)
-            .style("fill", '#2b77df')
+            .style("fill", function(d) { return referenceScatterplot.colorUpdater.getScatterplotPointsColors(); })
             //.style("fill", function(d, i) {return (d.highlight === "0") ? "#2b77df" : "red";} )
             .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + referenceScatterplot.width_translate; })
             .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + referenceScatterplot.height_translate; });
@@ -133,6 +134,14 @@ class Scatterplot {
 
         referenceScatterplot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
             referenceScatterplot.highlightBrushedPoints(referenceScatterplot, e);
+        });
+
+        referenceScatterplot.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
+            referenceScatterplot.updateVisualization(referenceScatterplot);
+        });
+
+        referenceScatterplot.dataUpdater.addListener('blindmodeUpdateColor', function(e) {
+            referenceScatterplot.updateVisualization(referenceScatterplot);
         });
 
     }

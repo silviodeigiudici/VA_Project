@@ -1,7 +1,8 @@
 class Header {
-    constructor(dataUpdater) {
-        
+    constructor(dataUpdater, colorUpdater) {
         this.dataUpdater = dataUpdater;
+        this.colorUpdater = colorUpdater;
+
         this.checkBoxPaid = document.querySelector("input[name='paid']");
         this.checkBoxPaid.checked = true;
         this.checkBoxFree = document.querySelector("input[name='free']");

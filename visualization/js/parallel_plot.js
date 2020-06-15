@@ -1,6 +1,7 @@
 class ParallelPlot {
-    constructor(dataUpdater) {
+    constructor(dataUpdater, colorUpdater) {
         this.dataUpdater = dataUpdater;
+        this.colorUpdater = colorUpdater;
 
         var margin = { top: 25, right: 5, bottom: 5, left: 20 }
         var height = 400;
