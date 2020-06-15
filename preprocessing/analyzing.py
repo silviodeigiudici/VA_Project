@@ -6,7 +6,8 @@ import scipy.spatial.distance as scispa
 from sklearn.impute import SimpleImputer
 from sklearn import preprocessing
 
-path_to_data = '../dataset/filtering/data_filtered.csv'
+#path_to_data = '../dataset/filtering/data_filtered.csv'
+path_to_data = '../dataset/deleting_duplicates/data_no_duplicates.csv'
 
 data = pd.io.parsers.read_csv(  #pandas handles in a better way
      path_to_data, 

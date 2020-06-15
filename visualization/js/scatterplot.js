@@ -23,12 +23,12 @@ class Scatterplot {
 
         var lenght_x = 525;
         this.x = d3.scaleLinear()
-            .domain([-5, 4])
+            .domain([-4, 4])
             .range([0, lenght_x]);
 
         var lenght_y = 400;
         this.y = d3.scaleLinear()
-            .domain([-5, 5])
+            .domain([-3, 5])
             .range([lenght_y, 0]);
 
         var xAxis = d3.axisBottom(this.x);
@@ -57,15 +57,16 @@ class Scatterplot {
 
     buildVisualization(referenceScatterplot, width_translate, height_translate){
 
-        var circle = referenceScatterplot.globalG.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData);
+        var circle = referenceScatterplot.globalG.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData, function(d) {return d.index;} );
 
-        circle.exit().remove();
+        circle.exit().transition().duration(600).attr("cx",0).attr("cy",0).remove();
 
         circle.enter().append("circle")
             .attr("id", function(d, i) { return "c" + i.toString();} )
             .attr("r", 3)
             .style("opacity", 0.5) //.transition().duration(750);
-            .merge(circle)
+            //.merge(circle)
+            .transition().duration(600)
             .style("fill", function(d) { return referenceScatterplot.colorUpdater.getScatterplotPointsColors(); })
             //.style("fill", function(d, i) {return (d.highlight === "0") ? "#2b77df" : "red";} )
             .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + referenceScatterplot.width_translate; })

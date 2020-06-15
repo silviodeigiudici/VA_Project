@@ -7,7 +7,7 @@ from sklearn.impute import SimpleImputer
 from sklearn import preprocessing
 
 #path_to_data = '../dataset/googleplaystore.csv'
-path_to_data = '../dataset/filtering/data_filtered.csv'
+path_to_data = '../dataset/deleting_duplicates/data_no_duplicates.csv'
 #path_to_data = '../visualization/data/data.csv'
 
 data = pd.io.parsers.read_csv(  #pandas handles in a better way
@@ -17,7 +17,7 @@ data = pd.io.parsers.read_csv(  #pandas handles in a better way
      usecols=[1,2,3,4,5,6,7,8,10]
     )
 
-iterations = 50
+iterations = 100
 num_rows = 1000
 #data_numpy = data.values[:num_rows]
 data_numpy = data.values[:]
@@ -86,7 +86,7 @@ dissM4_condensed = scispa.pdist(data_numpy_euclidian, 'euclidean')
 dissM4 = np.add(dissM4, scispa.squareform(dissM4_condensed, checks=False) )
 
 print("Start MDS...")
-mds = manifold.MDS(n_components=2, max_iter=iterations, eps=1e-9,dissimilarity="precomputed",random_state=2, n_jobs=4)
+mds = manifold.MDS(n_components=2, max_iter=iterations, eps=1e-9,dissimilarity="precomputed",random_state=2, n_jobs=8)
 #mds = manifold.MDS(n_components=2, max_iter=iterations, eps=1e-9,dissimilarity="precomputed",n_jobs=4)
 fitting = mds.fit(dissM4)
 pos = fitting.embedding_

@@ -10,12 +10,12 @@ rows = file_content.strip().split('\n')
 
 dest_file = open(dest_path, 'w')
 
-dest_file.write(rows[0] + ",highlight\n")
+dest_file.write(rows[0] + ",index\n")
 
 num_lines = len(rows)
 
 for i in range(1, num_lines):
-    new_row = rows[i] + "," + "0" #0 means no highlight, 1 from brushing, 2 from namelist, 3 from both
+    new_row = rows[i] + "," + str(i - 1) 
     dest_file.write(new_row + "\n")
 
 dest_file.close()

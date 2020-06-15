@@ -53,13 +53,11 @@ class NameList{
 
             actualList = dict[keys[j]];
             
-            if (k < actualList.length && !moreDownloaded.includes(actualList[k])){
+            if (k < actualList.length){ 
                 moreDownloaded.push(actualList[k]);
                 k++;
                 i++;
             }
-            else if(k < actualList.length && moreDownloaded.includes(actualList[k]))
-                k++;
             else{
                 k=0;
                 j++;
@@ -73,6 +71,7 @@ class NameList{
             .data(moreDownloaded);
         
         rows.exit().remove();
+            //.transition().duration(600).attr("transform", "translate(50,0)");
 
         var distance_between_row = 15;
 
@@ -94,9 +93,11 @@ class NameList{
         var all_g = g_entries.merge(rows);
 
         all_g.select("circle")
+            .transition().duration(600)
             .attr("cy", function(d,i) {return distance_between_row*i - 5;});
 
         all_g.select("text")
+            .transition().duration(600)
             .attr("y", function(d,i) {return distance_between_row*i;}) 
             .text(function(d,i) {return d;});
 
