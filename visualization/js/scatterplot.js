@@ -144,6 +144,11 @@ class Scatterplot {
             referenceScatterplot.updateVisualization(referenceScatterplot);
         });
 
+        referenceScatterplot.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
+            //referenceScatterplot.updateVisualization(referenceScatterplot);
+            console.log("update from parallel to the scatter");
+        });
+
     }
 
 }

@@ -7,6 +7,7 @@ class DataUpdater {
         this.originalData = [];
         this.header = undefined;
         this.scatterplot = undefined;
+        this.parallelPlot = undefined;
     }
 
     loadData() {
@@ -43,7 +44,7 @@ class DataUpdater {
         this.eventsHandler.dispatchEvent( new Event('typeUpdateVisualization') );
     }
 
-    brushParallelUpdateData() {
+    brushParallelUpdateData(brushData) {
 
         this.brushedData = [];
 
@@ -51,7 +52,7 @@ class DataUpdater {
         
         this.data.forEach( function(row, index) {
             
-            if( true )
+            if( referenceDataUpdater.parallelPlot.checkParallelFilter(row, brushData) )
                 referenceDataUpdater.brushedData.push( row );
 
         });

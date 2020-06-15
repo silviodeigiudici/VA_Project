@@ -13,5 +13,6 @@ var name_list = new NameList(dataUpdater, colorUpdater);
 
 dataUpdater.header = header;
 dataUpdater.scatterplot = scatterplot;
+dataUpdater.parallelPlot = parallelPlot;
 
 dataUpdater.loadData();
