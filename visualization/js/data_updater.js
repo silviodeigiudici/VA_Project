@@ -32,8 +32,6 @@ class DataUpdater {
 
         this.originalData.forEach( function(row, index) {
 
-            row.highlight = "0" //reset all the highlight value
-
             if( referenceDataUpdater.header.checkPaidFilter(row) && referenceDataUpdater.header.checkFreeFilter(row) )
                 referenceDataUpdater.data.push( row );
 
@@ -44,7 +42,7 @@ class DataUpdater {
         this.eventsHandler.dispatchEvent( new Event('typeUpdateVisualization') );
     }
 
-    brushParallelUpdateData(brushData) {
+    brushParallelUpdateData() {
 
         this.brushedData = [];
 

@@ -18,7 +18,7 @@ header_new = data.columns
 data_numpy = data.values
 
 dictionary = {}
-index_feature_analying = 5
+index_feature_analying = 7
 
 '''
 #used in reviews
@@ -37,10 +37,12 @@ def get_key(feature):
 print("Analyzing features")
 for row in data_numpy:
     key_to_add_dict = get_key(row[index_feature_analying])
+    if key_to_add_dict == 400.00:
+        print(row)
     if key_to_add_dict in dictionary:
         dictionary[key_to_add_dict] += 1  
     else:
-        dictionary[key_to_add_dict] = 0
+        dictionary[key_to_add_dict] = 1
 
-print(sorted(dictionary.items(), key=lambda e: e[1], reverse=True))
+print(sorted(dictionary.items(), key=lambda e: e[1], reverse=False))
 print(len(dictionary))

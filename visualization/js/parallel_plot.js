@@ -66,6 +66,24 @@ class ParallelPlot {
         referenceParallelPlot.c = c;
         referenceParallelPlot.filters = filters;
         referenceParallelPlot.buildVisualization(referenceParallelPlot,data);
+
+        //###########################################################
+        //EVENTS HANDLING, MUST BE AT THE END OF STARTVISUALIZATION
+        //###########################################################
+
+
+        referenceParallelPlot.dataUpdater.addListener('typeUpdateVisualization', function(e) {
+            referenceParallelPlot.updateVisualization(referenceParallelPlot);
+        });
+
+        referenceParallelPlot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
+            referenceParallelPlot.highlightBrushedPoints(referenceParallelPlot, e);
+        });
+
+        referenceParallelPlot.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
+            referenceParallelPlot.changeVisualizationColor(referenceParallelPlot);
+        });
+
   }
 
       buildVisualization(referenceParallelPlot,data){
@@ -238,7 +256,7 @@ class ParallelPlot {
               }
               //console.log(filters)
               return; // Ignore empty selections.
-        }
+            }
 
             for(var i=0;i<dimensions.length;++i){
                 if(d3.event.target==y[dimensions[i]].brush) {
@@ -251,8 +269,8 @@ class ParallelPlot {
                     d3.select(this).transition().call(d3.event.target.move, extents[i].map(y[dimensions[i]]));
                 }
             }
-        filters[ax] = limitRange
-        console.log(filters)
+            filters[ax] = limitRange
+            console.log(filters)
         }
 
         //   brush for ordinal cases
@@ -326,24 +344,6 @@ class ParallelPlot {
           //triggerBrushing(referenceParallelPlot,brushData)
         }
 
-
-        //###########################################################
-        //EVENTS HANDLING, MUST BE AT THE END OF STARTVISUALIZATION
-        //###########################################################
-
-
-        referenceParallelPlot.dataUpdater.addListener('typeUpdateVisualization', function(e) {
-            referenceParallelPlot.updateVisualization(referenceParallelPlot);
-        });
-
-        referenceParallelPlot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
-            referenceParallelPlot.highlightBrushedPoints(referenceParallelPlot, e);
-        });
-
-        referenceParallelPlot.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
-            referenceParallelPlot.changeVisualizationColor(referenceParallelPlot);
-        });
-
     }
 
     updateVisualization(referenceParallelPlot) {
@@ -392,7 +392,7 @@ class ParallelPlot {
         //referenceParallelPlot.triggerBrushing(referenceParallelPlot, "ciao");
     }
 
-    triggerBrushing(referenceParallelPlot, brushData){
+    triggerBrushing(referenceParallelPlot){
 
         //this function need to be called by the brush event handler, in order to filter the database for the
         //other visualizations
@@ -401,15 +401,15 @@ class ParallelPlot {
         //then you should see brushedData in the function below (checkParallelFilter)
 
         console.log("triggering update by parallel");
-        console.log(brushData);
 
-
-        referenceParallelPlot.dataUpdater.brushParallelUpdateData(brushData); //don't delete this
+        referenceParallelPlot.dataUpdater.brushParallelUpdateData(); //don't delete this
 
     }
     checkParallelFilter(row){
         //console.log("checking")
-        for(var i = 0;i < dimensions.length;++i){
+        num_dimensions = dimensions.length;
+
+        for(var i = 0;i < num_dimensions;++i){
           if(dimensions[i] == "Category" || dimensions[i] == "ContentRating"){
             if(!filters[dimensions[i]].includes(row[dimensions[i]])){
               //console.log("Not passed because of",dimensions[i],filters[dimensions[i]],row[dimensions[i]])
