@@ -260,7 +260,6 @@ class ParallelPlot {
 
             for(var i=0;i<dimensions.length;++i){
                 if(d3.event.target==y[dimensions[i]].brush) {
-                    console.log(dimensions[i])
                     extents[i]=d3.event.selection.map(y[dimensions[i]].invert,y[dimensions[i]]);
                     extents[i][0] = Math.round( extents[i][0] * 10 ) / 10;
                     extents[i][1] = Math.round( extents[i][1] * 10 ) / 10;
@@ -270,7 +269,7 @@ class ParallelPlot {
                 }
             }
             filters[ax] = limitRange
-            console.log(filters)
+            referenceParallelPlot.triggerBrushing(referenceParallelPlot);
         }
 
         //   brush for ordinal cases
@@ -314,7 +313,6 @@ class ParallelPlot {
                 filters[dimensions[i]] = []
               }
             }
-            console.log(filters)
             return; // Ignore empty selections.
           }
           for(var i=0;i<dimensions.length;++i){
@@ -342,6 +340,7 @@ class ParallelPlot {
           filters[ax] = temp
           //console.log(filters)
           //triggerBrushing(referenceParallelPlot,brushData)
+          referenceParallelPlot.triggerBrushing(referenceParallelPlot);
         }
 
     }
@@ -365,8 +364,8 @@ class ParallelPlot {
                   "translate(" + margin.left + "," + margin.top + ")");
         referenceParallelPlot = this;
 
-        referenceParallelPlot.buildVisualization(referenceParallelPlot,referenceParallelPlot.dataUpdater.data)
-        console.log("type update in the parallel");
+        referenceParallelPlot.buildVisualization(referenceParallelPlot,referenceParallelPlot.dataUpdater.data);
+
     }
 
     highlightBrushedPoints(referenceParallelPlot, eventInfo) {
@@ -400,26 +399,27 @@ class ParallelPlot {
 
         //then you should see brushedData in the function below (checkParallelFilter)
 
-        console.log("triggering update by parallel");
-
         referenceParallelPlot.dataUpdater.brushParallelUpdateData(); //don't delete this
 
     }
     checkParallelFilter(row){
         //console.log("checking")
-        num_dimensions = dimensions.length;
+        var num_dimensions = this.dimensions.length;
 
         for(var i = 0;i < num_dimensions;++i){
-          if(dimensions[i] == "Category" || dimensions[i] == "ContentRating"){
-            if(!filters[dimensions[i]].includes(row[dimensions[i]])){
-              //console.log("Not passed because of",dimensions[i],filters[dimensions[i]],row[dimensions[i]])
-              return false
+          if(this.filters[this.dimensions[i]].length > 0){
+
+            if(this.dimensions[i] == "Category" || this.dimensions[i] == "ContentRating"){
+              if(!this.filters[this.dimensions[i]].includes(row[this.dimensions[i]]) ){
+                //console.log("Not passed because of",dimensions[i],filters[dimensions[i]],row[dimensions[i]])
+                return false
+              }
             }
-          }
-          else{
-            if(row[dimensions[i]] < filters[dimensions[i]][0] || row[dimensions[i]] > filters[dimensions[i]][1]){
-              //console.log("Not passed because of",dimensions[i],filters[dimensions[i]],row[dimensions[i]])
-              return false
+            else{
+              if(row[this.dimensions[i]] < this.filters[this.dimensions[i]][0] || row[this.dimensions[i]] > this.filters[this.dimensions[i]][1]){
+                //console.log("Not passed because of",dimensions[i],filters[dimensions[i]],row[dimensions[i]])
+                return false
+              }
             }
           }
         }
