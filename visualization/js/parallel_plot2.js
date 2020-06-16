@@ -19,8 +19,6 @@ class ParallelPlot {
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
 
-        this.foreground = undefined;
-
         var referenceParallelPlot = this;
         this.dataUpdater.addListener('dataReady', function(e) {
             referenceParallelPlot.startVisualization(referenceParallelPlot,dataUpdater.data);
@@ -34,8 +32,8 @@ class ParallelPlot {
         referenceParallelPlot.dimensions = dimensions
         var data = currentData
         var i;
-        var y = {} //dictionary axies parallel
-        var c = {} //elements to put in the axies
+        var y = {}
+        var c = {}
 
         var filters = {}
         c["Category"] =  d3.map(data, function(d){return(d.Category)}).keys().sort()
@@ -67,8 +65,34 @@ class ParallelPlot {
         referenceParallelPlot.x = x;
         referenceParallelPlot.c = c;
         referenceParallelPlot.filters = filters;
-        
-        var dragging = {};
+        referenceParallelPlot.buildVisualization(referenceParallelPlot,data);
+
+        //###########################################################
+        //EVENTS HANDLING, MUST BE AT THE END OF STARTVISUALIZATION
+        //###########################################################
+
+
+        referenceParallelPlot.dataUpdater.addListener('typeUpdateVisualization', function(e) {
+            referenceParallelPlot.updateVisualization(referenceParallelPlot);
+        });
+
+        referenceParallelPlot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
+            referenceParallelPlot.highlightBrushedPoints(referenceParallelPlot, e);
+        });
+
+        referenceParallelPlot.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
+            referenceParallelPlot.changeVisualizationColor(referenceParallelPlot);
+        });
+
+  }
+
+      buildVisualization(referenceParallelPlot,data){
+        var y = referenceParallelPlot.y
+        var x = referenceParallelPlot.x
+        var c = referenceParallelPlot.c
+        var dimensions = referenceParallelPlot.dimensions
+        var dragging = {}
+        var filters = referenceParallelPlot.filters
         // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
         function path(d) {
             return d3.line()(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
@@ -79,20 +103,18 @@ class ParallelPlot {
                   extents;
 
         // Add grey background lines for context.
-        /*
         background = referenceParallelPlot.svg.append("g")
             .attr("class", "background")
             .selectAll("path")
             .data(data)
             .enter().append("path")
             .attr("d", path);
-*/
-        // Add blue foreground lines for focus.
-        referenceParallelPlot.temp = referenceParallelPlot.svg.append("g")
-            .attr("class", "foreground");
 
-        foreground = referenceParallelPlot.temp.selectAll("path")
-            .data(data, function(d) {return d.index;} )
+        // Add blue foreground lines for focus.
+        foreground = referenceParallelPlot.svg.append("g")
+            .attr("class", "foreground")
+            .selectAll("path")
+            .data(data)
             .enter().append("path")
             .attr("d", path);
 
@@ -103,15 +125,12 @@ class ParallelPlot {
             .data(dimensions)
             .enter().append("g")
             .attr("class", "dimension")
-            .attr("transform", function(d) {  return "translate(" + x(d) + ")"; }
-            );
-            /*
+            .attr("transform", function(d) {  return "translate(" + x(d) + ")"; })
             .call(d3.drag()
               .subject(function(d) { return {x: x(d)}; })
               .on("start", function(d) {
                 dragging[d] = x(d);
-                //background.attr("visibility", "hidden");
-                //foreground.attr("visibility", "hidden");
+                background.attr("visibility", "hidden");
               })
               .on("drag", function(d) {
                 dragging[d] = Math.min(width, Math.max(0, d3.event.x));
@@ -124,20 +143,14 @@ class ParallelPlot {
                 delete dragging[d];
                 transition(d3.select(this)).attr("transform", "translate(" + x(d) + ")");
                 transition(foreground).attr("d", path);
-              */  
-                //background
-                /*
-                  foreground 
+                background
                     .attr("d", path)
                   .transition()
                     .delay(500)
                     .duration(0)
                     .attr("visibility", null);
-              */
-              //})
-            //);
-              
-        
+              }));
+
         // Add an axis and title.
         var g = referenceParallelPlot.svg.selectAll(".dimension");
         g.append("g")
@@ -154,7 +167,6 @@ class ParallelPlot {
         g.append("g")
             .attr("class", "brush")
             .each(function(d) {
-             /* 
               if(d == 'Category' || d == "ContentRating"){
                 d3.select(this).call(y[d].brush = d3.brushY().extent([[-8, 0], [15,referenceParallelPlot.height]]).on("brush start", brushstart).on("brush", go_brush).on("brush", brush_parallel).on("end", brush_end_ordinal));
               }
@@ -162,16 +174,7 @@ class ParallelPlot {
             else{
                 d3.select(this).call(y[d].brush = d3.brushY().extent([[-8, 0], [8,referenceParallelPlot.height]]).on("brush start", brushstart).on("brush", go_brush).on("brush", brush_parallel_chart).on("end", brush_end));
                 }
-*/
-            if(d == 'Category' || d == "ContentRating"){
-                d3.select(this).call(y[d].brush = d3.brushY().extent([[-8, 0], [15,referenceParallelPlot.height]]).on("brush start", function(){ brush_parallel(referenceParallelPlot);})
-                    .on("end", function(){ brush_end_ordinal(referenceParallelPlot);}) );
-              }
 
-            else{
-                d3.select(this).call(y[d].brush = d3.brushY().extent([[-8, 0], [8,referenceParallelPlot.height]]).on("brush start", function(){ brush_parallel_chart(referenceParallelPlot); })
-                    .on("end", function(){ brush_end(referenceParallelPlot); }) );
-                }
             })
             .selectAll("rect")
             .attr("x", -8)
@@ -181,45 +184,32 @@ class ParallelPlot {
           var v = dragging[d];
           return v == null ? x(d) : v;
         }
-/*
+
         function transition(g) {
           return g.transition().duration(500);
         }
-*/
+
         // Returns the path for a given data point.
         function path(d) {
           return line(dimensions.map(function(p) { return [position(p), y[p](d[p])]; }));
         }
 
-        /*
         function go_brush() {
           d3.event.sourceEvent.stopPropagation();
         }
-*/
-/*
+
+
         var invertExtent = function(y) {
           return domain.filter(function(d, i) { return y === range[i]; });
         };
-*/
 
-       /* function brushstart(selectionName, referenceParallelPlot) {
 
-          //foreground.style("display", "none")
+        function brushstart(selectionName) {
+
+          foreground.style("display", "none")
           var dimensionsIndex = dimensions.indexOf(selectionName);
           extents[dimensionsIndex] = [0, 0];
 
-          foreground.attr("class", function(d) {
-            return dimensions.every(function(p, i) {
-                if(extents[i][0]==0 && extents[i][0]==0) {
-                    return true;
-                }
-              return extents[i][1] <= d[p] && d[p] <= extents[i][0];
-            }) ? "background" : "foreground";
-          });
-        
-        */  
-
-            /*
           foreground.style("display", function(d) {
             return dimensions.every(function(p, i) {
                 if(extents[i][0]==0 && extents[i][0]==0) {
@@ -228,14 +218,10 @@ class ParallelPlot {
               return extents[i][1] <= d[p] && d[p] <= extents[i][0];
             }) ? null : "none";
           });
-          */
-            
-
-            //referenceParallelPlot.triggerBrushing(referenceParallelPlot);
-       // }
+        }
 
         // Handles a brush event, toggling the display of foreground lines.
-        function brush_parallel_chart(referenceParallelPlot) {
+        function brush_parallel_chart() {
 
             for(var i=0;i<dimensions.length;++i){
 
@@ -248,17 +234,6 @@ class ParallelPlot {
 
             }
 
-/*
-          foreground.attr("class", function(d) {
-            return dimensions.every(function(p, i) {
-                if(extents[i][0]==0 && extents[i][0]==0) {
-                    return true;
-                }
-              return extents[i][1] <= d[p] && d[p] <= extents[i][0];
-            }) ? "background" : "foreground";
-          });
-          */
-            /*
             foreground.style("display", function(d) {
                return dimensions.every(function(p, i) {
                    if(extents[i][0]==0 && extents[i][0]==0) {
@@ -267,11 +242,10 @@ class ParallelPlot {
                  return extents[i][1] <= d[p] && d[p] <= extents[i][0];
                }) ? null : "none";
             });
-            */
         }
 
 
-        function brush_end(referenceParallelPlot){
+        function brush_end(){
             if (!d3.event.sourceEvent) return; // Only transition after input.
             if (!d3.event.selection){
             //Reset selection!
@@ -291,30 +265,15 @@ class ParallelPlot {
                     extents[i][1] = Math.round( extents[i][1] * 10 ) / 10;
                     var ax = dimensions[i];
                     var limitRange = [extents[i][1],extents[i][0]]
-                    //d3.select(this).transition().call(d3.event.target.move, extents[i].map(y[dimensions[i]]));
-                    d3.select(this).call(d3.event.target.move, extents[i].map(y[dimensions[i]]));
+                    d3.select(this).transition().call(d3.event.target.move, extents[i].map(y[dimensions[i]]));
                 }
             }
             filters[ax] = limitRange
-            
-            referenceParallelPlot.temp.selectAll("path").attr("visibility", function(d) {
-                var ret = referenceParallelPlot.checkParallelFilter(d);
-                if(ret)
-                    return "visible";
-                else
-                    return "hidden";
-            });
-            /*
-            referenceParallelPlot.temp.selectAll("path").each(function(d) {
-                var ret = referenceParallelPlot.checkParallelFilter(d);
-                d3.select(this).attr("opacity", ret);
-            });
-*/
             referenceParallelPlot.triggerBrushing(referenceParallelPlot);
         }
 
         //   brush for ordinal cases
-        function brush_parallel(referenceParallelPlot) {
+        function brush_parallel() {
 
             for(var i=0;i<dimensions.length;++i){
 
@@ -330,17 +289,7 @@ class ParallelPlot {
                       extents[i] = [temp[temp.length-1], temp[0]];
                   }
             }
-/*
-          foreground.attr("class", function(d) {
-            return dimensions.every(function(p, i) {
-                if(extents[i][0]==0 && extents[i][0]==0) {
-                    return true;
-                }
-              return extents[i][1] <= d[p] && d[p] <= extents[i][0];
-            }) ? "background" : "foreground";
-          });
-          */
-            /*
+
             foreground.style("display", function(d) {
                 return dimensions.every(function(p, i) {
                     if(extents[i][0]==0 && extents[i][0]==0) {
@@ -349,12 +298,12 @@ class ParallelPlot {
                     return extents[i][1] <= d[p] && d[p] <= extents[i][0];
                   }) ? null : "none";
             });
-*/
+
         }
 
 
 
-        function brush_end_ordinal(referenceParallelPlot){
+        function brush_end_ordinal(){
           if (!d3.event.sourceEvent) return; // Only transition after input.
 
           if (!d3.event.selection) {
@@ -378,18 +327,6 @@ class ParallelPlot {
                   extents[i] = [temp[temp.length-1], temp[0]];
                 }
             }
-
-/*
-          foreground.attr("class", function(d) {
-            return dimensions.every(function(p, i) {
-                if(extents[i][0]==0 && extents[i][0]==0) {
-                    return true;
-                }
-              return extents[i][1] <= d[p] && d[p] <= extents[i][0];
-            }) ? "background" : "foreground";
-          });
-          */
-            /*
             foreground.style("display", function(d) {
                 return dimensions.every(function(p, i) {
                     if(extents[i][0]==0 && extents[i][0]==0) {
@@ -398,91 +335,34 @@ class ParallelPlot {
                     return extents[i][1] <= d[p] && d[p] <= extents[i][0];
                   }) ? null : "none";
             });
-            */
           //temp contains all selected elements
           //Now filters contains all elements to remove
           filters[ax] = temp
-           
-
-            referenceParallelPlot.temp.selectAll("path").attr("visibility", function(d) {
-                var ret = referenceParallelPlot.checkParallelFilter(d);
-                if(ret)
-                    return "visible";
-                else
-                    return "hidden";
-            });
           //console.log(filters)
           //triggerBrushing(referenceParallelPlot,brushData)
           referenceParallelPlot.triggerBrushing(referenceParallelPlot);
         }
 
-        //referenceParallelPlot.buildVisualization(referenceParallelPlot,data);
-
-        //###########################################################
-        //EVENTS HANDLING, MUST BE AT THE END OF STARTVISUALIZATION
-        //###########################################################
-
-
-        referenceParallelPlot.dataUpdater.addListener('typeUpdateVisualization', function(e) {
-            referenceParallelPlot.updateVisualization(referenceParallelPlot);
-        });
-
-        referenceParallelPlot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
-            referenceParallelPlot.highlightBrushedPoints(referenceParallelPlot, e);
-        });
-
-        referenceParallelPlot.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
-            referenceParallelPlot.changeVisualizationColor(referenceParallelPlot);
-        });
-
-  }
-
-      buildVisualization(referenceParallelPlot,data){
-       /* 
-          var y = referenceParallelPlot.y
-        var x = referenceParallelPlot.x
-        var c = referenceParallelPlot.c
-        var dimensions = referenceParallelPlot.dimensions
-        var dragging = {}
-        var filters = referenceParallelPlot.filters
-        // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
-        function path(d) {
-            return d3.line()(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
-        }
-        var line = d3.line(),
-                  background,
-                  foreground;
-*/
-        // Add grey background lines for context.
-        /*background = referenceParallelPlot.svg.select(".background")
-            .selectAll("path")
-            .data(data, function(d){ return d.index;} )
-*/
-        // Add blue foreground lines for focus.
-        //var foreground = referenceParallelPlot.svg.select(".foreground")
-            
-        var foreground = referenceParallelPlot.temp.selectAll("path")
-            .data(data, function(d){ return d.index;} );
-
-          //console.log(foreground);
-
- //         background.enter().append("path").attr("d", path);
-   //       background.exit().remove();
-
-                /*
-          foreground.enter().append("path").attr("d", path);
-          foreground.exit().remove();
-*/
-        //console.log(foreground.enter());
-        //console.log(foreground.exit());
-          foreground.attr("visibility", "visible");
-          foreground.exit().attr("visibility", "hidden");
     }
 
     updateVisualization(referenceParallelPlot) {
 
         //here you need to update the visualization taking the new data from:
         //referenceParallelPlot.dataUpdater.data
+        var margin = { top: 25, right: 5, bottom: 5, left: 20 }
+        var height = 400;
+        var width = 1100;
+        this.height = height;
+        this.width = width;
+        d3.select(".parallel_plot").select("svg").remove();
+        referenceParallelPlot.svg = d3.select(".parallel_plot")
+          .append("svg")
+            .attr("width", '100%')
+            .attr("height", '100%')
+          .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+        referenceParallelPlot = this;
 
         referenceParallelPlot.buildVisualization(referenceParallelPlot,referenceParallelPlot.dataUpdater.data);
 
