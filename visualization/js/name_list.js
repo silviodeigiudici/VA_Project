@@ -117,6 +117,10 @@ class NameList{
             referenceNamelist.updateVisualization(referenceNamelist);
         });
 
+        this.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
+            referenceNamelist.updateVisualization(referenceNamelist);
+        });
+
     }
 
 }

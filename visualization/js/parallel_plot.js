@@ -20,6 +20,7 @@ class ParallelPlot {
                   "translate(" + margin.left + "," + margin.top + ")");
 
         this.foreground = undefined;
+        this.brush_dict = {};
 
         var referenceParallelPlot = this;
         this.dataUpdater.addListener('dataReady', function(e) {
@@ -34,8 +35,8 @@ class ParallelPlot {
         referenceParallelPlot.dimensions = dimensions
         var data = currentData
         var i;
-        var y = {} //dictionary axies parallel
-        var c = {} //elements to put in the axies
+        var y = {}; //dictionary axies parallel
+        var c = {}; //elements to put in the axies
 
         var filters = {}
         c["Category"] =  d3.map(data, function(d){return(d.Category)}).keys().sort()
@@ -68,15 +69,13 @@ class ParallelPlot {
         referenceParallelPlot.c = c;
         referenceParallelPlot.filters = filters;
         
-        var dragging = {};
+        //var dragging = {};
         // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
         function path(d) {
             return d3.line()(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
         }
         var line = d3.line(),
-                  background,
-                  foreground,
-                  extents;
+                  foreground;
 
         // Add grey background lines for context.
         /*
@@ -94,9 +93,9 @@ class ParallelPlot {
         foreground = referenceParallelPlot.temp.selectAll("path")
             .data(data, function(d) {return d.index;} )
             .enter().append("path")
-            .attr("d", path);
+            .attr("d", path).style("stroke-width", 0.5);
 
-        extents = dimensions.map(function(p) { return [0,0]; });
+        var extents = dimensions.map(function(p) { [0,0]; });
 
           // Add a group element for each dimension.
         var g = referenceParallelPlot.svg.selectAll(".dimension")
@@ -151,6 +150,7 @@ class ParallelPlot {
             .text(function(d) { return d; });
 
         // Add and store a brush for each axis.
+        var new_brush;
         g.append("g")
             .attr("class", "brush")
             .each(function(d) {
@@ -163,34 +163,41 @@ class ParallelPlot {
                 d3.select(this).call(y[d].brush = d3.brushY().extent([[-8, 0], [8,referenceParallelPlot.height]]).on("brush start", brushstart).on("brush", go_brush).on("brush", brush_parallel_chart).on("end", brush_end));
                 }
 */
-            if(d == 'Category' || d == "ContentRating"){
-                d3.select(this).call(y[d].brush = d3.brushY().extent([[-8, 0], [15,referenceParallelPlot.height]]).on("brush start", function(){ brush_parallel(referenceParallelPlot);})
-                    .on("end", function(){ brush_end_ordinal(referenceParallelPlot);}) );
-              }
+            if(d == 'Category' || d == "ContentRating")
+                new_brush = d3.brushY().extent([[-8, 0], [15,referenceParallelPlot.height]])
+                    .on("end", function(){ brush_end_ordinal(referenceParallelPlot);});
 
-            else{
-                d3.select(this).call(y[d].brush = d3.brushY().extent([[-8, 0], [8,referenceParallelPlot.height]]).on("brush start", function(){ brush_parallel_chart(referenceParallelPlot); })
-                    .on("end", function(){ brush_end(referenceParallelPlot); }) );
-                }
+            else
+                new_brush = d3.brushY().extent([[-8, 0], [8,referenceParallelPlot.height]])
+                    .on("end", function(){ brush_end(referenceParallelPlot); });
+
+            y[d].brush = new_brush;
+
+            new_brush.dimension = d;
+            d3.select(this).call(new_brush);
+
             })
             .selectAll("rect")
             .attr("x", -8)
             .attr("width", 16);
 
+/*
         function position(d) {
           var v = dragging[d];
           return v == null ? x(d) : v;
         }
+*/
 /*
         function transition(g) {
           return g.transition().duration(500);
         }
 */
         // Returns the path for a given data point.
+        /*
         function path(d) {
           return line(dimensions.map(function(p) { return [position(p), y[p](d[p])]; }));
         }
-
+*/
         /*
         function go_brush() {
           d3.event.sourceEvent.stopPropagation();
@@ -235,8 +242,8 @@ class ParallelPlot {
        // }
 
         // Handles a brush event, toggling the display of foreground lines.
-        function brush_parallel_chart(referenceParallelPlot) {
-
+      //  function brush_parallel_chart(referenceParallelPlot) {
+/*
             for(var i=0;i<dimensions.length;++i){
 
                 if(d3.event.target==y[dimensions[i]].brush) {
@@ -247,7 +254,7 @@ class ParallelPlot {
                 }
 
             }
-
+*/
 /*
           foreground.attr("class", function(d) {
             return dimensions.every(function(p, i) {
@@ -268,10 +275,12 @@ class ParallelPlot {
                }) ? null : "none";
             });
             */
-        }
+      //  }
 
 
         function brush_end(referenceParallelPlot){
+
+            /*
             if (!d3.event.sourceEvent) return; // Only transition after input.
             if (!d3.event.selection){
             //Reset selection!
@@ -283,7 +292,22 @@ class ParallelPlot {
               //console.log(filters)
               return; // Ignore empty selections.
             }
+*/
+            if(!d3.event.selection)
+                return;
 
+            var dimension = d3.event.target.dimension;
+            
+            var axis = y[dimension];
+            var coordinates = d3.event.selection.map(axis.invert, axis);
+            
+            //extents[dimension][0] = Math.round( coordinates[0] * 10 ) / 10;
+            //extents[dimension][1] = Math.round( coordinates[1] * 10 ) / 10;
+            var limitRange = [coordinates[1].toFixed(2), coordinates[0].toFixed(2)];
+            //var limitRange = [Math.round( coordinates[1] * 10 ) / 10, Math.round( coordinates[0] * 10 ) / 10];
+            filters[dimension] = limitRange;
+            
+            /*
             for(var i=0;i<dimensions.length;++i){
                 if(d3.event.target==y[dimensions[i]].brush) {
                     extents[i]=d3.event.selection.map(y[dimensions[i]].invert,y[dimensions[i]]);
@@ -292,11 +316,12 @@ class ParallelPlot {
                     var ax = dimensions[i];
                     var limitRange = [extents[i][1],extents[i][0]]
                     //d3.select(this).transition().call(d3.event.target.move, extents[i].map(y[dimensions[i]]));
-                    d3.select(this).call(d3.event.target.move, extents[i].map(y[dimensions[i]]));
+                    //d3.select(this).call(d3.event.target.move, extents[i].map(y[dimensions[i]]));
                 }
             }
             filters[ax] = limitRange
-            
+            */
+            /* 
             referenceParallelPlot.temp.selectAll("path").attr("visibility", function(d) {
                 var ret = referenceParallelPlot.checkParallelFilter(d);
                 if(ret)
@@ -304,18 +329,26 @@ class ParallelPlot {
                 else
                     return "hidden";
             });
+*/
+            referenceParallelPlot.temp.selectAll("path").style("stroke", function(d) {
+                var ret = referenceParallelPlot.checkParallelFilter(d);
+                if(ret)
+                    return "blue";
+                else
+                    return "grey";
+            });
             /*
             referenceParallelPlot.temp.selectAll("path").each(function(d) {
                 var ret = referenceParallelPlot.checkParallelFilter(d);
                 d3.select(this).attr("opacity", ret);
             });
 */
-            referenceParallelPlot.triggerBrushing(referenceParallelPlot);
+            //referenceParallelPlot.triggerBrushing(referenceParallelPlot);
         }
 
         //   brush for ordinal cases
-        function brush_parallel(referenceParallelPlot) {
-
+       // function brush_parallel(referenceParallelPlot) {
+/*
             for(var i=0;i<dimensions.length;++i){
 
                   if(d3.event.target==y[dimensions[i]].brush) {
@@ -330,6 +363,8 @@ class ParallelPlot {
                       extents[i] = [temp[temp.length-1], temp[0]];
                   }
             }
+*/
+
 /*
           foreground.attr("class", function(d) {
             return dimensions.every(function(p, i) {
@@ -350,11 +385,12 @@ class ParallelPlot {
                   }) ? null : "none";
             });
 */
-        }
+       // }
 
 
 
         function brush_end_ordinal(referenceParallelPlot){
+            /*
           if (!d3.event.sourceEvent) return; // Only transition after input.
 
           if (!d3.event.selection) {
@@ -366,6 +402,24 @@ class ParallelPlot {
             }
             return; // Ignore empty selections.
           }
+          */
+
+          if(!d3.event.selection)
+              return;
+
+          var dimension = d3.event.target.dimension;
+          
+          var axis = y[dimension];
+          var selection = d3.event.selection;
+
+          var selected =  axis.domain().filter(function(d){
+                            return (selection[0] <= axis(d)) && (axis(d) <= selection[1]);
+                          });
+          
+          //var temp = selected.sort();
+            
+          filters[dimension] = selected; 
+/*
           for(var i=0;i<dimensions.length;++i){
                 if(d3.event.target==y[dimensions[i]].brush) {
                   var  yScale = y[dimensions[i]];
@@ -373,12 +427,15 @@ class ParallelPlot {
                                   var s = d3.event.selection;
                                   return (s[0] <= yScale(d)) && (yScale(d) <= s[1])
                                   });
+                    console.log(yScale.domain());
+                    console.log(yScale);
+                    console.log(selected);
                   var temp = selected.sort();
                   var ax = dimensions[i];
                   extents[i] = [temp[temp.length-1], temp[0]];
                 }
             }
-
+*/
 /*
           foreground.attr("class", function(d) {
             return dimensions.every(function(p, i) {
@@ -401,7 +458,6 @@ class ParallelPlot {
             */
           //temp contains all selected elements
           //Now filters contains all elements to remove
-          filters[ax] = temp
            
 
             referenceParallelPlot.temp.selectAll("path").attr("visibility", function(d) {
@@ -522,10 +578,38 @@ class ParallelPlot {
         referenceParallelPlot.dataUpdater.brushParallelUpdateData(); //don't delete this
 
     }
-    checkParallelFilter(row){
-        //console.log("checking")
-        var num_dimensions = this.dimensions.length;
 
+    checkCategory(row, dimension) {
+        if(this.filters[dimension].length > 0 && !this.filters[dimension].includes(row[dimension]))
+            return false;
+        else
+            return true;
+        }
+
+    checkValues(row, dimension) {
+        if(this.filters[dimension].length > 0 && ( row[dimension] < this.filters[dimension][0] || row[dimension] > this.filters[dimension][1] ) )
+            return false;
+        else
+            return true;
+        }
+
+
+    checkParallelFilter(row){
+        
+        
+        if(!this.checkCategory(row, "Category")) return false;
+        if(!this.checkCategory(row, "ContentRating")) return false;
+        
+        if(!this.checkValues(row, "Rating")) return false;
+        if(!this.checkValues(row, "Reviews")) return false;
+        if(!this.checkValues(row, "Size")) return false;
+        if(!this.checkValues(row, "Installs")) return false;
+        if(!this.checkValues(row, "Price")) return false;
+        if(!this.checkValues(row, "AndroidVer")) return false;
+
+        return true;
+
+        /*
         for(var i = 0;i < num_dimensions;++i){
           if(this.filters[this.dimensions[i]].length > 0){
 
@@ -542,9 +626,9 @@ class ParallelPlot {
               }
             }
           }
-        }
+        }*/
         //console.log("passed")
-        return true
+        //return true
         //this function will be called from the dataUpdater in the brushParallelUpdateData, where it will update the data readed from all the visualizations
         //you need to check the row and return true if the row is in the range of the brushes that you user select, false otherwise
         //this function has the same goal of the checkScatterplotFilterin the scatterplot

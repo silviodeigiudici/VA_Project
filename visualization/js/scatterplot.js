@@ -55,62 +55,6 @@ class Scatterplot {
 
     }
 
-    buildVisualization(referenceScatterplot, width_translate, height_translate){
-
-        var circle = referenceScatterplot.globalG.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData, function(d) {return d.index;} );
-
-/*
-        console.log("Robe scatter");
-        console.log(referenceScatterplot.globalG.select("circle"));
-        console.log(circle.exit());
-        console.log(circle.enter());
-        console.log(circle);
-        console.log("Fine");
-*/
-/*
-        circle.join(
-            enter => enter.append("circle").attr("fill", "black")
-                .attr("r", 3)
-                .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + referenceScatterplot.width_translate; })
-                .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + referenceScatterplot.height_translate; }), 
-            update => update.attr("fill", "red"),
-            exit => exit.attr("fill", "green")
-        );
-*/
-
-
-/*
-
-        circle.attr("fill", "red");
-        circle.exit().attr("fill", "green");
-        circle.enter().append("circle").attr("fill", "black")
-            .attr("r", 3)
-            .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + referenceScatterplot.width_translate; })
-            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + referenceScatterplot.height_translate; });
-  */
-
-/* 
-        circle.exit().transition().duration(600).attr("cx",0).attr("cy",0).remove();
-
-        circle.enter().append("circle")
-            .attr("id", function(d, i) { return "c" + i.toString();} )
-            .attr("r", 3)
-            .style("opacity", 0.5) //.transition().duration(750);
-            //.merge(circle)
-            .transition().duration(600)
-            .style("fill", function(d) { return referenceScatterplot.colorUpdater.getScatterplotPointsColors(); })
-            //.style("fill", function(d, i) {return (d.highlight === "0") ? "#2b77df" : "red";} )
-            .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + referenceScatterplot.width_translate; })
-            .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + referenceScatterplot.height_translate; });
-    */
-        
-        circle.attr("visibility", "visible");
-
-        //circle.exit().transition().duration(600).attr("cx",0).attr("cy",0).remove();
-        circle.exit().attr("visibility", "hidden");
-
-    }
-
     checkScatterplotFilter(row, eventInfo) {
         
         var brushData = eventInfo.detail;
@@ -147,7 +91,12 @@ class Scatterplot {
         
         //referenceScatterplot.svg.call(referenceScatterplot.brush.move, null)
         
-        referenceScatterplot.buildVisualization(referenceScatterplot);
+        var circle = referenceScatterplot.globalG.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData, function(d) {return d.index;} );
+
+        
+        circle.attr("visibility", "visible");
+
+        circle.exit().attr("visibility", "hidden");
 
     }
 
