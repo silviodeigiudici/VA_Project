@@ -9,6 +9,9 @@ class HistoVersion {
         this.height = height;
         this.width = width;
         this.margin = margin;
+        this.x = {}
+        this.y = {}
+        this.max = 0;
         this.svg = d3.select(".histo_version")
           .append("svg")
             .attr("width", '100%')
@@ -22,34 +25,68 @@ class HistoVersion {
         this.dataUpdater.addListener('dataReady', function(e) {
             referenceHistogramVer.startVisualization(referenceHistogramVer);
         });
+        this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
+            referenceHistogramVer.updateVisualization(referenceHistogramVer);
+        });
+        referenceHistogramVer.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
+            referenceHistogramVer.updateVisualization(referenceHistogramVer);
+        });
     }
 
     startVisualization(referenceHistogramVer) {
-        //to see the data(you can delete this line, it's only an example):
-        var data = dataUpdater.data
-        var i;
-        var current;
-        var occurances = {}
-        var dat = []
-        var categories = []
-        for (i in data){
-          current = data[i].AndroidVer
-          if (current == undefined){ //The dataset has some..imperfections
-            continue
-          }
-          else if (occurances[current] == undefined){
-            occurances[current] = 1
-            categories.push(current)
+      //to see the data(you can delete this line, it's only an example):
+      var data = dataUpdater.data
+
+
+      var x = d3.scaleBand()
+                .range([0, referenceHistogramVer.width])
+                .padding(0.1);
+      var y = d3.scaleLinear()
+                .range([referenceHistogramVer.height, 0]);
+      var dataObj = referenceHistogramVer.dataObjCreation(data)
+      var max = this.max;
+      // Scale the range of the data in the domains
+      x.domain(dataObj.map(function(d) {
+          if(d.cat[0] != "V"){
+            return d.cat[0]+".x";
           }
           else{
-            if(current == "Varies with device"){
-              occurances[current] = occurances[current] + 1
-            }
-            else{
-              occurances[current] = occurances[current] + 1
-            }
+            return d.cat[0]+"aries";
+          } }));
+      y.domain([0, max])
+      this.x = x;
+      this.y = y;
+
+
+      referenceHistogramVer.buildVisualization(referenceHistogramVer,dataObj)
+
+}
+
+    dataObjCreation(data){
+
+      var i;
+      var current;
+      var occurances = {}
+      var dat = []
+      var categories = []
+      for (i in data){
+        current = data[i].AndroidVer
+        if (current == undefined){ //The dataset has some..imperfections
+          continue
+        }
+        else if (occurances[current] == undefined){
+          occurances[current] = 1
+          categories.push(current)
+        }
+        else{
+          if(current == "Varies with device"){
+            occurances[current] = occurances[current] + 1
+          }
+          else{
+            occurances[current] = occurances[current] + 1
           }
         }
+      }
       var max = 0
       var count = 0
       for (i in occurances){
@@ -78,34 +115,21 @@ class HistoVersion {
           max = occurances[categories[i]] + pr
         }
       }
+      this.max = max;
       dataObj.sort((a, b) => (a.cat > b.cat) ? 1 : -1)
+      return(dataObj)
 
-      var x = d3.scaleBand()
-                .range([0, referenceHistogramVer.width])
-                .padding(0.1);
-      var y = d3.scaleLinear()
-                .range([referenceHistogramVer.height, 0]);
-
-      // Scale the range of the data in the domains
-      x.domain(dataObj.map(function(d) {
-          if(d.cat[0] != "V"){
-            return d.cat[0]+".x";
-          }
-          else{
-            return d.cat[0]+"aries";
-          } }));
-      y.domain([0, max])
+}
+    buildVisualization(referenceHistogramVer,dataObj){
+      // append the rectangles for the bar chart, position them and add colors
+      var x = this.x
+      var y = this.y
       var z = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-
       var versionsForColors = ["x.0","x.1","x.2","x.3","x.4","Var"]
       z.domain(versionsForColors);
-
-      // append the rectangles for the bar chart, position them and add colors
       referenceHistogramVer.svg.selectAll(".bar")
         .data(dataObj)
         .enter().append("rect")
-
           .attr("class", "bar")
           .attr("x", function(d) {
             if(d.cat[0] != "V"){
@@ -126,30 +150,30 @@ class HistoVersion {
             }
           });
 
-    /* #Label over bars, need fixing
-    referenceHistogram.svg.selectAll(".bar")
-    .append("text")
+      /* #Label over bars, need fixing
+      referenceHistogram.svg.selectAll(".bar")
+      .append("text")
       .style("text-anchor", "middle")
       .attr("y", function(d) { return y(d.frequencies)+500; })
       .attr("x", function(d) { return x(d.cat); })
       .text(function(d) { return d.frequencies; })
       .style("fill", "black")
-*/
-    // add the x Axis
-    referenceHistogramVer.svg.append("g")
+      */
+      // add the x Axis
+      referenceHistogramVer.svg.append("g")
         .attr("transform", "translate(0," + referenceHistogramVer.height + ")")
         .call(d3.axisBottom(x));
-    referenceHistogramVer.svg.append("text")
+      referenceHistogramVer.svg.append("text")
         .attr("transform",
               "translate(" + ((referenceHistogramVer.width)/2) + " ," +
                              (referenceHistogramVer.height + 35) + ")")
         .style("text-anchor", "middle")
         .text("Android Version");
-    // add the y Axis
-    referenceHistogramVer.svg.append("g")
+      // add the y Axis
+      referenceHistogramVer.svg.append("g")
         .call(d3.axisLeft(y));
 
-    referenceHistogramVer.svg.append("text")
+      referenceHistogramVer.svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 0 - referenceHistogramVer.margin.left)
         .attr("x",0 - (referenceHistogramVer.height / 2))
@@ -157,8 +181,8 @@ class HistoVersion {
         .style("text-anchor", "middle")
         .text("Apps");
 
-    //Append a legend and populate it
-    var legend = referenceHistogramVer.svg.append("g")
+      //Append a legend and populate it
+      var legend = referenceHistogramVer.svg.append("g")
         .attr("font-family", "sans-serif")
         .attr("font-size", 10)
         .attr("text-anchor", "end")
@@ -167,21 +191,37 @@ class HistoVersion {
       .enter().append("g")
         .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-    legend.append("rect")
+      legend.append("rect")
         .attr("x", referenceHistogramVer.width - 19)
         .attr("width", 19)
         .attr("height", 19)
         .attr("fill", z);
 
-    legend.append("text")
+      legend.append("text")
         .attr("x", referenceHistogramVer.width - 24)
         .attr("y", 9.5)
         .attr("dy", "0.32em")
         .text(function(d) { return d; });
+    }
+    updateVisualization(referenceHistogramVer) {
+      var margin = { top: 50, right: 5, bottom: 10, left: 60 }
+      var height = 300  ;
+      var width = 420;
+      this.height = height;
+      this.width = width;
+      this.margin = margin;
+      d3.select(".histo_version").select("svg").remove();
+      this.svg = d3.select(".histo_version")
+        .append("svg")
+          .attr("width", '100%')
+          .attr("height", '100%')
+        .append("g")
+          .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
 
-}
+      var dataObj = referenceHistogramVer.dataObjCreation(referenceHistogramVer.dataUpdater.brushedData);
 
-    updateVisualization() {
+      referenceHistogramVer.buildVisualization(referenceHistogramVer,dataObj);
 
     }
 
