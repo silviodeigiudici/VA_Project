@@ -4,29 +4,29 @@ class BoxPlot1 {
         this.colorUpdater = colorUpdater;
 
         var margin = { top: 20, right: 50, bottom: 20, left: 90 }
-        var height = 110;
+        var height = 120;
         var width = 30;
         this.height = height;
         this.width = width;
         this.margin = margin;
         this.svg = d3.select(".boxplot1")
           .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 200 200")
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
         this.svg1 = d3.select(".boxplot2")
           .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 200 200")
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
         this.svg2 = d3.select(".boxplot3")
           .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 200 200")
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
@@ -108,8 +108,8 @@ class BoxPlot1 {
 
       this.svg = d3.select(".boxplot1")
         .append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
+          .attr("preserveAspectRatio", "xMinYMin meet")
+          .attr("viewBox", "0 0 200 200")
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
@@ -130,8 +130,8 @@ class BoxPlot1 {
 
       this.svg1 = d3.select(".boxplot2")
         .append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
+          .attr("preserveAspectRatio", "xMinYMin meet")
+          .attr("viewBox", "0 0 200 200")
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
@@ -154,8 +154,8 @@ class BoxPlot1 {
 
       this.svg2 = d3.select(".boxplot3")
         .append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
+          .attr("preserveAspectRatio", "xMinYMin meet")
+          .attr("viewBox", "0 0 200 200")
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");

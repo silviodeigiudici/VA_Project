@@ -3,7 +3,7 @@ class HistoVersion {
         this.dataUpdater = dataUpdater;
         this.colorUpdater = colorUpdater;
 
-        var margin = { top: 50, right: 5, bottom: 10, left: 60 }
+        var margin = { top: 30, right: 5, bottom: 100, left: 60 }
         var height = 300  ;
         var width = 420;
         this.height = height;
@@ -14,8 +14,8 @@ class HistoVersion {
         this.max = 0;
         this.svg = d3.select(".histo_version")
           .append("svg")
-            .attr("width", '100%')
-            .attr("height", '100%')
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 500 400")
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
@@ -213,8 +213,8 @@ class HistoVersion {
       d3.select(".histo_version").select("svg").remove();
       this.svg = d3.select(".histo_version")
         .append("svg")
-          .attr("width", '100%')
-          .attr("height", '100%')
+          .attr("preserveAspectRatio", "xMinYMin meet")
+          .attr("viewBox", "0 0 500 400")
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");

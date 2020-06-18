@@ -16,8 +16,8 @@ class HistoCategory {
         this.categories = []
         this.svg = d3.select(".barchart")
           .append("svg")
-            .attr("width", '100%')
-            .attr("height", '100%')
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 550 500")
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
@@ -101,6 +101,7 @@ class HistoCategory {
       }
       return(dataObj)
     }
+
   buildVisualization(referenceHistogramCat,dataObj){
     var y = d3.scaleBand()
       .range([0, referenceHistogramCat.width])
