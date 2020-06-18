@@ -47,7 +47,7 @@ class BoxPlot1 {
 
     startVisualization(referenceBoxPlot) {
         //Let's make rate boxplot
-        var data_s = dataUpdater.data
+        var data_s = dataUpdater.brushedData;
         var data_to_sort = []
         var i
         for (i in data_s){

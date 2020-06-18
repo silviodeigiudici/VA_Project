@@ -198,6 +198,13 @@ class ParallelPlot {
 
         referenceParallelPlot.dataUpdater.addListener('typeUpdateVisualization', function(e) {
             referenceParallelPlot.updateVisualization(referenceParallelPlot);
+        
+            /*
+            var num_dims = referenceParallelPlot.dimensions;
+            for (var i=0; i < num_dims; i++) {
+              referenceParallelPlot.filters[referenceParallelPlot.dimensions[i]] = [];
+            }*/
+
         });
 
         referenceParallelPlot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
@@ -218,11 +225,6 @@ class ParallelPlot {
         paths.attr("visibility", "visible");
         paths.exit().attr("visibility", "hidden");
         
-        var num_dims = referenceParallelPlot.dimensions;
-        for (var i=0; i < num_dims; i++) {
-          referenceParallelPlot.filters[referenceParallelPlot.dimensions[i]] = [];
-        }
-
     }
 
     highlightBrushedPoints(referenceParallelPlot, eventInfo) {

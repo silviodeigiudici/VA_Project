@@ -35,7 +35,7 @@ class HistoVersion {
 
     startVisualization(referenceHistogramVer) {
       //to see the data(you can delete this line, it's only an example):
-      var data = dataUpdater.data
+      var data = dataUpdater.brushedData;
 
 
       var x = d3.scaleBand()

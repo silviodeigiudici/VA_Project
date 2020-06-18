@@ -26,18 +26,23 @@ class DataUpdater {
     }
 
     typeUpdateData() {
+
         this.data = [];
+        this.brushedData = [];
 
         var referenceDataUpdater = this;
 
         this.originalData.forEach( function(row, index) {
 
-            if( referenceDataUpdater.header.checkPaidFilter(row) && referenceDataUpdater.header.checkFreeFilter(row) )
+            if( referenceDataUpdater.header.checkPaidFilter(row) && referenceDataUpdater.header.checkFreeFilter(row) ){
+                
                 referenceDataUpdater.data.push( row );
 
+                if( referenceDataUpdater.parallelPlot.checkParallelFilter(row) )
+                    referenceDataUpdater.brushedData.push( row );
+            
+            }
         });
-
-        this.brushedData = this.data;
 
         this.eventsHandler.dispatchEvent( new Event('typeUpdateVisualization') );
     }

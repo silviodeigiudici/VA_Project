@@ -39,7 +39,7 @@ class HistoContent {
         var y = d3.scaleLinear()
                   .range([referenceHistogram.height, 0]);
 
-        var dataObj = referenceHistogram.dataObjCreation(referenceHistogram.dataUpdater.data)
+        var dataObj = referenceHistogram.dataObjCreation(referenceHistogram.dataUpdater.brushedData);
         // get the data
         // format the data
           // Scale the range of the data in the domains

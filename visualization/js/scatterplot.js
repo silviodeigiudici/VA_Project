@@ -137,10 +137,6 @@ class Scatterplot {
             //referenceScatterplot.updateVisualization(referenceScatterplot); //you can't use this now, need a now one
         });
 
-        referenceScatterplot.dataUpdater.addListener('blindmodeUpdateColor', function(e) {
-            //referenceScatterplot.updateVisualization(referenceScatterplot); //same as darkmode
-        });
-
         referenceScatterplot.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
             referenceScatterplot.updateVisualization(referenceScatterplot);
         });

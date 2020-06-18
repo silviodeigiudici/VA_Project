@@ -33,7 +33,7 @@ class HistoCategory {
 
     startVisualization(referenceHistogramCat) {
         //to see the data(you can delete this line, it's only an example):
-      var data = dataUpdater.data
+      var data = dataUpdater.brushedData;
       var dataObj = referenceHistogramCat.dataObjCreation(data)
       //console.log(dataObj)
 
