@@ -157,7 +157,7 @@ class ParallelPlot {
             var limitRange = [coordinates[1].toFixed(2), coordinates[0].toFixed(2)];
             filters[dimension] = limitRange;
 
-            changePathsColor(referenceParallelPlot)
+            changePathsColor(referenceParallelPlot);
 
             //referenceParallelPlot.triggerBrushing(referenceParallelPlot); //you can use it with chrome
         }
@@ -178,14 +178,11 @@ class ParallelPlot {
         }
         
         function startAction(referenceParallelPlot){
-            if(d3.event.sourceEvent.ctrlKey){
-                var dimension = d3.event.target.dimension;
-                filters[dimension] = [];
-
-                referenceParallelPlot.triggerBrushing(referenceParallelPlot);
-                changePathsColor(referenceParallelPlot);
-            }
-
+            
+            var dimension = d3.event.target.dimension;
+            filters[dimension] = [];
+            changePathsColor(referenceParallelPlot);
+        
         }
         
         function endAction(referenceParallelPlot){
@@ -222,7 +219,7 @@ class ParallelPlot {
         paths.exit().attr("visibility", "hidden");
         
         var num_dims = referenceParallelPlot.dimensions;
-        for (i in num_dims) {
+        for (var i=0; i < num_dims; i++) {
           referenceParallelPlot.filters[referenceParallelPlot.dimensions[i]] = [];
         }
 
@@ -230,34 +227,21 @@ class ParallelPlot {
 
     highlightBrushedPoints(referenceParallelPlot, eventInfo) {
 
-        //here you can use the following function:
-        //referenceParallelPlot.dataUpdater.checkScatterplotFilter(d, eventInfo)
-        //where d is a row in the data and eventInfo are the data of the event that you have already.
-        //Basically it returns true if the row (sample, d or whatever) needs to be highlighed (because it is in the brush area of the scatter), false if not
-        //for an example see the highlighBrushedPoints in the scatterplot, where I use the class selected
-        //to change the style of the point in the brush area
-
-        console.log("brush scatter in the parallel");
+        referenceParallelPlot.globalG.selectAll("path").style("stroke", function(d) {
+            var ret = referenceParallelPlot.dataUpdater.checkScatterplotFilter(d, eventInfo.detail);
+            if(ret)
+                return "red";
+            else
+                return "rgb(70, 130, 180)";
+        });
 
     }
 
     changeVisualizationColor(referenceParallelPlot) {
 
-        //this function is called when we pass to the darkmode
-        //for now ignore it but start to think how to do it
-
-        console.log("color change in the parallel");
-
-        //referenceParallelPlot.triggerBrushing(referenceParallelPlot, "ciao");
     }
 
     triggerBrushing(referenceParallelPlot){
-
-        //this function need to be called by the brush event handler, in order to filter the database for the
-        //other visualizations
-        //Important: you also need to pass the data of the brush (brushData) that you need to use for selecting the rows of the dataset as range of values, categories (for this you may think to use dictionaries for efficiency) ecc
-
-        //then you should see brushedData in the function below (checkParallelFilter)
 
         referenceParallelPlot.dataUpdater.brushParallelUpdateData(); //don't delete this
 
@@ -268,7 +252,6 @@ class ParallelPlot {
         var valueRow = this.y[dimension](category);
         var filter = this.filters[dimension]; 
         if(filter.length > 0 && ( valueRow < filter[0] || valueRow > filter[1] ) )
-        //if(this.filters[dimension].length > 0 && !this.filters[dimension].includes(row[dimension]))
             return false;
         else
             return true;

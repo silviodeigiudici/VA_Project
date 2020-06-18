@@ -55,9 +55,7 @@ class Scatterplot {
 
     }
 
-    checkScatterplotFilter(row, eventInfo) {
-        
-        var brushData = eventInfo.detail;
+    checkScatterplotFilter(row, brushData) {
         
         if(brushData === null) return false;
 
@@ -121,8 +119,11 @@ class Scatterplot {
         
         referenceScatterplot.brush = d3.brush()  
             .extent( [ [0,0], [rect.width,rect.height] ] ) 
-            .on("start brush", function(e) { //you can write .on("start brush end", ..-) to get a notification of the event when you start brushing, when you continue to brush, and when you stop the brush (even if you simple translate the brush rectangular)
+            .on("end", function(e) { //you can write .on("start brush end", ..-) to get a notification of the event when you start brushing, when you continue to brush, and when you stop the brush (even if you simple translate the brush rectangular)
                 referenceScatterplot.triggerBrushing(referenceScatterplot, d3.event.selection);
+            })
+            .on("start brush", function(e){
+                referenceScatterplot.highlightBrushedPoints(referenceScatterplot, d3.event.selection);
             });
 
         referenceScatterplot.svg.call(referenceScatterplot.brush); //note: call to svg, not the globalG
@@ -130,10 +131,6 @@ class Scatterplot {
         //same for these events, once visualization is completed, let's enable them
         referenceScatterplot.dataUpdater.addListener('typeUpdateVisualization', function(e) {
             referenceScatterplot.updateVisualization(referenceScatterplot);
-        });
-
-        referenceScatterplot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
-            referenceScatterplot.highlightBrushedPoints(referenceScatterplot, e);
         });
 
         referenceScatterplot.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
@@ -146,7 +143,6 @@ class Scatterplot {
 
         referenceScatterplot.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
             referenceScatterplot.updateVisualization(referenceScatterplot);
-            //console.log("update from parallel to the scatter");
         });
 
     }
