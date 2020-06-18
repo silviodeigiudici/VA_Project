@@ -178,10 +178,12 @@ class ParallelPlot {
         }
         
         function startAction(referenceParallelPlot){
-            
-            var dimension = d3.event.target.dimension;
-            filters[dimension] = [];
-            changePathsColor(referenceParallelPlot);
+            var selection = d3.event.selection;
+            if(selection[0] === selection[1]){
+                var dimension = d3.event.target.dimension;
+                filters[dimension] = [];
+                changePathsColor(referenceParallelPlot);
+            }
         
         }
         
