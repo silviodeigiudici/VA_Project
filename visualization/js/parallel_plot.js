@@ -84,7 +84,7 @@ class ParallelPlot {
         referenceParallelPlot.globalG.selectAll("path")
             .data(data, function(d) {return d.index;} )
             .enter().append("path")
-            .attr("d", path).style("stroke-width", 0.5);
+            .attr("d", path).style("stroke-width", 0.8);
 
           // Add a group element for each dimension.
         var g = referenceParallelPlot.svg.selectAll(".dimension")
@@ -133,17 +133,19 @@ class ParallelPlot {
             .attr("x", -8)
             .attr("width", 16);
 
+        /*
         function changePathsColor(referenceParallelPlot){
             
             referenceParallelPlot.globalG.selectAll("path").style("stroke", function(d) {
-                var ret = referenceParallelPlot.checkParallelFilter(d);
+                var ret1 = referenceParallelPlot.checkParallelFilter(d);
+                var ret2 = referenceParallelPlot.dataUpdater.checkScatterplotFilter(d, eventInfo.detail);
                 if(ret)
                     return "rgb(70, 130, 180)";
                 else
                     return "#DCDCDC";
             });
         }  
-        
+       */ 
 
         function brushValues(referenceParallelPlot){
             
@@ -157,7 +159,7 @@ class ParallelPlot {
             var limitRange = [coordinates[1].toFixed(2), coordinates[0].toFixed(2)];
             filters[dimension] = limitRange;
 
-            changePathsColor(referenceParallelPlot);
+            referenceParallelPlot.changePathsColor(referenceParallelPlot);
 
             //referenceParallelPlot.triggerBrushing(referenceParallelPlot); //you can use it with chrome
         }
@@ -172,7 +174,7 @@ class ParallelPlot {
             var selection = d3.event.selection;
             filters[dimension] = selection; 
 
-            changePathsColor(referenceParallelPlot);
+            referenceParallelPlot.changePathsColor(referenceParallelPlot);
 
             //referenceParallelPlot.triggerBrushing(referenceParallelPlot); //you can use it with chrome
         }
@@ -182,7 +184,7 @@ class ParallelPlot {
             if(selection[0] === selection[1]){
                 var dimension = d3.event.target.dimension;
                 filters[dimension] = [];
-                changePathsColor(referenceParallelPlot);
+                referenceParallelPlot.changePathsColor(referenceParallelPlot);
             }
         
         }
@@ -208,9 +210,13 @@ class ParallelPlot {
             }*/
 
         });
-
+/*
         referenceParallelPlot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
             referenceParallelPlot.highlightBrushedPoints(referenceParallelPlot, e);
+        });
+*/
+        referenceParallelPlot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
+            referenceParallelPlot.changePathsColor(referenceParallelPlot);
         });
 
         referenceParallelPlot.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
@@ -229,6 +235,42 @@ class ParallelPlot {
         
     }
 
+   changePathsColor(referenceParallelPlot){
+      /* 
+       referenceParallelPlot.globalG.selectAll("path").style("stroke", function(d) {
+           var ret1 = referenceParallelPlot.checkParallelFilter(d);
+           var ret2 = referenceParallelPlot.dataUpdater.checkScatterplotFilter(d);
+           if(ret1 && ret2)
+               return "red"
+           else if(ret1)
+               return "rgb(70, 130, 180)";
+           else
+               return "#DCDCDC";
+       });*/
+
+       referenceParallelPlot.globalG.selectAll("path").each(function(d) {
+
+           var ret1 = referenceParallelPlot.checkParallelFilter(d);
+           var ret2 = referenceParallelPlot.dataUpdater.checkScatterplotFilter(d);
+
+           var element = d3.select(this);
+           if(ret1 && ret2){
+               element.style("stroke", "red");
+               element.style("opacity", 1);
+           }
+           else if(ret1){
+               element.style("stroke", "rgb(70, 130, 180)");
+               element.style("opacity", 1);
+           }
+           else{
+               element.style("stroke", "#DCDCDC");
+               element.style("opacity", 0.7);
+           }
+           
+       });
+
+   }
+/*
     highlightBrushedPoints(referenceParallelPlot, eventInfo) {
 
         referenceParallelPlot.globalG.selectAll("path").style("stroke", function(d) {
@@ -240,7 +282,7 @@ class ParallelPlot {
         });
 
     }
-
+*/
     changeVisualizationColor(referenceParallelPlot) {
 
     }

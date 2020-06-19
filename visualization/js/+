@@ -8,7 +8,7 @@ class Scatterplot {
         this.scatterplotHeight = rect.height;
 
         this.brush = undefined;
-        this.brushData = null;
+        this.brushData = [ [0,0], [rect.width,rect.height] ];
 
         var margin_scatter = { top: -3, right: 5, bottom: 5, left: 5 }
         //var height = 400;
@@ -102,9 +102,9 @@ class Scatterplot {
 
 
     startBrushing(referenceScatterplot, brushData){
-
+        console.log(brushData); 
         if(brushData[0][0] === brushData[1][0] && brushData[0][1] === brushData[1][1]){
-            referenceScatterplot.brushData = null;
+            referenceParallelPlot.brushData = [ [0,0], [rect.width,rect.height] ];
             referenceScatterplot.globalG.selectAll("circle").classed("selected", function(d) {
                 return referenceScatterplot.dataUpdater.checkScatterplotFilter(d);
             });

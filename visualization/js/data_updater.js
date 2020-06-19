@@ -64,15 +64,15 @@ class DataUpdater {
 
     }
 
-    checkScatterplotFilter(row, eventInfo){
+    checkScatterplotFilter(row){
 
-        return this.scatterplot.checkScatterplotFilter(row, eventInfo);
+        return this.scatterplot.checkScatterplotFilter(row);
 
     }
 
-    brushScatterUpdateData(brushData) {
+    brushScatterUpdateData() {
 
-        this.eventsHandler.dispatchEvent( new CustomEvent("brushScatterUpdateVisualization", {detail: brushData} ) );
+        this.eventsHandler.dispatchEvent( new Event("brushScatterUpdateVisualization") );
 
     }
 
