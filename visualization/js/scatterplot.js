@@ -47,9 +47,9 @@ class Scatterplot {
                         "#FFFFFF",
                         "#FFA765"
         ];
-
-        var labes_x = 540;
-        var labes_y = 10;
+        
+        var labes_x = this.scatterplotWidth * 0.9;
+        var labes_y = this.scatterplotHeight * 0.0235;
 
         var referenceScatterplot = this;
         
@@ -157,33 +157,23 @@ class Scatterplot {
 
     startVisualization(referenceScatterplot) {
 
-        //var max0 = d3.max(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp0);});
-        //var max1 = d3.max(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp1);});
-        //var min0 = d3.min(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp0);});
-        //var min1 = d3.min(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp1);});
-
         var median0 = d3.median(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp0);});
         var median1 = d3.median(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp1);});
         var variance0 = d3.variance(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp0);});
         var variance1 = d3.variance(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp1);});
-
-        //console.log(median0);
-        //console.log(median1);
-        //console.log(variance0);
-        //console.log(variance1);
 
         var min0 = median0 - (variance0 + 1.5);
         var max0 = median0 + (variance0 + 2.5);
         var min1 = median1 - (variance1);
         var max1 = median1 + (variance1 + 2);
 
-        var lenght_x = 525;
+        var lenght_x = referenceScatterplot.scatterplotWidth * 0.88;
         this.x = d3.scaleLinear()
             //.domain([min0, max0])
             .domain([min0, max0])
             .range([0, lenght_x]);
 
-        var lenght_y = 400;
+        var lenght_y = referenceScatterplot.scatterplotHeight * 0.91;
         this.y = d3.scaleLinear()
             //.domain([min1, max1])
             .domain([min1, max1])
@@ -194,9 +184,9 @@ class Scatterplot {
 
         //translation of the axes with respect the svg
         //var width_translate = 30;
-        this.width_translate = 30;
+        this.width_translate = referenceScatterplot.scatterplotWidth * 0.05;
         //var height_translate = 10;
-        this.height_translate = 10;
+        this.height_translate = referenceScatterplot.scatterplotHeight * 0.0235;
 
         this.svg.append("g")
             .attr("transform", "translate(" + this.width_translate + "," + (this.height_translate + lenght_y) + ")")

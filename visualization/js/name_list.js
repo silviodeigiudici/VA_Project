@@ -16,7 +16,6 @@ class NameList{
             //.attr("viewBox", "0,0,500,1000")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
         var referenceNamelist = this;
         this.dataUpdater.addListener('dataReady', function(e) {
             referenceNamelist.startVisualization(referenceNamelist);
@@ -93,11 +92,11 @@ class NameList{
         var all_g = g_entries.merge(rows);
 
         all_g.select("circle")
-            .transition().duration(600)
+            //.transition().duration(600)
             .attr("cy", function(d,i) {return distance_between_row*i - 5;});
 
         all_g.select("text")
-            .transition().duration(600)
+            //.transition().duration(600)
             .attr("y", function(d,i) {return distance_between_row*i;}) 
             .text(function(d,i) {return d;});
 

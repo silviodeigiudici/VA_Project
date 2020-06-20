@@ -6,8 +6,16 @@ class ParallelPlot {
         this.y = {};
         this.c = {};
         var margin = { top: 25, right: 5, bottom: 5, left: 20 }
-        var height = 400;
-        var width = 1100;
+        
+        var rect = d3.select(".parallel_plot").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
+        this.scatterplotWidth = rect.width;
+        this.scatterplotHeight = rect.height;
+        
+        console.log(this.scatterplotWidth)
+        console.log(this.scatterplotHeight)
+
+        var height = this.scatterplotHeight * 0.9;
+        var width = this.scatterplotWidth * 1.04;
         this.height = height;
         this.width = width;
         this.svg = d3.select(".parallel_plot")
@@ -133,20 +141,6 @@ class ParallelPlot {
             .attr("x", -8)
             .attr("width", 16);
 
-        /*
-        function changePathsColor(referenceParallelPlot){
-            
-            referenceParallelPlot.globalG.selectAll("path").style("stroke", function(d) {
-                var ret1 = referenceParallelPlot.checkParallelFilter(d);
-                var ret2 = referenceParallelPlot.dataUpdater.checkScatterplotFilter(d, eventInfo.detail);
-                if(ret)
-                    return "rgb(70, 130, 180)";
-                else
-                    return "#DCDCDC";
-            });
-        }  
-       */ 
-
         function brushValues(referenceParallelPlot){
             
             if(!d3.event.selection)
@@ -203,18 +197,8 @@ class ParallelPlot {
         referenceParallelPlot.dataUpdater.addListener('typeUpdateVisualization', function(e) {
             referenceParallelPlot.updateVisualization(referenceParallelPlot);
         
-            /*
-            var num_dims = referenceParallelPlot.dimensions;
-            for (var i=0; i < num_dims; i++) {
-              referenceParallelPlot.filters[referenceParallelPlot.dimensions[i]] = [];
-            }*/
-
         });
-/*
-        referenceParallelPlot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
-            referenceParallelPlot.highlightBrushedPoints(referenceParallelPlot, e);
-        });
-*/
+        
         referenceParallelPlot.dataUpdater.addListener('brushScatterUpdateVisualization', function(e) {
             referenceParallelPlot.changePathsColor(referenceParallelPlot);
         });
@@ -235,54 +219,31 @@ class ParallelPlot {
         
     }
 
-   changePathsColor(referenceParallelPlot){
-      /* 
-       referenceParallelPlot.globalG.selectAll("path").style("stroke", function(d) {
-           var ret1 = referenceParallelPlot.checkParallelFilter(d);
-           var ret2 = referenceParallelPlot.dataUpdater.checkScatterplotFilter(d);
-           if(ret1 && ret2)
-               return "red"
-           else if(ret1)
-               return "rgb(70, 130, 180)";
-           else
-               return "#DCDCDC";
-       });*/
+    changePathsColor(referenceParallelPlot){
 
-       referenceParallelPlot.globalG.selectAll("path").each(function(d) {
+        referenceParallelPlot.globalG.selectAll("path").each(function(d) {
 
-           var ret1 = referenceParallelPlot.checkParallelFilter(d);
-           var ret2 = referenceParallelPlot.dataUpdater.checkScatterplotFilter(d);
+            var ret1 = referenceParallelPlot.checkParallelFilter(d);
+            var ret2 = referenceParallelPlot.dataUpdater.checkScatterplotFilter(d);
 
-           var element = d3.select(this);
-           if(ret1 && ret2){
-               element.style("stroke", "red");
-               element.style("opacity", 1);
-           }
-           else if(ret1){
-               element.style("stroke", "rgb(70, 130, 180)");
-               element.style("opacity", 1);
-           }
-           else{
-               element.style("stroke", "#DCDCDC");
-               element.style("opacity", 0.7);
-           }
-           
-       });
-
-   }
-/*
-    highlightBrushedPoints(referenceParallelPlot, eventInfo) {
-
-        referenceParallelPlot.globalG.selectAll("path").style("stroke", function(d) {
-            var ret = referenceParallelPlot.dataUpdater.checkScatterplotFilter(d, eventInfo.detail);
-            if(ret)
-                return "red";
-            else
-                return "rgb(70, 130, 180)";
+            var element = d3.select(this);
+            if(ret1 && ret2){
+                element.style("stroke", "red");
+                element.style("opacity", 1);
+            }
+            else if(ret1){
+                element.style("stroke", "rgb(70, 130, 180)");
+                element.style("opacity", 1);
+            }
+            else{
+                element.style("stroke", "#DCDCDC");
+                element.style("opacity", 0.5);
+            }
+            
         });
 
     }
-*/
+    
     changeVisualizationColor(referenceParallelPlot) {
 
     }
