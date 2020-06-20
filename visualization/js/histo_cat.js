@@ -3,9 +3,19 @@ class HistoCategory {
         this.dataUpdater = dataUpdater;
         this.colorUpdater = colorUpdater;
 
-        var margin = { top: 50, right: 5, bottom: 10, left: 160 }
-        var height = 350  ;
-        var width = 330;
+        var rect = d3.select(".barchart").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
+        this.histoWidth = rect.width;
+        this.histoHeight = rect.height;
+
+        //console.log(this.histoWidth);
+        //console.log(this.histoHeight);
+        
+        //40, 5, 10, 160
+        var margin = { top: this.histoHeight * 0.11, right: this.histoWidth * 0.009, bottom: this.histoHeight * 0.03, left: this.histoWidth * 0.297 }
+        //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
+        var height = this.histoHeight * 0.854; //350;
+        var width = this.histoWidth * 0.66; //330;
+
         var x = {};
         var y = {};
         var dom = {};
@@ -16,8 +26,10 @@ class HistoCategory {
         this.categories = []
         this.svg = d3.select(".barchart")
           .append("svg")
-            .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "0 0 550 500")
+            .attr("width", '100%')
+            .attr("height", '100%')
+            //.attr("preserveAspectRatio", "xMinYMin meet")
+            //.attr("viewBox", "0 0 550 500")
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
@@ -26,9 +38,7 @@ class HistoCategory {
         this.dataUpdater.addListener('dataReady', function(e) {
             referenceHistogramCat.startVisualization(referenceHistogramCat);
         });
-        this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
-            referenceHistogramCat.updateVisualization(referenceHistogramCat);
-        });
+        
     }
 
     startVisualization(referenceHistogramCat) {
@@ -38,22 +48,28 @@ class HistoCategory {
       //console.log(dataObj)
 
       //Making x and y axis
+      /*
       var y = d3.scaleBand()
-        .range([0, referenceHistogramCat.width])
+        .range([0, referenceHistogramCat.height])
         .padding(0.1);
+        */
       var x = d3.scaleLinear()
-                .range([0, referenceHistogramCat.height]);
+                .range([0, referenceHistogramCat.width]);
 
       // Scale the range of the data in the domains
-      var dom = dataObj.map(function(d) { return d.cat; })
-      y.domain(dom);
+      //var dom = dataObj.map(function(d) { return d.cat; })
+      //y.domain(dom);
       x.domain([0, d3.max(dataObj, function(d) { return d.frequencies; })]);
       this.x = x;
-      this.y = y;
-      this.dom = dom;
+      //this.y = y;
+      //this.dom = dom;
       referenceHistogramCat.buildVisualization(referenceHistogramCat,dataObj);
 
       referenceHistogramCat.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
+          referenceHistogramCat.updateVisualization(referenceHistogramCat);
+      });
+
+      referenceHistogramCat.dataUpdater.addListener('typeUpdateVisualization', function(e) {
           referenceHistogramCat.updateVisualization(referenceHistogramCat);
       });
 }
@@ -104,7 +120,7 @@ class HistoCategory {
 
   buildVisualization(referenceHistogramCat,dataObj){
     var y = d3.scaleBand()
-      .range([0, referenceHistogramCat.width])
+      .range([0, referenceHistogramCat.height])
       .padding(0.1);
     var dom =  dataObj.map(function(d) { return d.cat; })
 
@@ -154,11 +170,24 @@ class HistoCategory {
   updateVisualization(referenceHistogramCat) {
     //here you need to update the visualization taking the new data from:
     //referenceHistogram.dataUpdater.data
-    var margin = { top: 50, right: 5, bottom: 10, left: 160 }
-    var height = 350  ;
-    var width = 330;
+    
+
+    var rect = d3.select(".barchart").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
+    this.histoWidth = rect.width;
+    this.histoHeight = rect.height;
+
+    //console.log(this.histoWidth);
+    //console.log(this.histoHeight);
+    
+    //40, 5, 10, 160
+    var margin = { top: this.histoHeight * 0.11, right: this.histoWidth * 0.009, bottom: this.histoHeight * 0.03, left: this.histoWidth * 0.297 }
+    //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
+    var height = this.histoHeight * 0.854; //350;
+    var width = this.histoWidth * 0.66; //330;
+
     this.height = height;
     this.width = width;
+
     d3.select(".barchart").select("svg").remove();
     this.svg = d3.select(".barchart")
       .append("svg")

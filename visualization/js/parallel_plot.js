@@ -8,14 +8,11 @@ class ParallelPlot {
         var margin = { top: 25, right: 5, bottom: 5, left: 20 }
         
         var rect = d3.select(".parallel_plot").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
-        this.scatterplotWidth = rect.width;
-        this.scatterplotHeight = rect.height;
+        this.parallelWidth = rect.width;
+        this.parallelHeight = rect.height;
         
-        console.log(this.scatterplotWidth)
-        console.log(this.scatterplotHeight)
-
-        var height = this.scatterplotHeight * 0.9;
-        var width = this.scatterplotWidth * 1.04;
+        var height = this.parallelHeight * 0.9;
+        var width = this.parallelWidth * 1.04;
         this.height = height;
         this.width = width;
         this.svg = d3.select(".parallel_plot")

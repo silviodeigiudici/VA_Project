@@ -2,10 +2,26 @@ class HistoVersion {
     constructor(dataUpdater, colorUpdater) {
         this.dataUpdater = dataUpdater;
         this.colorUpdater = colorUpdater;
+       
 
-        var margin = { top: 30, right: 5, bottom: 100, left: 60 }
-        var height = 300  ;
-        var width = 420;
+        var rect = d3.select(".histo_version").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
+        this.histoWidth = rect.width;
+        this.histoHeight = rect.height;
+
+        //console.log(this.histoWidth);
+        //console.log(this.histoHeight);
+        
+        //30, 5, 100, 60
+        var margin = { top: this.histoHeight * 0.082, right: this.histoWidth * 0.0093, bottom: this.histoHeight * 0.27, left: this.histoWidth * 0.142 }
+        //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
+        var height = this.histoHeight * 0.79; //350;
+        var width = this.histoWidth * 0.781; //330;
+        
+        //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
+
+
+        //var height = 300  ;
+        //var width = 420;
         this.height = height;
         this.width = width;
         this.margin = margin;
@@ -14,8 +30,10 @@ class HistoVersion {
         this.max = 0;
         this.svg = d3.select(".histo_version")
           .append("svg")
-            .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "0 0 500 400")
+            .attr("width", '100%')
+            .attr("height", '100%')
+            //.attr("preserveAspectRatio", "xMinYMin meet")
+            //.attr("viewBox", "0 0 500 400")
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
@@ -24,12 +42,6 @@ class HistoVersion {
         var referenceHistogramVer = this;
         this.dataUpdater.addListener('dataReady', function(e) {
             referenceHistogramVer.startVisualization(referenceHistogramVer);
-        });
-        this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
-            referenceHistogramVer.updateVisualization(referenceHistogramVer);
-        });
-        referenceHistogramVer.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
-            referenceHistogramVer.updateVisualization(referenceHistogramVer);
         });
     }
 
@@ -59,6 +71,15 @@ class HistoVersion {
 
 
       referenceHistogramVer.buildVisualization(referenceHistogramVer,dataObj)
+
+
+      referenceHistogramVer.dataUpdater.addListener('typeUpdateVisualization', function(e) {
+          referenceHistogramVer.updateVisualization(referenceHistogramVer);
+      });
+
+      referenceHistogramVer.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
+          referenceHistogramVer.updateVisualization(referenceHistogramVer);
+      });
 
 }
 
@@ -204,17 +225,27 @@ class HistoVersion {
         .text(function(d) { return d; });
     }
     updateVisualization(referenceHistogramVer) {
-      var margin = { top: 50, right: 5, bottom: 10, left: 60 }
-      var height = 300  ;
-      var width = 420;
+
+      var rect = d3.select(".histo_version").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
+      this.histoWidth = rect.width;
+      this.histoHeight = rect.height;
+
+      //30, 5, 100, 60
+      var margin = { top: this.histoHeight * 0.082, right: this.histoWidth * 0.0093, bottom: this.histoHeight * 0.27, left: this.histoWidth * 0.142 }
+      //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
+      var height = this.histoHeight * 0.79; //350;
+      var width = this.histoWidth * 0.781; //330;
+
       this.height = height;
       this.width = width;
       this.margin = margin;
       d3.select(".histo_version").select("svg").remove();
       this.svg = d3.select(".histo_version")
         .append("svg")
-          .attr("preserveAspectRatio", "xMinYMin meet")
-          .attr("viewBox", "0 0 500 400")
+            .attr("width", '100%')
+            .attr("height", '100%')
+          //.attr("preserveAspectRatio", "xMinYMin meet")
+          //.attr("viewBox", "0 0 500 400")
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");

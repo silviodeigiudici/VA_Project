@@ -3,9 +3,25 @@ class HistoContent {
         this.dataUpdater = dataUpdater;
         this.colorUpdater = colorUpdater;
 
-        var margin = { top: 30, right: 5, bottom: 100, left: 60 }
-        var height = 300  ;
-        var width = 420;
+
+        var rect = d3.select(".histo_content").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
+        this.histoWidth = rect.width;
+        this.histoHeight = rect.height;
+
+        //console.log(this.histoWidth);
+        //console.log(this.histoHeight);
+        
+        var margin = { top: this.histoHeight * 0.082, right: this.histoWidth * 0.00923, bottom: this.histoHeight * 0.27, left: this.histoWidth * 0.111 }
+
+        var height = this.histoHeight * 0.79; //350;
+        var width = this.histoWidth * 0.775; //330;
+
+
+        //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
+        //var height = 300;
+        //var width = 420;
+
+
         this.height = height;
         this.width = width;
         this.margin = margin;
@@ -14,8 +30,10 @@ class HistoContent {
 
         this.svg = d3.select(".histo_content")
           .append("svg")
-            .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", "0 0 500 400")
+            .attr("width", '100%')
+            .attr("height", '100%')
+            //.attr("preserveAspectRatio", "xMinYMin meet")
+            //.attr("viewBox", "0 0 500 400")
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
@@ -24,9 +42,7 @@ class HistoContent {
         this.dataUpdater.addListener('dataReady', function(e) {
             referenceHistogram.startVisualization(referenceHistogram);
         });
-        this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
-            referenceHistogram.updateVisualization(referenceHistogram);
-        });
+
     }
 
     startVisualization(referenceHistogram) {
@@ -51,6 +67,10 @@ class HistoContent {
         referenceHistogram.buildVisualization(referenceHistogram,dataObj);
 
         referenceHistogram.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
+            referenceHistogram.updateVisualization(referenceHistogram);
+        });
+
+        referenceHistogram.dataUpdater.addListener('typeUpdateVisualization', function(e) {
             referenceHistogram.updateVisualization(referenceHistogram);
         });
 
@@ -152,8 +172,10 @@ class HistoContent {
       d3.select(".histo_content").select("svg").remove();
       referenceHistogram.svg = d3.select(".histo_content")
         .append("svg")
-          .attr("preserveAspectRatio", "xMinYMin meet")
-          .attr("viewBox", "0 0 500 400")
+            .attr("width", '100%')
+            .attr("height", '100%')
+          //.attr("preserveAspectRatio", "xMinYMin meet")
+          //.attr("viewBox", "0 0 500 400")
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
