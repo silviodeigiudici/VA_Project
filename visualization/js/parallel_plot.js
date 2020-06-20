@@ -27,6 +27,7 @@ class ParallelPlot {
         this.dimensions = undefined;
 
         this.brush_dict = {};
+        this.checkBrushClick = undefined;
 
         var referenceParallelPlot = this;
         this.dataUpdater.addListener('dataReady', function(e) {
@@ -85,11 +86,13 @@ class ParallelPlot {
 
         referenceParallelPlot.globalG = referenceParallelPlot.svg.append("g")
             .attr("class", "foreground"); //important, otherwise you see all black lol
-
+        
+        var normalColor = referenceParallelPlot.colorUpdater.getParallelNormalColor();
+        
         referenceParallelPlot.globalG.selectAll("path")
             .data(data, function(d) {return d.index;} )
             .enter().append("path")
-            .attr("d", path).style("stroke-width", 0.8);
+            .attr("d", path).style("stroke", normalColor).style("stroke-width", 0.8);
 
           // Add a group element for each dimension.
         var g = referenceParallelPlot.svg.selectAll(".dimension")
@@ -140,6 +143,8 @@ class ParallelPlot {
 
         function brushValues(referenceParallelPlot){
             
+            referenceParallelPlot.checkBrushClick = false;
+            
             if(!d3.event.selection)
                 return;
 
@@ -157,6 +162,8 @@ class ParallelPlot {
 
         function brushCategorical(referenceParallelPlot){
 
+            referenceParallelPlot.checkBrushClick = false;
+
             if(!d3.event.selection)
                 return;
 
@@ -171,16 +178,28 @@ class ParallelPlot {
         }
         
         function startAction(referenceParallelPlot){
+
+            referenceParallelPlot.checkBrushClick = true;
+
+            /*
             var selection = d3.event.selection;
             if(selection[0] === selection[1]){
                 var dimension = d3.event.target.dimension;
                 filters[dimension] = [];
                 referenceParallelPlot.changePathsColor(referenceParallelPlot);
             }
+            */
         
         }
         
         function endAction(referenceParallelPlot){
+
+            if(referenceParallelPlot.checkBrushClick){
+                var selection = d3.event.selection;
+                var dimension = d3.event.target.dimension;
+                filters[dimension] = [];
+                referenceParallelPlot.changePathsColor(referenceParallelPlot);
+            }
 
             referenceParallelPlot.triggerBrushing(referenceParallelPlot);
 
@@ -214,26 +233,32 @@ class ParallelPlot {
         paths.attr("visibility", "visible");
         paths.exit().attr("visibility", "hidden");
         
+        referenceParallelPlot.changePathsColor(referenceParallelPlot);
+
     }
 
     changePathsColor(referenceParallelPlot){
+        
+        var normalColor = referenceParallelPlot.colorUpdater.getParallelNormalColor();
+        var selectColor = referenceParallelPlot.colorUpdater.getParallelSelectColor();
+        var backColor = referenceParallelPlot.colorUpdater.getParallelBackColor();
 
-        referenceParallelPlot.globalG.selectAll("path").each(function(d) {
+        referenceParallelPlot.globalG.selectAll("path").data(referenceParallelPlot.dataUpdater.data, function(d){ return d.index;} ).each(function(d) {
 
             var ret1 = referenceParallelPlot.checkParallelFilter(d);
             var ret2 = referenceParallelPlot.dataUpdater.checkScatterplotFilter(d);
 
             var element = d3.select(this);
             if(ret1 && ret2){
-                element.style("stroke", "red");
+                element.style("stroke", selectColor);
                 element.style("opacity", 1);
             }
             else if(ret1){
-                element.style("stroke", "rgb(70, 130, 180)");
+                element.style("stroke", normalColor);
                 element.style("opacity", 1);
             }
             else{
-                element.style("stroke", "#DCDCDC");
+                element.style("stroke", backColor);
                 element.style("opacity", 0.5);
             }
             
@@ -242,6 +267,8 @@ class ParallelPlot {
     }
     
     changeVisualizationColor(referenceParallelPlot) {
+
+        referenceParallelPlot.changePathsColor(referenceParallelPlot);
 
     }
 

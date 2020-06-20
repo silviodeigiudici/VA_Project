@@ -9,6 +9,7 @@ class Scatterplot {
 
         this.brush = undefined;
         this.brushData = null;
+        this.checkBrushClick = undefined;
 
         var margin_scatter = { top: -3, right: 5, bottom: 5, left: 5 }
         //var height = 400;
@@ -37,6 +38,7 @@ class Scatterplot {
             this.labels.push("Rating (" + i1.toFixed(1) + "," + i2.toFixed(1) + ")");
         }
 
+        /*
         this.colorDict = [
                         '#2b77df',
                         "#6d8181",
@@ -47,27 +49,29 @@ class Scatterplot {
                         "#FFFFFF",
                         "#FFA765"
         ];
-        
+        */
         var labes_x = this.scatterplotWidth * 0.9;
         var labes_y = this.scatterplotHeight * 0.0235;
 
         var referenceScatterplot = this;
         
-        var legend = this.svg.selectAll('legend')
-            .data(this.labels)
+        var colorDict = referenceScatterplot.colorUpdater.getScatterplotPointsColors();
+
+        this.legend = this.svg.selectAll('legend')
+            .data(this.labels) //, function(d, i) {return i;})
             .enter().append('g')
             .attr('class', 'legend')
             .attr('transform', function (d, i) { return 'translate(20,' + i * 20 + ')'; });
 
-        legend.append('rect')
+        this.legend.append('rect')
           .attr('x', labes_x)
           .attr('y', labes_y)
           .attr('width', 15)
           .attr('height', 15)
           .attr('class', 'legend_rect')
-          .style('fill', function (d, i) { return referenceScatterplot.colorDict[i] });
+          .style('fill', function (d, i) { return colorDict[i] });
 
-        legend.append('text')
+        this.legend.append('text')
           .attr('x', labes_x - 2)
           .attr('y', labes_y + 9)
           .attr('dy', '.25em')
@@ -103,26 +107,45 @@ class Scatterplot {
 
     startBrushing(referenceScatterplot, brushData){
 
+        referenceScatterplot.checkBrushClick = true;
+        
+        /*
         if(brushData[0][0] === brushData[1][0] && brushData[0][1] === brushData[1][1]){
             referenceScatterplot.brushData = null;
-            referenceScatterplot.globalG.selectAll("circle").classed("selected", function(d) {
+            referenceScatterplot.globalG.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData, function(d) {return d.index;} ).classed("selected", function(d) {
                 return referenceScatterplot.dataUpdater.checkScatterplotFilter(d);
             });
         }
+        */
 
     }
 
     highlightBrushedPoints(referenceScatterplot, brushData){
 
+        referenceScatterplot.checkBrushClick = false;
+
         referenceScatterplot.brushData = brushData; 
-        
-        referenceScatterplot.globalG.selectAll("circle").classed("selected", function(d) {
+
+        referenceScatterplot.selectBrushedPoints(referenceScatterplot);
+
+    }
+
+    selectBrushedPoints(referenceScatterplot){
+
+        referenceScatterplot.globalG.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData, function(d) {return d.index;} ).classed("selected", function(d) {
             return referenceScatterplot.dataUpdater.checkScatterplotFilter(d);
-        }); 
+        });
 
     }
 
     triggerBrushing(referenceScatterplot, brushData){
+
+        if(referenceScatterplot.checkBrushClick){
+
+            referenceScatterplot.brushData = null;
+            referenceScatterplot.selectBrushedPoints(referenceScatterplot);
+
+        }
 
         //referenceScatterplot.brushData = brushData; //not need, it's already done in highlightBrushedPoints
 
@@ -130,7 +153,7 @@ class Scatterplot {
 
     }
 
-    getColorByRow(row){
+    getColorByRow(row, colorDict){
         var coord = parseFloat(row.Rating);
 
         var list_len = this.list_range.length;
@@ -138,8 +161,20 @@ class Scatterplot {
             var i1 = this.list_range[i-1];
             var i2 = this.list_range[i];
             if( coord >= i1 && coord <= i2 )
-                return this.colorDict[i - 1];
+                return colorDict[i - 1];
         }
+    }
+
+    updateColorMode(referenceScatterplot){
+
+        var circle = referenceScatterplot.globalG.selectAll("circle").data(referenceScatterplot.dataUpdater.originalData, function(d) {return d.index;} );
+
+        var colorDict = referenceScatterplot.colorUpdater.getScatterplotPointsColors();
+
+        circle.style("fill", function(d) { return referenceScatterplot.getColorByRow(d, colorDict); })
+
+        this.legend.select('rect').style('fill', function (d, i) { return colorDict[i] });
+        
     }
 
     updateVisualization(referenceScatterplot) {
@@ -152,6 +187,14 @@ class Scatterplot {
         circle.attr("visibility", "visible");
 
         circle.exit().attr("visibility", "hidden");
+
+    }
+
+    updateTypeVisualization(referenceScatterplot){
+
+        referenceScatterplot.updateVisualization(referenceScatterplot);
+
+        referenceScatterplot.selectBrushedPoints(referenceScatterplot);
 
     }
 
@@ -197,7 +240,9 @@ class Scatterplot {
             .call(yAxis);
 
         //referenceScatterplot.buildVisualization(referenceScatterplot);
-        var circle = referenceScatterplot.globalG.selectAll("circle").data(referenceScatterplot.dataUpdater.brushedData, function(d) {return d.index;} );
+        var circle = referenceScatterplot.globalG.selectAll("circle").data(referenceScatterplot.dataUpdater.originalData, function(d) {return d.index;} );
+
+        var colorDict = referenceScatterplot.colorUpdater.getScatterplotPointsColors();
 
         circle.enter().append("circle")
             .attr("id", function(d, i) { return "c" + i.toString();} )
@@ -205,13 +250,12 @@ class Scatterplot {
             .style("opacity", 0.5) //.transition().duration(750);
             //.merge(circle)
             //.transition().duration(600)
-            .style("fill", function(d) { return referenceScatterplot.getColorByRow(d); })
+            .style("fill", function(d) { return referenceScatterplot.getColorByRow(d, colorDict); })
             //.style("fill", function(d, i) {return (d.highlight === "0") ? "#2b77df" : "red";} )
             .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + referenceScatterplot.width_translate; })
             .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + referenceScatterplot.height_translate; });
         
         //after building the visualization, let's enable the interactions registering to the events
-        
         
         referenceScatterplot.brush = d3.brush()  
             .extent( [ [0,0], [referenceScatterplot.scatterplotWidth,referenceScatterplot.scatterplotHeight] ] ) 
@@ -229,11 +273,11 @@ class Scatterplot {
 
         //same for these events, once visualization is completed, let's enable them
         referenceScatterplot.dataUpdater.addListener('typeUpdateVisualization', function(e) {
-            referenceScatterplot.updateVisualization(referenceScatterplot);
+            referenceScatterplot.updateTypeVisualization(referenceScatterplot);
         });
 
         referenceScatterplot.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
-            //referenceScatterplot.updateVisualization(referenceScatterplot); //you can't use this now, need a now one
+            referenceScatterplot.updateColorMode(referenceScatterplot); //you can't use this now, need a now one
         });
 
         referenceScatterplot.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
