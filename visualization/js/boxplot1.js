@@ -45,12 +45,6 @@ class BoxPlot1 {
             referenceBoxPlot.startVisualization(referenceBoxPlot);
         });
 
-        this.dataUpdater.addListener('typeUpdateVisualization', function(e) {
-            referenceBoxPlot.updateVisualization(referenceBoxPlot);
-        });
-        referenceBoxPlot.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
-            referenceBoxPlot.updateVisualization(referenceBoxPlot);
-        });
     }
 
     startVisualization(referenceBoxPlot) {
@@ -99,7 +93,41 @@ class BoxPlot1 {
         max = data_sorted[data_sorted.length-1]
 
         referenceBoxPlot.makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg2,data_sorted,"Size",min,max)
+
+
+        referenceBoxPlot.dataUpdater.addListener('typeUpdateVisualization', function(e) {
+            referenceBoxPlot.updateVisualization(referenceBoxPlot);
+        });
+
+        referenceBoxPlot.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
+            referenceBoxPlot.updateVisualization(referenceBoxPlot);
+        });
+
+        referenceBoxPlot.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
+            referenceBoxPlot.changeColors(referenceBoxPlot);
+        });
+
       }
+    
+    changeColors(referenceBoxPlot){
+
+        referenceBoxPlot.svg.selectAll("line").style("stroke", referenceBoxPlot.colorUpdater.getAxesColor());
+        referenceBoxPlot.svg.selectAll("text").style("fill", referenceBoxPlot.colorUpdater.getTextColor());
+        referenceBoxPlot.svg.selectAll(".domain").style("stroke", referenceBoxPlot.colorUpdater.getTextColor());
+        referenceBoxPlot.svg.selectAll("rect").attr("stroke", referenceBoxPlot.colorUpdater.getAxesColor());
+
+        referenceBoxPlot.svg1.selectAll("line").style("stroke", referenceBoxPlot.colorUpdater.getAxesColor());
+        referenceBoxPlot.svg1.selectAll("text").style("fill", referenceBoxPlot.colorUpdater.getTextColor());
+        referenceBoxPlot.svg1.selectAll(".domain").style("stroke", referenceBoxPlot.colorUpdater.getTextColor());
+        referenceBoxPlot.svg1.selectAll("rect").attr("stroke", referenceBoxPlot.colorUpdater.getAxesColor());
+
+        referenceBoxPlot.svg2.selectAll("line").style("stroke", referenceBoxPlot.colorUpdater.getAxesColor());
+        referenceBoxPlot.svg2.selectAll("text").style("fill", referenceBoxPlot.colorUpdater.getTextColor());
+        referenceBoxPlot.svg2.selectAll(".domain").style("stroke", referenceBoxPlot.colorUpdater.getTextColor());
+        referenceBoxPlot.svg2.selectAll("rect").attr("stroke", referenceBoxPlot.colorUpdater.getAxesColor());
+
+    }
+
     updateVisualization(referenceBoxPlot) {
       var rect = d3.select(".boxplot1").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
       this.boxWidth = rect.width;

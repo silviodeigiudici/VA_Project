@@ -95,7 +95,7 @@ class ColorUpdater {
 
     getParallelNormalColor(){
         if(this.isDarkMode)
-            return "black";
+            return "rgb(70, 130, 180)";
         else
             return "rgb(70, 130, 180)";
     }
@@ -109,7 +109,7 @@ class ColorUpdater {
 
     getParallelBackColor(){
         if(this.isDarkMode)
-            return "pink";
+            return "white";
         else
             return "#DCDCDC";
     }

@@ -108,6 +108,17 @@ class NameList{
 
     }
 
+    changeColors(referenceNamelist){
+
+        var rows = referenceNamelist.svg.selectAll("g");
+
+        rows.select("circle").style("fill", referenceNamelist.colorUpdater.getTextColor());
+
+        rows.select("text").style("fill", referenceNamelist.colorUpdater.getTextColor());
+            
+
+    }
+
     startVisualization(referenceNamelist){
 
         referenceNamelist.buildVisualization(referenceNamelist);
@@ -118,6 +129,10 @@ class NameList{
 
         this.dataUpdater.addListener('brushParallelUpdateVisualization', function(e) {
             referenceNamelist.updateVisualization(referenceNamelist);
+        });
+
+        this.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
+            referenceNamelist.changeColors(referenceNamelist);
         });
 
     }

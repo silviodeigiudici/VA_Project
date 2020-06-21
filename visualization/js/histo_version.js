@@ -81,7 +81,22 @@ class HistoVersion {
           referenceHistogramVer.updateVisualization(referenceHistogramVer);
       });
 
+      referenceHistogramVer.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
+          referenceHistogramVer.changeColors(referenceHistogramVer);
+      });
+
 }
+
+    changeColors(referenceHistogramVer){
+        
+
+        referenceHistogramVer.svg.selectAll("text").style("fill", referenceHistogramVer.colorUpdater.getTextColor());
+
+        referenceHistogramVer.svg.selectAll("line").style("stroke", referenceHistogramVer.colorUpdater.getAxesColor());
+
+        referenceHistogramVer.svg.selectAll(".domain").style("stroke", referenceHistogramVer.colorUpdater.getAxesColor());
+
+    }
 
     dataObjCreation(data){
 

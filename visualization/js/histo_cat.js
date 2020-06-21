@@ -72,7 +72,25 @@ class HistoCategory {
       referenceHistogramCat.dataUpdater.addListener('typeUpdateVisualization', function(e) {
           referenceHistogramCat.updateVisualization(referenceHistogramCat);
       });
-}
+
+      referenceHistogramCat.dataUpdater.addListener('darkmodeUpdateColor', function(e) {
+          referenceHistogramCat.changeColors(referenceHistogramCat);
+      });
+
+    }
+
+    changeColors(referenceHistogramCat){
+        
+        
+        referenceHistogramCat.svg.selectAll("text").style("fill", referenceHistogramCat.colorUpdater.getTextColor());
+
+        referenceHistogramCat.svg.selectAll("line").style("stroke", referenceHistogramCat.colorUpdater.getAxesColor());
+
+        referenceHistogramCat.svg.selectAll(".domain").style("stroke", referenceHistogramCat.colorUpdater.getAxesColor());
+
+    }
+    
+
     dataObjCreation(data){
         var i;
         var current;

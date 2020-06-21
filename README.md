@@ -12,5 +12,5 @@ then from the browser connect to: http://localhost:8888
 TODO:
 -logarithmic scale for reviews, install, boxplot
 -dynamic brush (changing axies for the bar charts and avoiding cat with 0 elements)
--dark mode (colorblind also?)
 -adding label x1, x2 scatter and delete apps from bar
+-resolve problem with fonts in parallel and its shadow

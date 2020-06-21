@@ -111,9 +111,12 @@ class ParallelPlot {
             //text does not show up because previous line breaks somehow
             .append("text")
             .attr("fill", "black")
+            .style("text-shadow", "0px 0px")
             .style("text-anchor", "middle")
             .attr("y", -9)
             .text(function(d) { return d; });
+
+        //referenceParallelPlot.svg.selectAll("text").style("text-shadow", "0px 0px");
 
         // Add and store a brush for each axis.
         var new_brush;
@@ -267,6 +270,13 @@ class ParallelPlot {
     }
     
     changeVisualizationColor(referenceParallelPlot) {
+        
+        var y_axis_parallel = referenceParallelPlot.svg.selectAll(".axis");
+        y_axis_parallel.selectAll("text").style("fill", referenceParallelPlot.colorUpdater.getTextColor())
+            .style("text-shadow", "0px 0px 1px " + referenceParallelPlot.colorUpdater.getBorderColor());
+        
+        y_axis_parallel.selectAll("line").style("stroke", referenceParallelPlot.colorUpdater.getAxesColor());
+        y_axis_parallel.select(".domain").style("stroke", referenceParallelPlot.colorUpdater.getAxesColor());
 
         referenceParallelPlot.changePathsColor(referenceParallelPlot);
 
