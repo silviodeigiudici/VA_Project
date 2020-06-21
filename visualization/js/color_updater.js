@@ -53,6 +53,11 @@ class ColorUpdater {
         else return "#808080";
     }
 
+    getAxesColor() {
+        if (this.isDarkMode) return "#FFFFFF";
+        else return "#000000";
+    }
+
     switchMode(){
         
         var duration = 100;

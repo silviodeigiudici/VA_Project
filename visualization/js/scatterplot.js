@@ -57,7 +57,7 @@ class Scatterplot {
         
         var colorDict = referenceScatterplot.colorUpdater.getScatterplotPointsColors();
         
-        this.svg.append('g').append('rect').attr("width", 115).attr("height", 115).style("fill", "white").attr('transform', 'translate(460, 10)')
+        this.svg.append('g').append('rect').attr("id","background_legend").attr("width", 116).attr("height", 116).style("fill", "white").attr('transform', 'translate(460, 10)')
 
         this.legend = this.svg.selectAll('legend')
             .data(this.labels) //, function(d, i) {return i;})
@@ -174,10 +174,23 @@ class Scatterplot {
 
         var colorDict = referenceScatterplot.colorUpdater.getScatterplotPointsColors();
 
-        circle.style("fill", function(d) { return referenceScatterplot.getColorByRow(d, colorDict); })
+        circle.style("fill", function(d) { return referenceScatterplot.getColorByRow(d, colorDict); });
+
+        this.svg.select("#background_legend").style("fill", referenceScatterplot.colorUpdater.getModeColor());
+        
+        var axis_x = this.svg.select(".scatterplot_x_axis");
+        axis_x.selectAll("line").style("stroke", referenceScatterplot.colorUpdater.getAxesColor());
+        axis_x.selectAll(".domain").style("stroke", referenceScatterplot.colorUpdater.getAxesColor());
+        axis_x.selectAll("text").style("fill", referenceScatterplot.colorUpdater.getAxesColor());
+        
+        var axis_y = this.svg.select(".scatterplot_y_axis");
+        axis_y.selectAll("line").style("stroke", referenceScatterplot.colorUpdater.getAxesColor());
+        axis_y.selectAll(".domain").style("stroke", referenceScatterplot.colorUpdater.getAxesColor());
+        axis_y.selectAll("text").style("fill", referenceScatterplot.colorUpdater.getAxesColor());
 
         this.legend.select('rect').style('fill', function (d, i) { return colorDict[i] });
-        
+        this.legend.select('text').style('fill', referenceScatterplot.colorUpdater.getTextColor());
+
     }
 
     updateVisualization(referenceScatterplot) {
@@ -227,7 +240,7 @@ class Scatterplot {
 
         var xAxis = d3.axisBottom(this.x);
         var yAxis = d3.axisLeft(this.y);
-
+        
         //translation of the axes with respect the svg
         //var width_translate = 30;
         this.width_translate = referenceScatterplot.scatterplotWidth * 0.05;
@@ -235,11 +248,11 @@ class Scatterplot {
         this.height_translate = referenceScatterplot.scatterplotHeight * 0.0235;
 
         this.svg.append("g")
-            .attr("transform", "translate(" + this.width_translate + "," + (this.height_translate + lenght_y) + ")")
+            .attr("transform", "translate(" + this.width_translate + "," + (this.height_translate + lenght_y) + ")").attr("class", 'scatterplot_x_axis')
             .call(xAxis);
 
         this.svg.append("g")
-            .attr("transform", "translate(" + this.width_translate + "," + this.height_translate + ")")
+            .attr("transform", "translate(" + this.width_translate + "," + this.height_translate + ")").attr("class", 'scatterplot_y_axis')
             .call(yAxis);
 
         //referenceScatterplot.buildVisualization(referenceScatterplot);
