@@ -273,7 +273,7 @@ class ParallelPlot {
         
         var y_axis_parallel = referenceParallelPlot.svg.selectAll(".axis");
         y_axis_parallel.selectAll("text").style("fill", referenceParallelPlot.colorUpdater.getTextColor())
-            .style("text-shadow", "0px 0px 1px " + referenceParallelPlot.colorUpdater.getBorderColor());
+            .style("text-shadow", "0px 0px 1px " + referenceParallelPlot.colorUpdater.getModeColor());
         
         y_axis_parallel.selectAll("line").style("stroke", referenceParallelPlot.colorUpdater.getAxesColor());
         y_axis_parallel.select(".domain").style("stroke", referenceParallelPlot.colorUpdater.getAxesColor());

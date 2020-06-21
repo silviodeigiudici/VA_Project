@@ -13,4 +13,3 @@ TODO:
 -logarithmic scale for reviews, install, boxplot
 -dynamic brush (changing axies for the bar charts and avoiding cat with 0 elements)
 -adding label x1, x2 scatter and delete apps from bar
--resolve problem with fonts in parallel and its shadow
