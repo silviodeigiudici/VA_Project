@@ -14,4 +14,3 @@ TODO:
 -dynamic brush (changing axies for the bar charts and avoiding cat with 0 elements)
 -dark mode (colorblind also?)
 -adding label x1, x2 scatter and delete apps from bar
--decrease legend and hide points behind

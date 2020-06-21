@@ -56,6 +56,8 @@ class Scatterplot {
         var referenceScatterplot = this;
         
         var colorDict = referenceScatterplot.colorUpdater.getScatterplotPointsColors();
+        
+        this.svg.append('g').append('rect').attr("width", 115).attr("height", 115).style("fill", "white").attr('transform', 'translate(460, 10)')
 
         this.legend = this.svg.selectAll('legend')
             .data(this.labels) //, function(d, i) {return i;})
@@ -66,8 +68,8 @@ class Scatterplot {
         this.legend.append('rect')
           .attr('x', labes_x)
           .attr('y', labes_y)
-          .attr('width', 15)
-          .attr('height', 15)
+          .attr('width', 12)
+          .attr('height', 12)
           .attr('class', 'legend_rect')
           .style('fill', function (d, i) { return colorDict[i] });
 
@@ -75,6 +77,7 @@ class Scatterplot {
           .attr('x', labes_x - 2)
           .attr('y', labes_y + 9)
           .attr('dy', '.25em')
+          .style("font-size", "12px")
           .style('text-anchor', 'end')
           .style("fill", "black")
           .text(function (d, i) { return referenceScatterplot.labels[i]; });
@@ -254,6 +257,9 @@ class Scatterplot {
             //.style("fill", function(d, i) {return (d.highlight === "0") ? "#2b77df" : "red";} )
             .attr("cx", function (d) { return referenceScatterplot.x(parseFloat(d.comp0)) + referenceScatterplot.width_translate; })
             .attr("cy", function (d) { return referenceScatterplot.y(parseFloat(d.comp1)) + referenceScatterplot.height_translate; });
+
+
+        //referenceScatterplot.globalG.append('g').append('rect').attr("width", 100).attr("height", 100).style("fill", "black");
         
         //after building the visualization, let's enable the interactions registering to the events
         
