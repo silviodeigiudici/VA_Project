@@ -7,10 +7,9 @@ class HistoContent {
         var rect = d3.select(".histo_content").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
         this.histoWidth = rect.width;
         this.histoHeight = rect.height;
-
         //console.log(this.histoWidth);
         //console.log(this.histoHeight);
-        
+
         var margin = { top: this.histoHeight * 0.082, right: this.histoWidth * 0.00923, bottom: this.histoHeight * 0.27, left: this.histoWidth * 0.111 }
 
         var height = this.histoHeight * 0.79; //350;
@@ -185,20 +184,24 @@ class HistoContent {
       var width = referenceHistogram.width;
       this.height = height;
       this.width = width;
-      d3.select(".histo_content").select("svg").remove();
-      referenceHistogram.svg = d3.select(".histo_content")
-        .append("svg")
-            .attr("width", '100%')
-            .attr("height", '100%')
-          //.attr("preserveAspectRatio", "xMinYMin meet")
-          //.attr("viewBox", "0 0 500 400")
-        .append("g")
-          .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
-      var dataObj = referenceHistogram.dataObjCreation(referenceHistogram.dataUpdater.brushedData);
 
-      referenceHistogram = this;
-      referenceHistogram.buildVisualization(referenceHistogram,dataObj);
+
+      var x = referenceHistogram.x
+      var y = referenceHistogram.y
+      var dataObj = referenceHistogram.dataObjCreation(referenceHistogram.dataUpdater.brushedData);
+      var t1 = d3.transition()
+          .duration(2000);
+      referenceHistogram.svg.selectAll(".bar")
+        .data(dataObj)
+        .transition(t1  )
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.cat); })
+        .attr("width", x.bandwidth())
+        .attr("y", function(d) { return y(d.frequencies); })
+        .attr("height", function(d) { return referenceHistogram.height - y(d.frequencies); })
+        .attr("fill", "#69b3a2");
+      //referenceHistogram = this;
+      //referenceHistogram.buildVisualization(referenceHistogram,dataObj);
 
 
     }

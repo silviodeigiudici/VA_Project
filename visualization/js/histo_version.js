@@ -2,7 +2,7 @@ class HistoVersion {
     constructor(dataUpdater, colorUpdater) {
         this.dataUpdater = dataUpdater;
         this.colorUpdater = colorUpdater;
-       
+
 
         var rect = d3.select(".histo_version").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
         this.histoWidth = rect.width;
@@ -10,13 +10,13 @@ class HistoVersion {
 
         //console.log(this.histoWidth);
         //console.log(this.histoHeight);
-        
+
         //30, 5, 100, 60
         var margin = { top: this.histoHeight * 0.082, right: this.histoWidth * 0.0093, bottom: this.histoHeight * 0.27, left: this.histoWidth * 0.142 }
         //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
         var height = this.histoHeight * 0.79; //350;
         var width = this.histoWidth * 0.781; //330;
-        
+
         //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
 
 
@@ -88,7 +88,7 @@ class HistoVersion {
 }
 
     changeColors(referenceHistogramVer){
-        
+
 
         referenceHistogramVer.svg.selectAll("text").style("fill", referenceHistogramVer.colorUpdater.getTextColor());
 
@@ -250,25 +250,41 @@ class HistoVersion {
       //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
       var height = this.histoHeight * 0.79; //350;
       var width = this.histoWidth * 0.781; //330;
-
+      var t1 = d3.transition()
+          .duration(2000);
       this.height = height;
       this.width = width;
       this.margin = margin;
-      d3.select(".histo_version").select("svg").remove();
-      this.svg = d3.select(".histo_version")
-        .append("svg")
-            .attr("width", '100%')
-            .attr("height", '100%')
-          //.attr("preserveAspectRatio", "xMinYMin meet")
-          //.attr("viewBox", "0 0 500 400")
-        .append("g")
-          .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
+      var x = this.x
+      var y = this.y
+      var z = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+      var versionsForColors = ["x.0","x.1","x.2","x.3","x.4","Var"]
+      z.domain(versionsForColors);
 
       var dataObj = referenceHistogramVer.dataObjCreation(referenceHistogramVer.dataUpdater.brushedData);
 
-      referenceHistogramVer.buildVisualization(referenceHistogramVer,dataObj);
+      referenceHistogramVer.svg.selectAll(".bar")
+        .data(dataObj)
+        .transition(t1)
 
+        .attr("x", function(d) {
+          if(d.cat[0] != "V"){
+            return x(d.cat[0]+".x")
+          }
+          else{
+            return x(d.cat[0]+"aries")
+          }})
+        .attr("width", x.bandwidth())
+        .attr("y", function(d) { return y(d.sumPreced +d.frequencies); })
+        .attr("height", function(d) { return  referenceHistogramVer.height - y(d.frequencies); })
+        .attr("fill", function(d) {
+          if(d.cat[2] == "r"){
+            return z("Var")
+          }
+          else{
+            return z("x."+d.cat[2]);
+          }
+        });
     }
 
 }
