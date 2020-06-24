@@ -9,7 +9,7 @@ class HistoCategory {
 
         //console.log(this.histoWidth);
         //console.log(this.histoHeight);
-        
+
         //40, 5, 10, 160
         var margin = { top: this.histoHeight * 0.11, right: this.histoWidth * 0.009, bottom: this.histoHeight * 0.03, left: this.histoWidth * 0.297 }
         //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
@@ -38,7 +38,7 @@ class HistoCategory {
         this.dataUpdater.addListener('dataReady', function(e) {
             referenceHistogramCat.startVisualization(referenceHistogramCat);
         });
-        
+
     }
 
     startVisualization(referenceHistogramCat) {
@@ -80,8 +80,8 @@ class HistoCategory {
     }
 
     changeColors(referenceHistogramCat){
-        
-        
+
+
         referenceHistogramCat.svg.selectAll("text").style("fill", referenceHistogramCat.colorUpdater.getTextColor());
 
         referenceHistogramCat.svg.selectAll("line").style("stroke", referenceHistogramCat.colorUpdater.getAxesColor());
@@ -89,7 +89,7 @@ class HistoCategory {
         referenceHistogramCat.svg.selectAll(".domain").style("stroke", referenceHistogramCat.colorUpdater.getAxesColor());
 
     }
-    
+
 
     dataObjCreation(data){
         var i;
@@ -165,13 +165,6 @@ class HistoCategory {
     referenceHistogramCat.svg.append("g")
         .call(d3.axisTop(x));
 
-    //label x Axis
-    referenceHistogramCat.svg.append("text")
-        .attr("transform",
-              "translate(" + ((referenceHistogramCat.width)/2) + " ," + "-" + referenceHistogramCat.margin.top/2 + ")")
-        .style("text-anchor", "middle")
-        .text("Apps");
-
     // draw the y Axis
     referenceHistogramCat.svg.append("g")
         .call(d3.axisLeft(y));
@@ -188,7 +181,7 @@ class HistoCategory {
   updateVisualization(referenceHistogramCat) {
     //here you need to update the visualization taking the new data from:
     //referenceHistogram.dataUpdater.data
-    
+
 
     var rect = d3.select(".barchart").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
     this.histoWidth = rect.width;
@@ -196,7 +189,7 @@ class HistoCategory {
 
     //console.log(this.histoWidth);
     //console.log(this.histoHeight);
-    
+
     //40, 5, 10, 160
     var margin = { top: this.histoHeight * 0.11, right: this.histoWidth * 0.009, bottom: this.histoHeight * 0.03, left: this.histoWidth * 0.297 }
     //var margin = { top: 30, right: 5, bottom: 100, left: 60 }

@@ -2,14 +2,11 @@ class HistoVersion {
     constructor(dataUpdater, colorUpdater) {
         this.dataUpdater = dataUpdater;
         this.colorUpdater = colorUpdater;
-
+        this.categories = []
 
         var rect = d3.select(".histo_version").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
         this.histoWidth = rect.width;
         this.histoHeight = rect.height;
-
-        //console.log(this.histoWidth);
-        //console.log(this.histoHeight);
 
         //30, 5, 100, 60
         var margin = { top: this.histoHeight * 0.082, right: this.histoWidth * 0.0093, bottom: this.histoHeight * 0.27, left: this.histoWidth * 0.142 }
@@ -17,11 +14,6 @@ class HistoVersion {
         var height = this.histoHeight * 0.79; //350;
         var width = this.histoWidth * 0.781; //330;
 
-        //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
-
-
-        //var height = 300  ;
-        //var width = 420;
         this.height = height;
         this.width = width;
         this.margin = margin;
@@ -104,7 +96,17 @@ class HistoVersion {
       var current;
       var occurances = {}
       var dat = []
-      var categories = []
+      var flag = true;
+
+      if(this.categories.length != 0){
+        flag = false;
+        var categories = this.categories;
+      }
+      else{
+        flag = true;
+        var categories = []
+      }
+
       for (i in data){
         current = data[i].AndroidVer
         if (current == undefined){ //The dataset has some..imperfections
@@ -112,27 +114,29 @@ class HistoVersion {
         }
         else if (occurances[current] == undefined){
           occurances[current] = 1
-          categories.push(current)
+          if(flag){
+            categories.push(current)
+          }
         }
         else{
-          if(current == "Varies with device"){
-            occurances[current] = occurances[current] + 1
-          }
-          else{
             occurances[current] = occurances[current] + 1
           }
         }
+      if(flag){
+        this.categories = categories
       }
       var max = 0
-      var count = 0
+      var count = categories.length
+
       for (i in occurances){
-        count = count +1
         dat[i] = []
         dat.push(occurances[i])
       }
 
       var pr = 0
-      categories.sort((a, b) => (a > b) ? 1 : -1)
+      if(flag){
+        categories.sort((a, b) => (a > b) ? 1 : -1)
+      }
       //Let's make bins for bar chart and sort it
       var dataObj = []
       for (let i = 0; i < count; i++) {
@@ -141,6 +145,9 @@ class HistoVersion {
         }
         else{
           pr = dataObj[i-1].sumPreced+dataObj[i-1].frequencies
+        }
+        if(occurances[categories[i]] == undefined){
+          occurances[categories[i]] = 0;
         }
         dataObj.push({
           cat: categories[i],
@@ -186,16 +193,6 @@ class HistoVersion {
             }
           });
 
-      /* #Label over bars, need fixing
-      referenceHistogram.svg.selectAll(".bar")
-      .append("text")
-      .style("text-anchor", "middle")
-      .attr("y", function(d) { return y(d.frequencies)+500; })
-      .attr("x", function(d) { return x(d.cat); })
-      .text(function(d) { return d.frequencies; })
-      .style("fill", "black")
-      */
-      // add the x Axis
       referenceHistogramVer.svg.append("g")
         .attr("transform", "translate(0," + referenceHistogramVer.height + ")")
         .call(d3.axisBottom(x));
@@ -208,14 +205,6 @@ class HistoVersion {
       // add the y Axis
       referenceHistogramVer.svg.append("g")
         .call(d3.axisLeft(y));
-
-      referenceHistogramVer.svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - referenceHistogramVer.margin.left)
-        .attr("x",0 - (referenceHistogramVer.height / 2))
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .text("Apps");
 
       //Append a legend and populate it
       var legend = referenceHistogramVer.svg.append("g")
@@ -262,7 +251,6 @@ class HistoVersion {
       z.domain(versionsForColors);
 
       var dataObj = referenceHistogramVer.dataObjCreation(referenceHistogramVer.dataUpdater.brushedData);
-
       referenceHistogramVer.svg.selectAll(".bar")
         .data(dataObj)
         .transition(t1)
