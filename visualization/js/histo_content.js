@@ -14,7 +14,6 @@ class HistoContent {
         this.height = height;
         this.width = width;
         this.margin = margin;
-        this.barE = {}
 
         this.svg = d3.select(".histo_content")
           .append("svg")
@@ -106,7 +105,9 @@ class HistoContent {
           occurances[current] = occurances[current] + 1
         }
       }
-
+      if(flag){
+        this.categories = categories
+      }
       var count = categories.length
       for (i in occurances){
         dat[i] = []
@@ -158,20 +159,6 @@ class HistoContent {
       // add the y Axis
       referenceHistogram.svg.append("g")
           .call(d3.axisLeft(y));
-
-      //labeling over bars, we save it for an easier remove and reinstantiation in updates.
-      var barExit = referenceHistogram.svg
-              .selectAll("text.bar")
-              .data(dataObj)
-              .enter()
-              .append("text")
-              .attr("class", "yAxis-label")
-              .attr("text-anchor", "middle")
-              .attr("x", d => this.x(d.cat)+x.bandwidth()/2)
-              .attr("y", d => this.y(d.frequencies) - 5)
-              .text(d => d.frequencies);
-
-      referenceHistogram.barE = barExit
     }
 
     updateVisualization(referenceHistogram) {
@@ -184,7 +171,7 @@ class HistoContent {
       var x = referenceHistogram.x
       var y = referenceHistogram.y
       var dataObj = referenceHistogram.dataObjCreation(referenceHistogram.dataUpdater.brushedData);
-
+      console.log(dataObj)
       //let's create the transition and apply it to the bars with new data
       var t1 = d3.transition()
           .duration(2000);
@@ -199,24 +186,6 @@ class HistoContent {
           return referenceHistogram.height - y(d.frequencies); })
         .attr("fill", "#69b3a2");
 
-      //The timeout will eventually be reconstructed as an on("end",cb) if we have time to do so, since it seems like transions on end generate errors and
-      //doesn't work.
-      referenceHistogram.barE.remove();
-
-      setTimeout(() => {
-        referenceHistogram.barE = referenceHistogram.svg
-                .selectAll("text.bar")
-                .data(dataObj)
-                .enter()
-                .append("text")
-                .attr("class", "yAxis-label")
-                .attr("text-anchor", "middle")
-                .attr("x", d => this.x(d.cat)+x.bandwidth()/2)
-                .attr("y", d => this.y(d.frequencies) - 5)
-                .text(d => d.frequencies);
-      }, 1700);
-      //referenceHistogram = this;
-      //referenceHistogram.buildVisualization(referenceHistogram,dataObj);
 
 
     }

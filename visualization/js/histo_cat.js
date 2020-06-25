@@ -6,10 +6,10 @@ class HistoCategory {
         var rect = d3.select(".barchart").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
         this.histoWidth = rect.width;
         this.histoHeight = rect.height;
-
+        this.categories = []
         //console.log(this.histoWidth);
         //console.log(this.histoHeight);
-
+        this.x = {}
         //40, 5, 10, 160
         var margin = { top: this.histoHeight * 0.11, right: this.histoWidth * 0.009, bottom: this.histoHeight * 0.03, left: this.histoWidth * 0.297 }
         //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
@@ -97,6 +97,16 @@ class HistoCategory {
         var occurances = {}
         var dat = []
         var categories = []
+        var flag = false;
+
+        if(this.categories.length != 0){
+          flag = false;
+          var categories = this.categories
+        }
+        else{
+          flag = true;
+          var categories = []
+        }
         for (i in data){
           current = data[i].Category
           if (current == undefined){ //The dataset has some..imperfections
@@ -104,16 +114,21 @@ class HistoCategory {
           }
           if (occurances[current] == undefined){
             occurances[current] = 1
-            categories.push(current)
+            if(flag){
+              categories.push(current)
+            }
           }
           else{
             occurances[current] = occurances[current] + 1
           }
         }
+      if(flag){
+        this.categories = categories
+      }
+
       var max = 0
-      var count = 0
+      var count = categories.length
       for (i in occurances){
-        count = count +1
         dat[i] = []
         dat.push(occurances[i])
         if (occurances[i] > max){
@@ -124,6 +139,9 @@ class HistoCategory {
       //Let's make bins for bar chart and sort it
       var dataObj = []
       for (let i = 0; i < count; i++) {
+        if(occurances[categories[i]] == undefined){
+          occurances[categories[i]] = 0;
+        }
       dataObj.push({
         cat: categories[i],
         frequencies: occurances[categories[i]]
@@ -161,13 +179,16 @@ class HistoCategory {
           .attr("height", y.bandwidth())
           .attr("fill", "#69b3a2");
 
-    // drwa the x Axis
-    referenceHistogramCat.svg.append("g")
-        .call(d3.axisTop(x));
-
     // draw the y Axis
     referenceHistogramCat.svg.append("g")
+        .attr("class","axisY")
         .call(d3.axisLeft(y));
+
+    // drwa the x Axis
+    referenceHistogramCat.svg.append("g")
+        .attr("class","axisX")
+        .call(d3.axisTop(x));
+
     //label y Axis
     referenceHistogramCat.svg.append("text")
         .attr("transform", "rotate(-90)")
@@ -181,7 +202,6 @@ class HistoCategory {
   updateVisualization(referenceHistogramCat) {
     //here you need to update the visualization taking the new data from:
     //referenceHistogram.dataUpdater.data
-
 
     var rect = d3.select(".barchart").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
     this.histoWidth = rect.width;
@@ -198,7 +218,12 @@ class HistoCategory {
 
     this.height = height;
     this.width = width;
+    var t1 = d3.transition()
+        .duration(2000);
+    var t2 = d3.transition()
+        .duration(200);
 
+        /*
     d3.select(".barchart").select("svg").remove();
     this.svg = d3.select(".barchart")
       .append("svg")
@@ -207,10 +232,33 @@ class HistoCategory {
       .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
-    referenceHistogramCat = this;
+    referenceHistogramCat = this;*/
     var dataObj = referenceHistogramCat.dataObjCreation(referenceHistogramCat.dataUpdater.brushedData);
+    var x = referenceHistogramCat.x
+    var y = d3.scaleBand()
+          .range([0, referenceHistogramCat.height])
+          .padding(0.1)
+          .domain( dataObj.map(function(d) {
+            if(d.frequencies != 0){
+              return d.cat; }}));
 
-    referenceHistogramCat.buildVisualization(referenceHistogramCat,dataObj);
+    //referenceHistogramCat.svg.select("g>axisY").remove()
+
+
+    referenceHistogramCat.svg.selectAll(".bar")
+        .data(dataObj)
+        .transition(t1)
+        .attr("class", "bar")
+        .attr("width", function(d) {return x(d.frequencies); } )
+        .attr("y", function(d) { return y(d.cat); })
+        .attr("height", y.bandwidth())
+        .attr("fill", "#69b3a2");
+
+    referenceHistogramCat.svg.select("g")
+        .attr("class","axisY")
+        .transition(t1)
+        .call(d3.axisLeft(y));
+    //referenceHistogramCat.buildVisualization(referenceHistogramCat,dataObj);
 
   }
 
