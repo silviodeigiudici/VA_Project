@@ -244,7 +244,6 @@ class HistoCategory {
 
     //referenceHistogramCat.svg.select("g>axisY").remove()
 
-
     referenceHistogramCat.svg.selectAll(".bar")
         .data(dataObj)
         .transition(t1)

@@ -34,7 +34,7 @@ class DataUpdater {
 
         this.originalData.forEach( function(row, index) {
 
-            if( referenceDataUpdater.header.checkPaidFilter(row) && referenceDataUpdater.header.checkFreeFilter(row) ){
+            if( referenceDataUpdater.header.checkPaidFilter(row) && referenceDataUpdater.header.checkFreeFilter(row) && referenceDataUpdater.header.checkLastUpdate(row) ){
                 
                 referenceDataUpdater.data.push( row );
 
