@@ -2,17 +2,21 @@ class BoxPlot1 {
     constructor(dataUpdater, colorUpdater) {
         this.dataUpdater = dataUpdater;
         this.colorUpdater = colorUpdater;
-        
+
         var rect = d3.select(".boxplot1").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
         this.boxWidth = rect.width;
         this.boxHeight = rect.height;
-        
+
         //console.log(this.boxWidth);
         //console.log(this.boxHeight);
         //20, 50, 20, 90
         var margin = { top: this.boxHeight * 0.1, right: this.boxWidth * 0.26, bottom: this.boxHeight * 0.144, left: this.boxWidth * 0.469 }
         var height = this.boxHeight * 0.8;
         var width = this.boxWidth * 0.16;
+        this.minMax = {}
+        this.minMax["Avg Rating"] = [0,0];
+        this.minMax["Size"] = [0,0];
+        this.minMax["#Reviews"] = [0,0];
 
         this.height = height;
         this.width = width;
@@ -108,7 +112,7 @@ class BoxPlot1 {
         });
 
       }
-    
+
     changeColors(referenceBoxPlot){
 
         referenceBoxPlot.svg.selectAll("line").style("stroke", referenceBoxPlot.colorUpdater.getAxesColor());
@@ -132,14 +136,14 @@ class BoxPlot1 {
       var rect = d3.select(".boxplot1").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
       this.boxWidth = rect.width;
       this.boxHeight = rect.height;
-      
+
       //console.log(this.boxWidth);
       //console.log(this.boxHeight);
       //20, 50, 20, 90
       var margin = { top: this.boxHeight * 0.1, right: this.boxWidth * 0.26, bottom: this.boxHeight * 0.144, left: this.boxWidth * 0.469 }
       var height = this.boxHeight * 0.8;
       var width = this.boxWidth * 0.16;
-      
+
       this.height = height;
       this.width = width;
       this.margin = margin;
@@ -166,7 +170,7 @@ class BoxPlot1 {
       var data_sorted = data_to_sort.sort(d3.ascending)
       var min = data_sorted[0]
       var max = data_sorted[data_sorted.length-1]
-
+      console.log(data_sorted)
       referenceBoxPlot.makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg,data_sorted,"Avg Rating",min,max)
 
 
@@ -191,6 +195,7 @@ class BoxPlot1 {
       data_sorted = data_to_sort.sort(d3.ascending)
       min = data_sorted[0]
       max = data_sorted[data_sorted.length-1]
+      console.log(data_sorted)
 
       referenceBoxPlot.makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg1,data_sorted,"#Reviews",min,max)
 
@@ -215,6 +220,8 @@ class BoxPlot1 {
       //console.log(data_sorted)
       min = data_sorted[0]
       max = data_sorted[data_sorted.length-1]
+      console.log(data_sorted)
+
       referenceBoxPlot.makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg2,data_sorted,"Size",min,max)
 
     }
@@ -222,17 +229,32 @@ class BoxPlot1 {
 
 
 makeBoxPlot(referenceBoxPlot,svg,data_sorted,axName,min,max){
+  // Compute summary statistics used for the box:
+    if(data_sorted.length == 0){
+      console.log("damn son",min,max)
+      min = referenceBoxPlot.minMax[axName][0]
+      max = referenceBoxPlot.minMax[axName][1]
+      var q1 = 0
+      var median = 0
+      var q3 = 0
+      var interQuantileRange = 0
+    }
+    else{
+      referenceBoxPlot.minMax[axName][0] = min
+      referenceBoxPlot.minMax[axName][1] = max
 
-    // Compute summary statistics used for the box:
-    var q1 = d3.quantile(data_sorted, .25)
-    var median = d3.quantile(data_sorted, .5)
-    var q3 = d3.quantile(data_sorted, .75)
-    var interQuantileRange = q3 - q1
+      var q1 = d3.quantile(data_sorted, .25)
+      var median = d3.quantile(data_sorted, .5)
+      var q3 = d3.quantile(data_sorted, .75)
+      var interQuantileRange = q3 - q1
+    }
 
+    console.log(q1,median,q3,interQuantileRange,min,max)
     // Show the Y scale
     var y = d3.scaleLinear()
       .domain([min,max])
       .range([referenceBoxPlot.height, 0]);
+
     svg.append("g")
       .call(d3.axisLeft(y));
 
