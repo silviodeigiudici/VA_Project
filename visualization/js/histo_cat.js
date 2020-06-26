@@ -7,8 +7,7 @@ class HistoCategory {
         this.histoWidth = rect.width;
         this.histoHeight = rect.height;
         this.categories = []
-        //console.log(this.histoWidth);
-        //console.log(this.histoHeight);
+
         this.x = {}
         //40, 5, 10, 160
         var margin = { top: this.histoHeight * 0.11, right: this.histoWidth * 0.009, bottom: this.histoHeight * 0.03, left: this.histoWidth * 0.297 }
@@ -45,14 +44,7 @@ class HistoCategory {
         //to see the data(you can delete this line, it's only an example):
       var data = dataUpdater.brushedData;
       var dataObj = referenceHistogramCat.dataObjCreation(data)
-      //console.log(dataObj)
 
-      //Making x and y axis
-      /*
-      var y = d3.scaleBand()
-        .range([0, referenceHistogramCat.height])
-        .padding(0.1);
-        */
       var x = d3.scaleLinear()
                 .range([0, referenceHistogramCat.width]);
 
@@ -207,8 +199,6 @@ class HistoCategory {
     this.histoWidth = rect.width;
     this.histoHeight = rect.height;
 
-    //console.log(this.histoWidth);
-    //console.log(this.histoHeight);
 
     //40, 5, 10, 160
     var margin = { top: this.histoHeight * 0.11, right: this.histoWidth * 0.009, bottom: this.histoHeight * 0.03, left: this.histoWidth * 0.297 }
@@ -216,33 +206,22 @@ class HistoCategory {
     var height = this.histoHeight * 0.854; //350;
     var width = this.histoWidth * 0.66; //330;
 
-    this.height = height;
-    this.width = width;
     var t1 = d3.transition()
         .duration(2000);
     var t2 = d3.transition()
-        .duration(200);
+        .duration(1000);
 
-        /*
-    d3.select(".barchart").select("svg").remove();
-    this.svg = d3.select(".barchart")
-      .append("svg")
-        .attr("width", '100%')
-        .attr("height", '100%')
-      .append("g")
-        .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")");
-    referenceHistogramCat = this;*/
     var dataObj = referenceHistogramCat.dataObjCreation(referenceHistogramCat.dataUpdater.brushedData);
-    var x = referenceHistogramCat.x
+    var x = d3.scaleLinear()
+              .range([0, referenceHistogramCat.width]);
+    x.domain([0, d3.max(dataObj, function(d) { return d.frequencies; })]);
+
     var y = d3.scaleBand()
           .range([0, referenceHistogramCat.height])
           .padding(0.1)
           .domain( dataObj.map(function(d) {
             if(d.frequencies != 0){
               return d.cat; }}));
-
-    //referenceHistogramCat.svg.select("g>axisY").remove()
 
     referenceHistogramCat.svg.selectAll(".bar")
         .data(dataObj)
@@ -253,11 +232,13 @@ class HistoCategory {
         .attr("height", y.bandwidth())
         .attr("fill", "#69b3a2");
 
-    referenceHistogramCat.svg.select("g")
-        .attr("class","axisY")
+    referenceHistogramCat.svg.select(".axisX")
+        .transition(t2)
+        .call(d3.axisTop(x));
+
+    referenceHistogramCat.svg.select(".axisY")
         .transition(t1)
         .call(d3.axisLeft(y));
-    //referenceHistogramCat.buildVisualization(referenceHistogramCat,dataObj);
 
   }
 

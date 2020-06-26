@@ -7,9 +7,7 @@ class BoxPlot1 {
         this.boxWidth = rect.width;
         this.boxHeight = rect.height;
 
-        //console.log(this.boxWidth);
-        //console.log(this.boxHeight);
-        //20, 50, 20, 90
+
         var margin = { top: this.boxHeight * 0.1, right: this.boxWidth * 0.26, bottom: this.boxHeight * 0.144, left: this.boxWidth * 0.469 }
         var height = this.boxHeight * 0.8;
         var width = this.boxWidth * 0.16;
@@ -80,7 +78,6 @@ class BoxPlot1 {
         min = data_sorted[0]
         max = data_sorted[data_sorted.length-1]
 
-        //console.log(data_sorted)
         referenceBoxPlot.makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg1,data_sorted, "#Reviews",min,max)
 
         //Size boxplot
@@ -92,7 +89,6 @@ class BoxPlot1 {
         }
         data_to_sort.pop() //One NaN is sneaking in somehow in the last loop..
         data_sorted = data_to_sort.sort(d3.ascending)
-        //console.log(data_sorted)
         min = data_sorted[0]
         max = data_sorted[data_sorted.length-1]
 
@@ -137,9 +133,6 @@ class BoxPlot1 {
       this.boxWidth = rect.width;
       this.boxHeight = rect.height;
 
-      //console.log(this.boxWidth);
-      //console.log(this.boxHeight);
-      //20, 50, 20, 90
       var margin = { top: this.boxHeight * 0.1, right: this.boxWidth * 0.26, bottom: this.boxHeight * 0.144, left: this.boxWidth * 0.469 }
       var height = this.boxHeight * 0.8;
       var width = this.boxWidth * 0.16;
@@ -170,7 +163,6 @@ class BoxPlot1 {
       var data_sorted = data_to_sort.sort(d3.ascending)
       var min = data_sorted[0]
       var max = data_sorted[data_sorted.length-1]
-      console.log(data_sorted)
       referenceBoxPlot.makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg,data_sorted,"Avg Rating",min,max)
 
 
@@ -195,7 +187,6 @@ class BoxPlot1 {
       data_sorted = data_to_sort.sort(d3.ascending)
       min = data_sorted[0]
       max = data_sorted[data_sorted.length-1]
-      console.log(data_sorted)
 
       referenceBoxPlot.makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg1,data_sorted,"#Reviews",min,max)
 
@@ -217,10 +208,9 @@ class BoxPlot1 {
       }
       data_to_sort.pop() //One NaN is sneaking in somehow in the last loop..
       data_sorted = data_to_sort.sort(d3.ascending)
-      //console.log(data_sorted)
+
       min = data_sorted[0]
       max = data_sorted[data_sorted.length-1]
-      console.log(data_sorted)
 
       referenceBoxPlot.makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg2,data_sorted,"Size",min,max)
 
@@ -231,7 +221,6 @@ class BoxPlot1 {
 makeBoxPlot(referenceBoxPlot,svg,data_sorted,axName,min,max){
   // Compute summary statistics used for the box:
     if(data_sorted.length == 0){
-      console.log("damn son",min,max)
       min = referenceBoxPlot.minMax[axName][0]
       max = referenceBoxPlot.minMax[axName][1]
       var q1 = 0
@@ -249,7 +238,6 @@ makeBoxPlot(referenceBoxPlot,svg,data_sorted,axName,min,max){
       var interQuantileRange = q3 - q1
     }
 
-    console.log(q1,median,q3,interQuantileRange,min,max)
     // Show the Y scale
     var y = d3.scaleLinear()
       .domain([min,max])

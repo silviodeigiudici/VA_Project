@@ -195,6 +195,7 @@ class HistoVersion {
 
       referenceHistogramVer.svg.append("g")
         .attr("transform", "translate(0," + referenceHistogramVer.height + ")")
+        .attr("class","axisX")
         .call(d3.axisBottom(x));
       referenceHistogramVer.svg.append("text")
         .attr("transform",
@@ -204,6 +205,7 @@ class HistoVersion {
         .text("Android Version");
       // add the y Axis
       referenceHistogramVer.svg.append("g")
+        .attr("class","axisY")
         .call(d3.axisLeft(y));
 
       //Append a legend and populate it
@@ -234,6 +236,11 @@ class HistoVersion {
       this.histoWidth = rect.width;
       this.histoHeight = rect.height;
 
+      var t1 = d3.transition()
+          .duration(2000);
+      var t2 = d3.transition()
+          .duration(1000);
+
       //30, 5, 100, 60
       var margin = { top: this.histoHeight * 0.082, right: this.histoWidth * 0.0093, bottom: this.histoHeight * 0.27, left: this.histoWidth * 0.142 }
       //var margin = { top: 30, right: 5, bottom: 100, left: 60 }
@@ -244,13 +251,29 @@ class HistoVersion {
       this.height = height;
       this.width = width;
       this.margin = margin;
-      var x = this.x
-      var y = this.y
+
+      var dataObj = referenceHistogramVer.dataObjCreation(referenceHistogramVer.dataUpdater.brushedData);
+
       var z = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
       var versionsForColors = ["x.0","x.1","x.2","x.3","x.4","Var"]
       z.domain(versionsForColors);
 
-      var dataObj = referenceHistogramVer.dataObjCreation(referenceHistogramVer.dataUpdater.brushedData);
+      var x = d3.scaleBand()
+                .range([0, referenceHistogramVer.width])
+                .padding(0.1);
+      var y = d3.scaleLinear()
+                .range([referenceHistogramVer.height, 0]);
+      var max = this.max;
+      // Scale the range of the data in the domains
+      x.domain(dataObj.map(function(d) {
+          if(d.cat[0] != "V"){
+            return d.cat[0]+".x";
+          }
+          else{
+            return d.cat[0]+"aries";
+          } }));
+      y.domain([0, max])
+
       referenceHistogramVer.svg.selectAll(".bar")
         .data(dataObj)
         .transition(t1)
@@ -273,6 +296,15 @@ class HistoVersion {
             return z("x."+d.cat[2]);
           }
         });
+      /*referenceHistogramVer.svg.select(".axisX")
+          .attr("transform", "translate(0," + referenceHistogramVer.height + ")")
+          .transition(t2)
+          .call(d3.axisTop(x));*/
+
+      referenceHistogramVer.svg.select(".axisY")
+          .transition(t1)
+          .call(d3.axisLeft(y));
+
     }
 
 }

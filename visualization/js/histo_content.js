@@ -148,7 +148,9 @@ class HistoContent {
       // add the x Axis
       referenceHistogram.svg.append("g")
           .attr("transform", "translate(0," + referenceHistogram.height + ")")
+          .attr("class","axisX")
           .call(d3.axisBottom(x));
+
       referenceHistogram.svg.append("text")
           .attr("transform",
                 "translate(" + ((referenceHistogram.width)/2) + " ,0" +
@@ -158,6 +160,7 @@ class HistoContent {
 
       // add the y Axis
       referenceHistogram.svg.append("g")
+        .attr("class","axisY")
           .call(d3.axisLeft(y));
     }
 
@@ -168,10 +171,23 @@ class HistoContent {
       var width = referenceHistogram.width;
       this.height = height;
       this.width = width;
-      var x = referenceHistogram.x
-      var y = referenceHistogram.y
+
       var dataObj = referenceHistogram.dataObjCreation(referenceHistogram.dataUpdater.brushedData);
-      console.log(dataObj)
+
+      var t1 = d3.transition()
+          .duration(2000);
+      var t2 = d3.transition()
+          .duration(1000);
+
+      var x = d3.scaleBand()
+                .range([0, referenceHistogram.width])
+                .padding(0.1);
+      var y = d3.scaleLinear()
+                .range([referenceHistogram.height, 0]);
+      x.domain(dataObj.map(function(d) { return d.cat; }));
+      y.domain([0, d3.max(dataObj, function(d) { return d.frequencies; })]);
+
+
       //let's create the transition and apply it to the bars with new data
       var t1 = d3.transition()
           .duration(2000);
@@ -185,6 +201,14 @@ class HistoContent {
         .attr("height", function(d) {
           return referenceHistogram.height - y(d.frequencies); })
         .attr("fill", "#69b3a2");
+
+      referenceHistogram.svg.select(".axisX")
+          .transition(t2)
+          .call(d3.axisBottom(x));
+
+      referenceHistogram.svg.select(".axisY")
+          .transition(t1)
+          .call(d3.axisLeft(y));
 
 
 
