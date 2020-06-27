@@ -283,6 +283,7 @@ class Scatterplot {
             })
             .on("brush", function(e){
                 referenceScatterplot.highlightBrushedPoints(referenceScatterplot, d3.event.selection);
+                referenceScatterplot.triggerBrushing(referenceScatterplot, d3.event.selection);
             })
             .on("start", function(e){
                 referenceScatterplot.startBrushing(referenceScatterplot, d3.event.selection);

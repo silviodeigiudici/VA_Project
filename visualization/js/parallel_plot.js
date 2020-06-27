@@ -160,7 +160,7 @@ class ParallelPlot {
 
             referenceParallelPlot.changePathsColor(referenceParallelPlot);
 
-            //referenceParallelPlot.triggerBrushing(referenceParallelPlot); //you can use it with chrome
+            referenceParallelPlot.triggerBrushing(referenceParallelPlot); //you can use it with chrome
         }
 
         function brushCategorical(referenceParallelPlot){
@@ -177,7 +177,7 @@ class ParallelPlot {
 
             referenceParallelPlot.changePathsColor(referenceParallelPlot);
 
-            //referenceParallelPlot.triggerBrushing(referenceParallelPlot); //you can use it with chrome
+            referenceParallelPlot.triggerBrushing(referenceParallelPlot); //you can use it with chrome
         }
         
         function startAction(referenceParallelPlot){

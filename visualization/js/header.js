@@ -8,8 +8,11 @@ class Header {
         this.checkBoxFree = document.querySelector("input[name='free']");
         this.checkBoxFree.checked = true;
 
-        this.monthSelector = document.querySelector("input[name='year_month']");
-        this.monthSelector.value = "05/2011 - 08/2018";
+        this.monthSelectorStart = document.querySelector("input[name='year_month_start']");
+        this.monthSelectorEnd = document.querySelector("input[name='year_month_end']");
+        this.monthSelectorStart.value = "2011-05";
+        this.monthSelectorEnd.value = "2018-08";
+        //this.monthSelector.value = "05/2011 - 08/2018";
 
         this.monthDict = {  "January" : 1,
                             "February" : 2,                    
@@ -80,31 +83,28 @@ class Header {
             referenceHeader.dataUpdater.typeUpdateData();
         });
 
-        referenceHeader.monthSelector.addEventListener('change', function() {
-            //console.log(referenceHeader.monthSelector.value);
-            var string = referenceHeader.monthSelector.value.trim().split("-");
-            var lowerDate = string[0].trim();
-            var higherDate = string[1].trim();
+        referenceHeader.monthSelectorStart.addEventListener('change', function() {
+            //console.log(referenceHeader.monthSelectorStart.value);
 
-            var tempLower = lowerDate.split("/");
-            var tempHigher = higherDate.split("/");
+            var string = referenceHeader.monthSelectorStart.value.trim().split("-");
 
-            referenceHeader.lowerMonth = parseInt( tempLower[0].trim() );
-            referenceHeader.lowerYear = parseInt( tempLower[1].trim() );
-
-            //console.log(referenceHeader.lowerMonth);
-            //console.log(referenceHeader.lowerYear);
-
-            referenceHeader.higherMonth = parseInt( tempHigher[0].trim() );
-            referenceHeader.higherYear = parseInt( tempHigher[1].trim() );
-
-            //console.log(referenceHeader.higherMonth);
-            //console.log(referenceHeader.higherYear);
+            referenceHeader.lowerMonth = parseInt( string[1].trim() );
+            referenceHeader.lowerYear = parseInt( string[0].trim() );
             
             referenceHeader.dataUpdater.typeUpdateData();
-        
+
         });
 
+        referenceHeader.monthSelectorEnd.addEventListener('change', function() {
+
+            var string = referenceHeader.monthSelectorEnd.value.trim().split("-");
+
+            referenceHeader.higherMonth = parseInt( string[1].trim() );
+            referenceHeader.higherYear = parseInt( string[0].trim() );
+            
+            referenceHeader.dataUpdater.typeUpdateData();
+
+        });
     }
 
 

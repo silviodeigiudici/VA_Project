@@ -207,9 +207,9 @@ class HistoCategory {
     var width = this.histoWidth * 0.66; //330;
 
     var t1 = d3.transition()
-        .duration(2000);
+        .duration(400);
     var t2 = d3.transition()
-        .duration(1000);
+        .duration(200);
 
     var dataObj = referenceHistogramCat.dataObjCreation(referenceHistogramCat.dataUpdater.brushedData);
     var x = d3.scaleLinear()

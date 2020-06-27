@@ -237,9 +237,9 @@ class HistoVersion {
       this.histoHeight = rect.height;
 
       var t1 = d3.transition()
-          .duration(2000);
+          .duration(400);
       var t2 = d3.transition()
-          .duration(1000);
+          .duration(200);
 
       //30, 5, 100, 60
       var margin = { top: this.histoHeight * 0.082, right: this.histoWidth * 0.0093, bottom: this.histoHeight * 0.27, left: this.histoWidth * 0.142 }
@@ -247,7 +247,7 @@ class HistoVersion {
       var height = this.histoHeight * 0.79; //350;
       var width = this.histoWidth * 0.781; //330;
       var t1 = d3.transition()
-          .duration(2000);
+          .duration(400);
       this.height = height;
       this.width = width;
       this.margin = margin;

@@ -175,9 +175,9 @@ class HistoContent {
       var dataObj = referenceHistogram.dataObjCreation(referenceHistogram.dataUpdater.brushedData);
 
       var t1 = d3.transition()
-          .duration(2000);
+          .duration(400);
       var t2 = d3.transition()
-          .duration(1000);
+          .duration(200);
 
       var x = d3.scaleBand()
                 .range([0, referenceHistogram.width])
@@ -190,7 +190,7 @@ class HistoContent {
 
       //let's create the transition and apply it to the bars with new data
       var t1 = d3.transition()
-          .duration(2000);
+          .duration(400);
       referenceHistogram.svg.selectAll(".bar")
         .data(dataObj)
         .transition(t1)
