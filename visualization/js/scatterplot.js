@@ -200,7 +200,7 @@ class Scatterplot {
 
         circle.style("fill", function(d) { return referenceScatterplot.getColorByRow(d, colorDict); });
 
-        this.svg.select("#background_legend").style("fill", referenceScatterplot.colorUpdater.getModeColor());
+        this.svg.select("#background_legend").transition().duration(100).style("fill", referenceScatterplot.colorUpdater.getModeColor());
         
         var axis_x = this.svg.select(".scatterplot_x_axis");
         axis_x.selectAll("line").style("stroke", referenceScatterplot.colorUpdater.getAxesColor());

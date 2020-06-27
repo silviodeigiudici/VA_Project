@@ -78,9 +78,11 @@ class ColorUpdater {
 
     getScatterplotPointsColors() {
         if(this.isDarkMode)
-            return ['#2b77df', "#6d8181", "#F0F032", "#C32C01", "#A1DBFF", "#FFFFFF", "#FFA765"];
+            //return ['#2b77df', "#6d8181", "#F0F032", "#C32C01", "#A1DBFF", "#FFFFFF", "#FFA765"];
+            return ['#1b9e77',"#d95f02","#7570b3","#e7298a","#66a61e","#FFFFFF","#a6761d"];
         else
-            return ['black', "red", "blue", "yellow", "green", "pink", "orange"];
+            //return ['black', "red", "blue", "yellow", "green", "pink", "orange"];
+            return ['#1b9e77',"#d95f02","#7570b3","#e7298a","#66a61e","#666666","#a6761d"]
         /*
         if(this.isDarkMode && !this.isColorBlindnessMode)
             return 'red';
@@ -95,23 +97,23 @@ class ColorUpdater {
 
     getParallelNormalColor(){
         if(this.isDarkMode)
-            return "rgb(70, 130, 180)";
+            return "#69b3a2";
         else
-            return "rgb(70, 130, 180)";
+            return "#69b3a2";
     }
 
     getParallelSelectColor(){
         if(this.isDarkMode)
-            return "green";
+            return '#e41a1c';
         else
-            return "red";
+            return '#e41a1c';
     }
 
     getParallelBackColor(){
         if(this.isDarkMode)
-            return "white";
+            return '#595953';
         else
-            return "#DCDCDC";
+            return '#ddd';
     }
 
 }
