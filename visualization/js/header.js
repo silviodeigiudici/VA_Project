@@ -10,8 +10,14 @@ class Header {
 
         this.monthSelectorStart = document.querySelector("input[name='year_month_start']");
         this.monthSelectorEnd = document.querySelector("input[name='year_month_end']");
+
         this.monthSelectorStart.value = "2011-05";
+        this.monthSelectorStart.min = "2011-05";
+        this.monthSelectorStart.max = "2018-08";
+
         this.monthSelectorEnd.value = "2018-08";
+        this.monthSelectorEnd.min = "2011-05";
+        this.monthSelectorEnd.max = "2018-08";
         //this.monthSelector.value = "05/2011 - 08/2018";
 
         this.monthDict = {  "January" : 1,
