@@ -4,21 +4,21 @@ class Scatterplot {
         this.colorUpdater = colorUpdater;
 
         var rect = d3.select(".scatterplot").node().getBoundingClientRect(); //the node() function get the DOM element represented by the selection (d3.select)
-        this.scatterplotWidth = rect.width;
-        this.scatterplotHeight = rect.height;
+        this.scatterplotWidth = rect.width * 0.97;
+        this.scatterplotHeight = rect.height * 0.95;
 
         this.brush = undefined;
         this.brushData = null;
         this.checkBrushClick = undefined;
 
-        var margin_scatter = { top: -3, right: 5, bottom: 5, left: 5 }
+        var margin_scatter = { top: 5, right: 5, bottom: 5, left: 18 }
         //var height = 400;
         //var width = 400;
 
         this.svg = d3.select(".scatterplot")
             .append("svg")
-            .attr("width", '98%')
-            .attr("height", '98%')
+            .attr("width", '97%')
+            .attr("height", '93.3%')
             .attr("transform", "translate(" + margin_scatter.left + "," + margin_scatter.top + ")");
 
         this.globalG = this.svg.append("g");
@@ -82,7 +82,31 @@ class Scatterplot {
           .style("fill", "black")
           .text(function (d, i) { return referenceScatterplot.labels[i]; });
         
+       this.labelX0 = d3.select(".scatterplot")
+            .append("svg")
+            .attr("height", 30)
+            .attr("width", 30)
+            .attr("transform", "translate(" + labes_x + "," + -2 + ")")
+            .append("text")      // text label for the x axis
+            .attr("x", 20 )
+            .attr("y",  20 )
+            .style("text-anchor", "middle")
+            .style("fill", "black")
+            .text("X0");
         
+       var translate = -this.scatterplotHeight*0.93;
+
+       this.labelX1 = d3.select(".scatterplot")
+            .append("svg")
+            .attr("height", 30)
+            .attr("width", 30)
+            .attr("transform", "translate(" + -33 + "," + translate + ")")
+            .append("text")      // text label for the x axis
+            .attr("x", 20 )
+            .attr("y",  20 )
+            .style("text-anchor", "middle")
+            .style("fill", "black")
+            .text("X1");
 
         //var referenceScatterplot = this;
         this.dataUpdater.addListener('dataReady', function(e) {
@@ -191,6 +215,9 @@ class Scatterplot {
         this.legend.select('rect').style('fill', function (d, i) { return colorDict[i] });
         this.legend.select('text').style('fill', referenceScatterplot.colorUpdater.getTextColor());
 
+        this.labelX0.style('fill', referenceScatterplot.colorUpdater.getTextColor());
+        this.labelX1.style('fill', referenceScatterplot.colorUpdater.getTextColor());
+
     }
 
     updateVisualization(referenceScatterplot) {
@@ -221,7 +248,7 @@ class Scatterplot {
         var variance0 = d3.variance(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp0);});
         var variance1 = d3.variance(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp1);});
 
-        var min0 = median0 - (variance0 + 1.5);
+        var min0 = median0 - (variance0 + 1.5) + 0.31;
         var max0 = median0 + (variance0 + 2.5);
         var min1 = median1 - (variance1);
         var max1 = median1 + (variance1 + 2);
@@ -275,7 +302,7 @@ class Scatterplot {
         //referenceScatterplot.globalG.append('g').append('rect').attr("width", 100).attr("height", 100).style("fill", "black");
         
         //after building the visualization, let's enable the interactions registering to the events
-        
+
         referenceScatterplot.brush = d3.brush()  
             .extent( [ [0,0], [referenceScatterplot.scatterplotWidth,referenceScatterplot.scatterplotHeight] ] ) 
             .on("end", function(e) { //you can write .on("start brush end", ..-) to get a notification of the event when you start brushing, when you continue to brush, and when you stop the brush (even if you simple translate the brush rectangular)
