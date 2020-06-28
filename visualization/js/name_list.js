@@ -81,12 +81,13 @@ class NameList{
             .attr("cx", function(d) {return -40;})
             .attr("r", 5)
             //.style("stroke", "black")
-            .style("fill", "black") 
+            .style("fill", referenceNamelist.colorUpdater.getTextColor()) 
             //.style("stroke-width", "3") 
             .style("opacity", 0.5);
 
         g_entries.append("text")
             .attr("font-size","12px")
+            .style("fill", referenceNamelist.colorUpdater.getTextColor())
             .attr("x",function(d) {return -30;});
 
         var all_g = g_entries.merge(rows);

@@ -305,6 +305,8 @@ class HistoVersion {
           .transition(t1)
           .call(d3.axisLeft(y));
 
+      referenceHistogramVer.changeColors(referenceHistogramVer);
+
     }
 
 }

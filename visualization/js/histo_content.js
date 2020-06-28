@@ -200,7 +200,7 @@ class HistoContent {
         .attr("y", function(d) { return y(d.frequencies); })
         .attr("height", function(d) {
           return referenceHistogram.height - y(d.frequencies); })
-        .attr("fill", "#69b3a2");
+        //.attr("fill", "#69b3a2");
 
       referenceHistogram.svg.select(".axisX")
           .transition(t2)
@@ -210,7 +210,7 @@ class HistoContent {
           .transition(t1)
           .call(d3.axisLeft(y));
 
-
+      referenceHistogram.changeColors(referenceHistogram);
 
     }
 

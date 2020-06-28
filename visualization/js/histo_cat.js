@@ -230,7 +230,7 @@ class HistoCategory {
         .attr("width", function(d) {return x(d.frequencies); } )
         .attr("y", function(d) { return y(d.cat); })
         .attr("height", y.bandwidth())
-        .attr("fill", "#69b3a2");
+        //.attr("fill", "#69b3a2");
 
     referenceHistogramCat.svg.select(".axisX")
         .transition(t2)
@@ -239,6 +239,8 @@ class HistoCategory {
     referenceHistogramCat.svg.select(".axisY")
         .transition(t1)
         .call(d3.axisLeft(y));
+
+    referenceHistogramCat.changeColors(referenceHistogramCat);
 
   }
 

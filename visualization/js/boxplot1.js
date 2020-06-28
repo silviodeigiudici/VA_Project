@@ -214,6 +214,8 @@ class BoxPlot1 {
 
       referenceBoxPlot.makeBoxPlot(referenceBoxPlot,referenceBoxPlot.svg2,data_sorted,"Size",min,max)
 
+      referenceBoxPlot.changeColors(referenceBoxPlot);
+
     }
 
 
