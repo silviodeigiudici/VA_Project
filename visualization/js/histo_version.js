@@ -50,13 +50,16 @@ class HistoVersion {
       var dataObj = referenceHistogramVer.dataObjCreation(data)
       var max = this.max;
       // Scale the range of the data in the domains
-      x.domain(dataObj.map(function(d) {
+      var dom = dataObj.map(function(d) {
           if(d.cat[0] != "V"){
             return d.cat[0]+".x";
           }
           else{
             return d.cat[0]+"aries";
-          } }));
+          } })
+      dom.push("")
+      console.log(dom)
+      x.domain(dom)
       y.domain([0, max])
       this.x = x;
       this.y = y;
@@ -265,13 +268,16 @@ class HistoVersion {
                 .range([referenceHistogramVer.height, 0]);
       var max = this.max;
       // Scale the range of the data in the domains
-      x.domain(dataObj.map(function(d) {
+      var dom = dataObj.map(function(d) {
           if(d.cat[0] != "V"){
             return d.cat[0]+".x";
           }
           else{
             return d.cat[0]+"aries";
-          } }));
+          } })
+      dom.push("")
+      console.log(dom)
+      x.domain(dom)
       y.domain([0, max])
 
       referenceHistogramVer.svg.selectAll(".bar")
@@ -296,10 +302,6 @@ class HistoVersion {
             return z("x."+d.cat[2]);
           }
         });
-      /*referenceHistogramVer.svg.select(".axisX")
-          .attr("transform", "translate(0," + referenceHistogramVer.height + ")")
-          .transition(t2)
-          .call(d3.axisTop(x));*/
 
       referenceHistogramVer.svg.select(".axisY")
           .transition(t1)
