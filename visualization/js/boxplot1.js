@@ -220,6 +220,9 @@ class BoxPlot1 {
 
 makeBoxPlot(referenceBoxPlot,svg,data_sorted,axName,min,max){
   // Compute summary statistics used for the box:
+    var t1 = d3.transition()
+        .duration(200);
+
     if(data_sorted.length == 0){
       min = referenceBoxPlot.minMax[axName][0]
       max = referenceBoxPlot.minMax[axName][1]
@@ -270,12 +273,13 @@ makeBoxPlot(referenceBoxPlot,svg,data_sorted,axName,min,max){
     // Show the box
     svg
       .append("rect")
+        .transition(t1)
         .attr("x", center - width/2)
         .attr("y", y(q3) )
         .attr("height", (y(q1)-y(q3)) )
         .attr("width", referenceBoxPlot.width )
         .attr("stroke", "black")
-        .style("fill", "#69b3a2")
+        .attr("fill", "#69b3a2")
 
     // show median, min and max horizontal lines
     svg
