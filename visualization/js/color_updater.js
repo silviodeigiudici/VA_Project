@@ -6,12 +6,12 @@ class ColorUpdater {
         this.isDarkMode = false;
         //this.isColorBlindnessMode = false; //used? boh
 
-        this.darkmode_buttom = document.getElementById("darkmode_button");
+        this.darkmode_button = document.getElementById("darkmode_button");
         //this.blind_buttom = document.getElementById("blind_button");
         
         var referenceColorUpdater = this;
 
-        this.darkmode_buttom.addEventListener('click', function() {
+        this.darkmode_button.addEventListener('click', function() {
             if(referenceColorUpdater.isDarkMode)
                 referenceColorUpdater.isDarkMode = false;
             else
@@ -58,6 +58,11 @@ class ColorUpdater {
         else return "#000000";
     }
 
+    getImgButton() {
+        if(this.isDarkMode) return "./res/25665_on.svg";
+        else return "./res/25665_off.svg";
+    }
+
     switchMode(){
         
         var duration = 100;
@@ -73,6 +78,8 @@ class ColorUpdater {
         d3.select(".box_area").style("border", "2px solid " + this.getBorderColor());
         d3.select(".scatterplot").style("border", "2px solid " + this.getBorderColor());
         d3.select(".name_list").style("border", "2px solid " + this.getBorderColor());
+
+        document.getElementById('darkmode_img').src = this.getImgButton();
 
     }
 

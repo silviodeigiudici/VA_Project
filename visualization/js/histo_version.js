@@ -58,7 +58,7 @@ class HistoVersion {
             return d.cat[0]+"aries";
           } })
       dom.push("")
-      console.log(dom)
+      //console.log(dom)
       x.domain(dom)
       y.domain([0, max])
       this.x = x;
@@ -276,7 +276,7 @@ class HistoVersion {
             return d.cat[0]+"aries";
           } })
       dom.push("")
-      console.log(dom)
+      //console.log(dom)
       x.domain(dom)
       y.domain([0, max])
 
