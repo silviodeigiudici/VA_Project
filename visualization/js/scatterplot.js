@@ -248,8 +248,8 @@ class Scatterplot {
         var variance0 = d3.variance(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp0);});
         var variance1 = d3.variance(referenceScatterplot.dataUpdater.brushedData, function(d) {return parseFloat(d.comp1);});
 
-        var min0 = median0 - (variance0 + 1.5) + 0.31;
-        var max0 = median0 + (variance0 + 2.5);
+        var min0 = median0 - (variance0 + 1.5) - 0.35;
+        var max0 = median0 + (variance0 + 2.5) + 0.1;
         var min1 = median1 - (variance1);
         var max1 = median1 + (variance1 + 2);
 
