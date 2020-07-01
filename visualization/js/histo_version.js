@@ -170,8 +170,16 @@ class HistoVersion {
       // append the rectangles for the bar chart, position them and add colors
       var x = this.x
       var y = this.y
-      var z = d3.scaleOrdinal().range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-      var versionsForColors = ["x.0","x.1","x.2","x.3","x.4","Var"]
+      var z = d3.scaleOrdinal().range(["#d53e4f",
+                                      "#f46d43",
+                                      "#fdae61",
+                                      "#fee08b",
+                                      "#e6f598",
+                                      "#abdda4",
+                                      "#66c2a5",
+                                      "#3288bd"
+                                      ]);
+      var versionsForColors = ["x.0","x.1","x.2","x.3","x.4","x.5","x.6","Var"]
       z.domain(versionsForColors);
       referenceHistogramVer.svg.selectAll(".bar")
         .data(dataObj)
